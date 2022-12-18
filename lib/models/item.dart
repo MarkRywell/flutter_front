@@ -3,7 +3,7 @@ class Item {
   final String name;
   final String details;
   final int userId;
-  final bool sold;
+  final String sold;
 
   Item({
     required this.id,
