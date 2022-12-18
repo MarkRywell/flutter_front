@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class FormPage extends StatefulWidget {
 
   const FormPage({Key? key}) : super(key: key);
@@ -14,7 +13,7 @@ class _FormPageState extends State<FormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add ")
+        title: const Text("Add")
       ),
     );
   }
