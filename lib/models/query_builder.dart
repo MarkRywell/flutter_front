@@ -36,9 +36,40 @@ class QueryBuilder {
 
     await db.execute('''
           CREATE TABLE items(id INTEGER PRIMARY KEY, name TEXT, details TEXT,
-          userId INTEGER, sold TEXT, 
+          userId INTEGER, sold TEXT, picture TEXT, created_at TEXT,
+          updated_at TEXT,
           FOREIGN KEY(userId) REFERENCES users(id))
     ''');
   }
+
+  Future <List<Item>> items() async {
+
+    Database db = await instance.getDatabase();
+
+    final List<Map<String, dynamic>> map = await db.query('items');
+
+    return List.generate(map.length, (i) {
+      return Item(
+        id: map[i]['id'],
+        name: map[i]['name'],
+        details: map[i]['details'],
+        userId: map[i]['userId'],
+        sold: map[i]['sold'],
+        picture: map[i]['picture'],
+        createdAt: map[i]['created_at'],
+        updatedAt: map[i]['updated_at'],
+      );
+    });
+  }
+
+  Future addItem(Item item) async {
+
+    Database db = await instance.getDatabase();
+
+    int status = await db.insert('items', item.toMap());
+
+    return status;
+  }
+
 
 }

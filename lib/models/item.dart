@@ -4,6 +4,7 @@ class Item {
   final String details;
   final int userId;
   final String sold;
+  final String picture;
   String? createdAt;
   String? updatedAt;
 
@@ -13,7 +14,21 @@ class Item {
     required this.details,
     required this.userId,
     required this.sold,
+    required this.picture,
     this.createdAt,
     this.updatedAt
   });
+
+  Map <String, dynamic> toMap () {
+    return {
+      'id' : id,
+      'name' : name,
+      'details' : details,
+      'userId' : userId,
+      'sold' : sold,
+      'picture' : picture,
+      'created_at' : createdAt,
+      'updated_at' : updatedAt,
+    };
+  }
 }
