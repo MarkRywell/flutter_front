@@ -13,7 +13,7 @@ class _AddItemState extends State<AddItem> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add")
+        title: const Text("Add Item")
       ),
     );
   }
