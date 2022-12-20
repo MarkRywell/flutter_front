@@ -80,4 +80,14 @@ class QueryBuilder {
 
     return status;
   }
+
+  Future updateItem(Item item) async {
+
+    Database db = await instance.getDatabase();
+
+    int status = await db.update('items', item.toMap(),
+        where: 'id = ?', whereArgs: [item.id]);
+
+    return status;
+  }
 }
