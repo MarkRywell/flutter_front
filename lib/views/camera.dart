@@ -19,7 +19,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
 
   late CameraController _controller;
-  
+
 
   @override
   Widget build(BuildContext context) {
