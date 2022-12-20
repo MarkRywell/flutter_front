@@ -48,7 +48,8 @@ class QueryBuilder {
 
     final List<Map<String, dynamic>> map = await db.query('items');
 
-    return List.generate(map.length, (i) {
+    return map.isNotEmpty ?
+      List.generate(map.length, (i) {
       return Item(
         id: map[i]['id'],
         name: map[i]['name'],
@@ -59,7 +60,7 @@ class QueryBuilder {
         createdAt: map[i]['created_at'],
         updatedAt: map[i]['updated_at'],
       );
-    });
+    }) : [];
   }
 
   Future addItem(Item item) async {
@@ -71,5 +72,22 @@ class QueryBuilder {
     return status;
   }
 
+  Future deleteItem(int id) async {
 
+    Database db = await instance.getDatabase();
+    
+    int status = await db.delete('items', where: 'id = ?', whereArgs: [id]);
+
+    return status;
+  }
+
+  Future updateItem(Item item) async {
+
+    Database db = await instance.getDatabase();
+
+    int status = await db.update('items', item.toMap(),
+        where: 'id = ?', whereArgs: [item.id]);
+
+    return status;
+  }
 }
