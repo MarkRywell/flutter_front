@@ -1,26 +1,29 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_front/views/update_item.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter_front/models/item.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/intl.dart';
 
 class Api {
+
+  String date = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
 
   Api.privateConstructor();
   static final Api instance = Api.privateConstructor();
 
   Future <dynamic> fetchItems () async {
-
     var url = Uri.parse('${dotenv.env['API_URL']}/items');
 
     var response = await http.get(url);
 
-    if(response.statusCode == 200) {
-
+    if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
 
       return jsonResponse.isNotEmpty ?
-      List.generate(jsonResponse.length, (i){
+      List.generate(jsonResponse.length, (i) {
         return Item(
           id: jsonResponse[i]['id'],
           name: jsonResponse[i]['name'],
@@ -28,23 +31,63 @@ class Api {
           userId: jsonResponse[i]['userId'],
           sold: jsonResponse[i]['sold'],
           picture: jsonResponse[i]['picture'],
+          soldTo: jsonResponse[i]['sold_to'],
           createdAt: jsonResponse[i]['created_at'],
           updatedAt: jsonResponse[i]['updatedAt'],
         );
       }) : [];
     }
     else {
-      Exception("Error Fetching Data with a Status Code: ${response.statusCode}");
+      Exception(
+          "Error Fetching Data with a Status Code: ${response.statusCode}");
     }
+  }
 
     Future addItem (var newItem) async {
 
       var url = Uri.parse('${dotenv.env}/items?'
-          '&title=${newItem.title}&details=${newItem.details}'
-          '&userId=${newItem.userId}&sold==${newItem.sold}&picture=${newItem.picture}');
+          '&name=${newItem.title}&details=${newItem.details}'
+          '&userId=${newItem.userId}&picture=${newItem.picture}');
 
+      var response = await http.post(url);
+
+      if(response.statusCode == 201) {
+        return response.statusCode;
+      }
     }
 
-}
+    Future updateItem (var updatedItem) async {
+
+    var url = Uri.parse('${dotenv.env}/items/${updatedItem.id}?'
+        '&title=${updatedItem.title}&details=${updatedItem.details}'
+        '&picture=${updatedItem.picture}');
+
+    var response = await http.put(url);
+
+    if(response.statusCode == 200) {
+      return Item(
+        id: updatedItem.id,
+        name: updatedItem.name,
+        details: updatedItem.details,
+        userId: updatedItem.userId,
+        sold: "Available",
+        picture: updatedItem.picture,
+        updatedAt: date
+      );
+    }
+    else {
+      Exception(
+          "Error Fetching Data with a Status Code: ${response.statusCode}");
+    }
+  }
+
+  Future setStatus (var updatedItem) async {
+
+    var url = Uri.parse('${dotenv.env}/items/${updatedItem.id}?sold=${updatedItem.sold}');
+
+    var response = await http.patch(url);
+
+
+  }
 
 }
