@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_front/views/update_item.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter_front/models/item.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 
 class Api {
@@ -86,7 +83,6 @@ class Api {
     var url = Uri.parse('${dotenv.env}/items/${updatedItem.id}?sold=${updatedItem.sold}');
 
     var response = await http.patch(url);
-
 
   }
 
