@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/views/add_item.dart';
+import 'package:flutter_front/views/home_page.dart';
 import 'package:flutter_front/views/my_listings_page.dart';
 import 'package:flutter_front/views/profile_page.dart';
 
@@ -23,15 +24,15 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
     Icons.person_rounded,
   ];
 
-  List <Widget> widgets = [
+  List <Widget> widgets1 = [
     Center(child: Text("Home")),
     Center(child: Text("Listings")),
     Center(child: Text("Add")),
     Center(child: Text("Profile")),
   ];
 
-  List <Widget> widgets1 = [
-    MainPage(),
+  List <Widget> widgets = [
+    HomePage(),
     MyListingsPage(),
     AddItem(),
     ProfilePage()
@@ -104,7 +105,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
           ),
         )
       ),
-      body: widgets[currentIndex],
+      body: IndexedStack(
+        index: currentIndex,
+        children: widgets,
+      )
     );
   }
 }

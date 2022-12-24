@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/api_response.dart';
-import 'package:flutter_front/views/home_page.dart';
+import 'package:flutter_front/views/main_page.dart';
 import 'package:flutter_front/views/register_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
 
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(
-          builder: (context) => HomePage()
+          builder: (context) => MainPage()
         ), (route) => false);
   }
 
