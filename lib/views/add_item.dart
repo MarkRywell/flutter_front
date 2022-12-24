@@ -12,13 +12,12 @@ class _AddItemState extends State<AddItem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Add Item")
-      ),
-      body: Container (
-        
 
-      ) 
+      body: Container (
+        child: Center(
+            child: Text("Add Item"),
+        )
+      )
     );
   }
 }

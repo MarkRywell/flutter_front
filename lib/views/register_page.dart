@@ -12,11 +12,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool passwordVisible = true;
   var formKey = GlobalKey<FormState>();
-  TextEditingController controllerName = TextEditingController();
-  TextEditingController controllerEmail = TextEditingController();
-  TextEditingController controllerAddress = TextEditingController();
-  TextEditingController controllerPassword = TextEditingController();
-  TextEditingController controllerConfirmPassword = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
 
 
@@ -41,7 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: TextFormField(
-                    controller: controllerName,
+                    controller: nameController,
                     maxLines: 1,
                     decoration: const InputDecoration(
                         hintText: 'e.x Juan ',
@@ -65,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: TextFormField(
-                    controller: controllerEmail,
+                    controller: emailController,
                     maxLines: 1,
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
@@ -90,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: TextFormField(
-                    controller: controllerAddress,
+                    controller: addressController,
                     maxLines: 1,
                     decoration: const InputDecoration(
                         hintText: 'e.x Lapasan',
@@ -114,7 +114,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: TextFormField(
-                    controller: controllerPassword,
+                    controller: passwordController,
                     obscureText: passwordVisible,
                     enableSuggestions: false,
                     autocorrect: false,
@@ -141,7 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: TextFormField(
-                    controller: controllerConfirmPassword,
+                    controller: confirmPasswordController,
                     obscureText: passwordVisible,
                     enableSuggestions: false,
                     autocorrect: false,
@@ -160,7 +160,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
-                      return (value != controllerPassword.text) ? "Password is not the same": null;
+                      return (value != passwordController.text) ? "Password is not the same": null;
                     },
                   ),
                 ),
