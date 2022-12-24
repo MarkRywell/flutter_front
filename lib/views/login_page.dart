@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter_front/models/api.dart';
+import 'package:flutter_front/models/api_response.dart';
+import 'package:flutter_front/views/home_page.dart';
 import 'package:flutter_front/views/register_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert' as convert;
 
 class LoginPage extends StatefulWidget {
 
@@ -31,6 +36,22 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  showStatus({required Color color, required String text}) {
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(text),
+            backgroundColor: color,
+            width: 100,
+            padding: const EdgeInsets.all(15),
+            behavior: SnackBarBehavior.fixed,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            )
+        )
+    );
+  }
+
 
   login(context) async {
 
@@ -38,8 +59,34 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
+    Map credentials = {
+      'email' : emailController.text,
+      'password' : passwordController.text
+    };
+
+    var response = await Api.instance.loginUser(credentials);
 
 
+
+    if(response[1] != 200){
+      showStatus(color: Colors.red, text: response[0].message);
+      return;
+    }
+
+    preferences(response[0]);
+  }
+
+  preferences(ApiResponse response) async {
+    print(response.data);
+
+    final pref = await SharedPreferences.getInstance();
+    pref.setString("token", response.data!['token']);
+    pref.setString("user", convert.jsonEncode(response.data!['user']));
+
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(
+          builder: (context) => HomePage()
+        ), (route) => false);
   }
 
   @override

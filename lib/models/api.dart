@@ -1,4 +1,5 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_front/models/api_response.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter_front/models/item.dart';
@@ -83,6 +84,32 @@ class Api {
     var url = Uri.parse('${dotenv.env}/items/${updatedItem.id}?sold=${updatedItem.sold}');
 
     var response = await http.patch(url);
+
+  }
+
+  Future loginUser (Map credentials) async {
+
+    var url = Uri.parse("${dotenv.env['API_URL']}/login");
+
+    var response = await http.post(url, body: convert.jsonEncode(credentials),
+    headers: {
+        "Content-type" : "application/json"
+      }
+    );
+
+
+    var jsonResponse = await convert.jsonDecode(response.body);
+
+    ApiResponse apiResponse = ApiResponse(
+        status: jsonResponse['status'],
+        message: jsonResponse['message'],
+        data: jsonResponse['data'] ?? new Map());
+
+    if(response.statusCode != 200) {
+      return([apiResponse, 400]);
+    }
+
+    return ([apiResponse, 200]);
 
   }
 
