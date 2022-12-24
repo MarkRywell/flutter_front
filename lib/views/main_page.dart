@@ -38,12 +38,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
     ProfilePage()
   ];
 
-  onSelectColor(int currentIndex, int index) {
-    return currentIndex == index ? Colors.white : null;
-  }
-
   TextStyle customStyle () {
-    return TextStyle(
+    return const TextStyle(
       fontSize: 12,
       color: Colors.white,
       fontFamily: "Poppins"

@@ -12,14 +12,13 @@ class Api {
   Api.privateConstructor();
   static final Api instance = Api.privateConstructor();
 
-  Future <dynamic> fetchItems () async {
-    var url = Uri.parse('${dotenv.env['API_URL']}/items');
+  Future <dynamic> fetchOtherItems (int id) async {
+    var url = Uri.parse('${dotenv.env['API_URL']}/items/$id');
 
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
-
       return jsonResponse.isNotEmpty ?
       List.generate(jsonResponse.length, (i) {
         return Item(
