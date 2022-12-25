@@ -63,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
       'password' : passwordController.text
     };
 
+    print("logging");
     var response = await Api.instance.loginUser(credentials);  // Call API Method
 
     if(response.runtimeType != List<Object>){
