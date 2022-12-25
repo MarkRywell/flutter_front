@@ -16,7 +16,7 @@ void main() async {
           primarySwatch: Colors.blue
         ),
         debugShowCheckedModeBanner: false,
-        home: AnimatedSplashScreen(
+        home: AnimatedSplashScreen(   //Loading Screen when the App is first launched
           splash: Image.asset('assets/OnlySells.png'),
           splashIconSize: 1000,
           duration: 3000,
