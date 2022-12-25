@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   String email = "";
   String password = "";
 
-  bool validate(String email, String password){
+  bool validate(String email, String password){     // Validate if email is valid
     if(email.isEmpty || password.isEmpty) {
       return false;
     }
@@ -36,13 +36,12 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  showStatus({required Color color, required String text}) {
+  showStatus({required Color color, required String text}) {    // Snackbar to show message of API Response
 
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(text),
             backgroundColor: color,
-            width: 100,
             padding: const EdgeInsets.all(15),
             behavior: SnackBarBehavior.fixed,
             shape: RoundedRectangleBorder(
@@ -53,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 
-  login(context) async {
+  login(context) async {    //  Login function to attempt Authentication and set Shared Preferences
 
     if(!formKey.currentState!.validate()){
       return;
@@ -64,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
       'password' : passwordController.text
     };
 
-    var response = await Api.instance.loginUser(credentials);
+    var response = await Api.instance.loginUser(credentials);  // Call API Method
 
 
 
@@ -84,10 +83,13 @@ class _LoginPageState extends State<LoginPage> {
     pref.setString("user", convert.jsonEncode(response.data!['user']));
 
 
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(
-          builder: (context) => MainPage()
-        ), (route) => false);
+    Navigator.push(context,
+    MaterialPageRoute(builder: (context) => MainPage()));
+
+    // Navigator.pushAndRemoveUntil(context,
+    //     MaterialPageRoute(
+    //       builder: (context) => MainPage()
+    //     ), (route) => false);
   }
 
   @override

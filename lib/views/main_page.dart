@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/views/add_item.dart';
 import 'package:flutter_front/views/home_page.dart';
@@ -44,6 +45,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
       color: Colors.white,
       fontFamily: "Poppins"
     );
+  }
+
+  @override
+  void dispose() {
+
+    super.dispose();
   }
 
   @override

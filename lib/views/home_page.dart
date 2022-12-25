@@ -25,13 +25,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     Map user = convert.jsonDecode(pref.getString("user")!);
 
-    print('WTFFFF ${user['id']}');
+    print("sa function ${itemList.length}");
 
     return await Api.instance.fetchOtherItems(user['id']);
   }
 
   @override
-  void initState(){
+  void initState() {
     animationController = AnimationController(
         vsync: this,
         duration: const Duration(seconds: 2)
@@ -43,6 +43,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ));
     animationController.repeat();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -87,17 +93,27 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
               itemList.isEmpty ? itemList = snapshot.data! :null;
 
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
+              print("dris sa snapshot ${itemList.length}");
 
-                  final item = itemList[index];
-
-                  return ListTile(
-                    title: Text(item.name),
-                    subtitle: Text(item.sold),
-                  );
+              return RefreshIndicator(
+                onRefresh: () async {
+                  itemList = await fetchOtherItems();
+                  setState(() {
+                    itemList;
+                  });
                 },
+                child: ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+
+                    final item = itemList[index];
+
+                    return ListTile(
+                      title: Text(item.name),
+                      subtitle: Text(item.sold),
+                    );
+                  },
+                ),
               );
 
             }
