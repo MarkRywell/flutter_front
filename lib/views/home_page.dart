@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_front/models/api.dart';
+import 'package:flutter_front/models/query_builder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:convert' as convert;
 
 class HomePage extends StatefulWidget {
@@ -14,7 +18,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   List itemList = [];
-
+  String networkStatus = " ";
+  late StreamSubscription subscription;
   late AnimationController animationController;
   // ignore: prefer_typing_uninitialized_variables
   late var colorTween;
@@ -25,9 +30,51 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     Map user = convert.jsonDecode(pref.getString("user")!);
 
-    print("sa function ${itemList.length}");
+    List items = await Api.instance.fetchOtherItems(user['id']);
 
-    return await Api.instance.fetchOtherItems(user['id']);
+    QueryBuilder.instance.truncateTable();
+
+    for(int i = 0; i < items.length; i++) {
+      QueryBuilder.instance.addItem(items[i]);
+    }
+
+    return items;
+  }
+
+  Future <void> checkConnectivity() async {
+    var result = await Connectivity().checkConnectivity();
+
+    print(result);
+
+    if(result == ConnectivityResult.mobile) {
+      setState(() {
+        networkStatus = "Mobile Network";
+      });
+    } else if(result == ConnectivityResult.wifi) {
+      setState(() {
+        networkStatus = "WiFi Network";
+      });
+    }
+    else {
+      setState(() {
+        networkStatus = "none";
+      });
+    }
+  }
+
+  showStatus({required Color color, required String text}) {    // Snackbar to show message of API Response
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(text),
+            backgroundColor: color,
+            padding: const EdgeInsets.all(15),
+            behavior: SnackBarBehavior.fixed,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            )
+        )
+    );
   }
 
   @override
@@ -42,6 +89,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             end: Colors.amber
         ));
     animationController.repeat();
+
+    checkConnectivity();
+    subscription = Connectivity().onConnectivityChanged.listen((event) {
+      showStatus(color: event.name == "wifi" ? Colors.greenAccent : Colors.blueAccent,
+          text: "Network: ${event.name}");
+
+      setState(() {
+        networkStatus = event.name;
+      });
+    });
+
     super.initState();
   }
 

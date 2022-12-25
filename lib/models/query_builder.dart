@@ -81,6 +81,14 @@ class QueryBuilder {
     return status;
   }
 
+  Future truncateTable() async {
+
+    Database db = await instance.getDatabase();
+
+    await db.execute('''DELETE FROM items''');
+    await db.execute('''VACUUM''');
+  }
+
   Future updateItem(Item item) async {
 
     Database db = await instance.getDatabase();
