@@ -356,8 +356,34 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() => _currentStep = step);
   }
 
+
   continued() {
-    _currentStep < 4 ? setState(() => _currentStep += 1) : null;
+
+    if(_currentStep == 0) {
+      if(firstName.text.isEmpty || lastName.text.isEmpty || middleName.text.isEmpty) {
+        return null;
+      }
+    }
+    else if(_currentStep == 1) {
+      if(controllerAddress.text.isEmpty) {
+        return null;
+      }
+    }
+    else if(_currentStep == 2) {
+      if(controllerEmail.text.isEmpty) {
+        return null;
+      }
+    }
+    else if(_currentStep == 3) {
+      if(controllerPassword.text.isEmpty || controllerConfirmPassword.text.isEmpty || controllerPassword.text != controllerConfirmPassword.text) {
+        return null;
+      }
+    }
+
+    setState(() {
+      _currentStep += 1;
+    });
+    // _currentStep < 4 ? setState(() => _currentStep += 1) : null;
   }
 
   cancel() {
