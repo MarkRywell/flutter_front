@@ -65,7 +65,12 @@ class _LoginPageState extends State<LoginPage> {
 
     var response = await Api.instance.loginUser(credentials);  // Call API Method
 
-
+    if(response.runtimeType != List<Object>){
+      if(response.statusCode == 500){
+        showStatus(color: Colors.red, text: response.body);
+        return;
+      }
+    }
 
     if(response[1] != 200){
       showStatus(color: Colors.red, text: response[0].message);

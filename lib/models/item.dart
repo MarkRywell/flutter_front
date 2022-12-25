@@ -21,6 +21,20 @@ class Item {
     this.updatedAt
   });
 
+  factory Item.fromJson(Map <String, dynamic> json) {
+    return Item(
+      id: json['id'],
+      name: json['name'],
+      details: json['details'],
+      userId: json['userId'],
+      sold: json['sold'],
+      picture: json['picture'],
+      soldTo: json['soldTo'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
+    );
+  }
+
   Map <String, dynamic> toMap () {
     return {
       'id' : id,
@@ -29,7 +43,7 @@ class Item {
       'userId' : userId,
       'sold' : sold,
       'picture' : picture,
-      'sold_to' : soldTo,
+      'soldTo' : soldTo,
       'created_at' : createdAt,
       'updated_at' : updatedAt,
     };
