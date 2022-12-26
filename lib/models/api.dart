@@ -108,7 +108,7 @@ class Api {
     ApiResponse apiResponse = ApiResponse(
         status: jsonResponse['status'],
         message: jsonResponse['message'],
-        data: jsonResponse['data'] ?? Map());
+        data: jsonResponse['data'] ?? {});
 
     if(response.statusCode != 200) {
       return([apiResponse, 400]);
