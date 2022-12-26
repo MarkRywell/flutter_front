@@ -67,6 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 ? "Please Enter your First Name"
                                 : null;
                           },
+
                         ),
                       ),
                       Padding(
@@ -103,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           return (value == '')
                               ? "Please enter your Middle Name"
                               : null;
-                        },
+                        }
                       ),
                     ],
                   ),
@@ -193,6 +194,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           enableSuggestions: false,
                           autocorrect: false,
                           maxLines: 1,
+
                           decoration: InputDecoration(
                             labelText: 'Password',
                             border: OutlineInputBorder(
@@ -214,6 +216,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           enableSuggestions: false,
                           autocorrect: false,
                           maxLines: 1,
+
                           decoration: InputDecoration(
                             labelText: 'Confirm Password',
                             border: OutlineInputBorder(
