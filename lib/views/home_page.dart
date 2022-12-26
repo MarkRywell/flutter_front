@@ -181,9 +181,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             }
           }
           return Center(
-              child: CircularProgressIndicator(
-                valueColor: colorTween,
-              )
+            child: Text("Loading"),
+              // child: CircularProgressIndicator(
+              //   valueColor: colorTween,
+              // )
           );
         },
       )

@@ -20,7 +20,7 @@ void main() async {
           splash: Image.asset('assets/OnlySells.png'),
           splashIconSize: 1000,
           duration: 3000,
-          nextScreen: const LoginPage(),
+          nextScreen: const MainPage(),
         )
       ));
 }
