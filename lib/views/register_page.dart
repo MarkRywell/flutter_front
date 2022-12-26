@@ -342,11 +342,11 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     } else if (_currentStep == 1) {
       if (addressController.text.isEmpty) {
-        return _currentStep == 1;
+        return null;
       }
     } else if (_currentStep == 2) {
       if (emailAddressController.text.isEmpty) {
-        return _currentStep == 2;
+        return null;
       }
     } else if (_currentStep == 3) {
       if (passwordController.text.isEmpty ||
