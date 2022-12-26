@@ -52,16 +52,23 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: TextFormField(
                           controller: firstNameController,
                           maxLines: 1,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
+
                               hintText: 'First Name',
                               border: OutlineInputBorder(
-                                  borderSide: BorderSide(
+                                borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
                                     color: Colors.white,
                                     width: 0.75,
                                   ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10.0),
-                                  ))),
+                                  )),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) {
+                            return (value == '')
+                                ? "Please Enter your First Name"
+                                : null;
+                          },
+
                         ),
                       ),
                       Padding(
@@ -70,32 +77,34 @@ class _RegisterPageState extends State<RegisterPage> {
                           controller: lastNameController,
                           maxLines: 1,
                           keyboardType: TextInputType.name,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                               hintText: 'Last Name',
                               border: OutlineInputBorder(
-                                  borderSide: BorderSide(
+                                borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
                                     color: Colors.white,
                                     width: 0.75,
                                   ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10.0),
-                                  ))),
+                                  )),
                         ),
                       ),
                       TextFormField(
                         controller: middleNameController,
                         maxLines: 1,
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                             hintText: 'Middle Name',
                             border: OutlineInputBorder(
-                                borderSide: BorderSide(
+                              borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
                                   color: Colors.white,
                                   width: 0.75,
                                 ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.0),
-                                ))),
+                                )),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) {
+                          return (value == '')
+                              ? "Please enter your Middle Name"
+                              : null;
                       ),
                     ],
                   ),
@@ -114,16 +123,22 @@ class _RegisterPageState extends State<RegisterPage> {
                             controller: addressController,
                             maxLines: 1,
                             keyboardType: TextInputType.streetAddress,
-                            decoration: const InputDecoration(
-                                hintText: 'eg. Lapasan',
+                            decoration: InputDecoration(
+                                hintText: 'Address',
                                 border: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(
                                       color: Colors.white,
                                       width: 0.75,
                                     ),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10.0),
-                                    ))),
+                                   )),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              return (value == '')
+                                  ? "Please enter your Address"
+                                  : null;
+                            },
                           ))
                     ],
                   ),
@@ -142,16 +157,22 @@ class _RegisterPageState extends State<RegisterPage> {
                             controller: emailAddressController,
                             maxLines: 1,
                             keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                                 hintText: 'Email Address',
                                 border: OutlineInputBorder(
-                                    borderSide: BorderSide(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(
                                       color: Colors.white,
                                       width: 0.75,
                                     ),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10.0),
-                                    ))),
+                                    )),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              return (value == '')
+                                  ? "Please enter your Email Address"
+                                  : null;
+                            },
                           ))
                     ],
                   ),
@@ -173,16 +194,16 @@ class _RegisterPageState extends State<RegisterPage> {
                           enableSuggestions: false,
                           autocorrect: false,
                           maxLines: 1,
-                          decoration: const InputDecoration(
-                            hintText: "Password",
+
+                          decoration: InputDecoration(
+                            labelText: 'Password',
                             border: OutlineInputBorder(
-                                borderSide: BorderSide(
+                              borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
                                   color: Colors.white,
                                   width: 0.75,
                                 ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.0),
-                                )),
+                                ),
                           ),
                         ),
                       ),
@@ -195,16 +216,16 @@ class _RegisterPageState extends State<RegisterPage> {
                           enableSuggestions: false,
                           autocorrect: false,
                           maxLines: 1,
-                          decoration: const InputDecoration(
-                            hintText: 'Confirm Password',
+
+                          decoration: InputDecoration(
+                            labelText: 'Confirm Password',
                             border: OutlineInputBorder(
-                                borderSide: BorderSide(
+                              borderRadius: BorderRadius.circular(10),
+                                borderSide: const BorderSide(
                                   color: Colors.white,
                                   width: 0.75,
                                 ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.0),
-                                )),
+                                ),
                           ),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (value) {
