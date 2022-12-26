@@ -13,13 +13,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool passwordVisible = true;
   var formKey = GlobalKey<FormState>();
-  TextEditingController firstName = TextEditingController();
-  TextEditingController lastName = TextEditingController();
-  TextEditingController middleName = TextEditingController();
-  TextEditingController controllerEmail = TextEditingController();
-  TextEditingController controllerAddress = TextEditingController();
-  TextEditingController controllerPassword = TextEditingController();
-  TextEditingController controllerConfirmPassword = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController middleNameController = TextEditingController();
+  TextEditingController emailAddressController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,6 @@ class _RegisterPageState extends State<RegisterPage> {
               type: stepperType,
               physics: const ScrollPhysics(),
               currentStep: _currentStep,
-              onStepTapped: (step) => tapped(step),
               onStepContinue: continued,
               onStepCancel: cancel,
               steps: <Step>[
@@ -51,11 +50,10 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
                         child: TextFormField(
-                          controller: firstName,
+                          controller: firstNameController,
                           maxLines: 1,
                           decoration: const InputDecoration(
-                              hintText: 'e.x John ',
-                              labelText: 'First Name',
+                              hintText: 'First Name',
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Colors.white,
@@ -64,22 +62,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(10.0),
                                   ))),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            return (value == '')
-                                ? "Please Enter your First Name"
-                                : null;
-                          },
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: TextFormField(
-                          controller: lastName,
+                          controller: lastNameController,
                           maxLines: 1,
+                          keyboardType: TextInputType.name,
                           decoration: const InputDecoration(
-                              hintText: 'e.x Cruz',
-                              labelText: 'Last Name',
+                              hintText: 'Last Name',
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Colors.white,
@@ -88,20 +80,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(10.0),
                                   ))),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            return (value == '')
-                                ? "Please Enter your Last Name"
-                                : null;
-                          },
                         ),
                       ),
                       TextFormField(
-                        controller: middleName,
+                        controller: middleNameController,
                         maxLines: 1,
+                        keyboardType: TextInputType.name,
                         decoration: const InputDecoration(
-                            hintText: 'e.x Dela',
-                            labelText: 'Middle Name',
+                            hintText: 'Middle Name',
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.white,
@@ -110,12 +96,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
                                 ))),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) {
-                          return (value == '')
-                              ? "Please enter your Middle Name"
-                              : null;
-                        },
                       ),
                     ],
                   ),
@@ -131,12 +111,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                           padding: const EdgeInsets.only(top: 5.0),
                           child: TextFormField(
-                            controller: controllerAddress,
+                            controller: addressController,
                             maxLines: 1,
                             keyboardType: TextInputType.streetAddress,
                             decoration: const InputDecoration(
-                                hintText: 'e.x Lapasan',
-                                labelText: 'Address',
+                                hintText: 'eg. Lapasan',
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Colors.white,
@@ -145,13 +124,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(10.0),
                                     ))),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (value) {
-                              return (value == '')
-                                  ? "Please enter your Address"
-                                  : null;
-                            },
                           ))
                     ],
                   ),
@@ -167,12 +139,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                           padding: const EdgeInsets.only(top: 5.0),
                           child: TextFormField(
-                            controller: controllerEmail,
+                            controller: emailAddressController,
                             maxLines: 1,
                             keyboardType: TextInputType.emailAddress,
                             decoration: const InputDecoration(
-                                hintText: 'e.x Juan@gmail.com ',
-                                labelText: 'Email Address',
+                                hintText: 'Email Address',
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Colors.white,
@@ -181,13 +152,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(10.0),
                                     ))),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (value) {
-                              return (value == '')
-                                  ? "Please enter your Email Address"
-                                  : null;
-                            },
                           ))
                     ],
                   ),
@@ -203,13 +167,14 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 5.0, top: 5.0),
                         child: TextFormField(
-                          controller: controllerPassword,
+                          controller: passwordController,
+                          keyboardType: TextInputType.visiblePassword,
                           obscureText: passwordVisible,
                           enableSuggestions: false,
                           autocorrect: false,
                           maxLines: 1,
                           decoration: const InputDecoration(
-                            labelText: 'Password',
+                            hintText: "Password",
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.white,
@@ -219,24 +184,19 @@ class _RegisterPageState extends State<RegisterPage> {
                                   Radius.circular(10.0),
                                 )),
                           ),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            return (value == '')
-                                ? "Please enter your Password"
-                                : null;
-                          },
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 5.0),
+                        padding: const EdgeInsets.only(bottom: 5.0, top: 10.0),
                         child: TextFormField(
-                          controller: controllerConfirmPassword,
+                          controller: confirmPasswordController,
+                          keyboardType: TextInputType.visiblePassword,
                           obscureText: passwordVisible,
                           enableSuggestions: false,
                           autocorrect: false,
                           maxLines: 1,
                           decoration: const InputDecoration(
-                            labelText: 'Confirm Password',
+                            hintText: 'Confirm Password',
                             border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.white,
@@ -248,8 +208,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (value) {
-                            return (value != controllerPassword.text)
-                                ? "Password not match"
+                            return (value != passwordController.text)
+                                ? "Password not matched"
                                 : null;
                           },
                         ),
@@ -272,46 +232,8 @@ class _RegisterPageState extends State<RegisterPage> {
                           children: [
                             Align(
                               alignment: Alignment.topLeft,
-                              child: Text("First Name: ${firstName.text}",
-                                  style: const TextStyle(
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12)),
-                            ),
-                            const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 2),
-                                child: Divider(
-                                  thickness: 2,
-                                )),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text("Last Name: ${lastName.text}",
-                                  style: const TextStyle(
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12)),
-                            ),
-                            const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 2),
-                                child: Divider(
-                                  thickness: 2,
-                                )),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text("Middle Name: ${middleName.text}",
-                                  style: const TextStyle(
-                                      color: Colors.black54,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12)),
-                            ),
-                            const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 2),
-                                child: Divider(
-                                  thickness: 2,
-                                )),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text("Address: ${controllerAddress.text}",
+                              child: Text(
+                                  "First Name: ${firstNameController.text}",
                                   style: const TextStyle(
                                       color: Colors.black54,
                                       fontWeight: FontWeight.bold,
@@ -325,7 +247,48 @@ class _RegisterPageState extends State<RegisterPage> {
                             Align(
                               alignment: Alignment.topLeft,
                               child: Text(
-                                  "Email Address: ${controllerEmail.text}",
+                                  "Last Name: ${lastNameController.text}",
+                                  style: const TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12)),
+                            ),
+                            const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2),
+                                child: Divider(
+                                  thickness: 2,
+                                )),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                  "Middle Name: ${middleNameController.text}",
+                                  style: const TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12)),
+                            ),
+                            const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2),
+                                child: Divider(
+                                  thickness: 2,
+                                )),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text("Address: ${addressController.text}",
+                                  style: const TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12)),
+                            ),
+                            const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2),
+                                child: Divider(
+                                  thickness: 2,
+                                )),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                  "Email Address: ${emailAddressController.text}",
                                   style: const TextStyle(
                                       color: Colors.black54,
                                       fontWeight: FontWeight.bold,
@@ -352,30 +315,25 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  tapped(int step) {
-    setState(() => _currentStep = step);
-  }
-
-
   continued() {
-
-    if(_currentStep == 0) {
-      if(firstName.text.isEmpty || lastName.text.isEmpty || middleName.text.isEmpty) {
+    if (_currentStep == 0) {
+      if (firstNameController.text.isEmpty ||
+          lastNameController.text.isEmpty ||
+          middleNameController.text.isEmpty) {
         return null;
       }
-    }
-    else if(_currentStep == 1) {
-      if(controllerAddress.text.isEmpty) {
-        return null;
+    } else if (_currentStep == 1) {
+      if (addressController.text.isEmpty) {
+        return _currentStep == 1;
       }
-    }
-    else if(_currentStep == 2) {
-      if(controllerEmail.text.isEmpty) {
-        return null;
+    } else if (_currentStep == 2) {
+      if (emailAddressController.text.isEmpty) {
+        return _currentStep == 2;
       }
-    }
-    else if(_currentStep == 3) {
-      if(controllerPassword.text.isEmpty || controllerConfirmPassword.text.isEmpty || controllerPassword.text != controllerConfirmPassword.text) {
+    } else if (_currentStep == 3) {
+      if (passwordController.text.isEmpty ||
+          confirmPasswordController.text.isEmpty ||
+          passwordController.text != confirmPasswordController.text) {
         return null;
       }
     }
