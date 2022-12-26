@@ -95,6 +95,7 @@ class Api {
         "Content-type" : "application/json"
       }
     ).timeout(const Duration(seconds: 2), onTimeout: () {
+
       return http.Response("Request Timeout", 500);
     });
 

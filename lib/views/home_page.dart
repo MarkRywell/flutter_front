@@ -32,6 +32,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     List items = await Api.instance.fetchOtherItems(user['id']);
 
+    if(items.isEmpty) {
+      return;
+    }
+
     QueryBuilder.instance.truncateTable();
 
     for(int i = 0; i < items.length; i++) {
@@ -92,7 +96,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     checkConnectivity();
     subscription = Connectivity().onConnectivityChanged.listen((event) {
-      showStatus(color: event.name == "wifi" ? Colors.greenAccent : Colors.blueAccent,
+      showStatus(color: event.name != "none" ? Colors.blueAccent : Colors.red,
           text: "Network: ${event.name}");
 
       setState(() {
@@ -116,7 +120,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         title: Text("Home Page")
       ),
       body: FutureBuilder(
-        future: fetchOtherItems(),
+        future: networkStatus != "none" ? fetchOtherItems() : QueryBuilder.instance.items(),
         builder: (context, snapshot) {
 
           if(snapshot.connectionState == ConnectionState.done) {
@@ -177,9 +181,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             }
           }
           return Center(
-              child: CircularProgressIndicator(
-                valueColor: colorTween,
-              )
+            child: Text("Loading"),
+              // child: CircularProgressIndicator(
+              //   valueColor: colorTween,
+              // )
           );
         },
       )
