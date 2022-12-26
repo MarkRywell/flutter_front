@@ -53,7 +53,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           controller: firstNameController,
                           maxLines: 1,
                           decoration: InputDecoration(
-
                               hintText: 'First Name',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -105,6 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           return (value == '')
                               ? "Please enter your Middle Name"
                               : null;
+                        }
                       ),
                     ],
                   ),
