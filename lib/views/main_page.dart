@@ -56,7 +56,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Padding(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
         padding: EdgeInsets.all(20),
         child: Material(
           elevation: 10,
@@ -71,7 +72,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
               data: NavigationBarThemeData(
                 indicatorColor: Colors.blue[100],
                 labelTextStyle: MaterialStateProperty.all(
-                  customStyle()
+                    customStyle()
                 ),
               ),
               child: NavigationBar(
@@ -80,9 +81,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
                 labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
                 destinations: const [
                   NavigationDestination(
-                      icon: Icon(Icons.home_outlined),
-                      selectedIcon: Icon(Icons.home),
-                      label: "Home" ,),
+                    icon: Icon(Icons.home_outlined),
+                    selectedIcon: Icon(Icons.home),
+                    label: "Home" ,),
                   NavigationDestination(
                       icon: Icon(Icons.list_outlined),
                       selectedIcon: Icon(Icons.list),
@@ -106,7 +107,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
               ),
             ),
           ),
-        )
+        ),
       ),
       body: IndexedStack(
         index: currentIndex,
