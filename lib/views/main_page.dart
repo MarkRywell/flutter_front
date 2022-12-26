@@ -26,17 +26,17 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
   ];
 
   List <Widget> widgets1 = [
-    Center(child: Text("Home")),
-    Center(child: Text("Listings")),
-    Center(child: Text("Add")),
-    Center(child: Text("Profile")),
+    const Center(child: Text("Home")),
+    const Center(child: Text("Listings")),
+    const Center(child: Text("Add")),
+    const Center(child: Text("Profile")),
   ];
 
   List <Widget> widgets = [
-    HomePage(),
-    MyListingsPage(),
-    AddItem(),
-    ProfilePage()
+    const HomePage(),
+    const MyListingsPage(),
+    const AddItem(),
+    const ProfilePage()
   ];
 
   TextStyle customStyle () {
@@ -58,7 +58,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Material(
           elevation: 10,
           borderRadius: BorderRadius.circular(25),
