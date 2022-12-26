@@ -99,8 +99,6 @@ class Api {
       return http.Response("Request Timeout", 500);
     });
 
-    print(response);
-
     if(response.statusCode == 500){
       return response;
     }
