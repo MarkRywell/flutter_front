@@ -1,8 +1,8 @@
 class Item {
-  final int id;
+  final int? id;
   final String name;
   final String details;
-  final int userId;
+  final int? userId;
   final String sold;
   final String picture;
   String? soldTo;
