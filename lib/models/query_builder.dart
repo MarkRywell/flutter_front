@@ -36,7 +36,7 @@ class QueryBuilder {
 
     await db.execute('''
           CREATE TABLE items(id INTEGER PRIMARY KEY, name TEXT, details TEXT,
-          userId INTEGER, sold TEXT, picture TEXT, sold_to TEXT, created_at TEXT,
+          userId INTEGER, sold TEXT, picture TEXT, soldTo TEXT, created_at TEXT,
           updated_at TEXT,
           FOREIGN KEY(userId) REFERENCES users(id))
     ''');
@@ -79,6 +79,14 @@ class QueryBuilder {
     int status = await db.delete('items', where: 'id = ?', whereArgs: [id]);
 
     return status;
+  }
+
+  Future truncateTable() async {
+
+    Database db = await instance.getDatabase();
+
+    await db.execute('''DELETE FROM items''');
+    await db.execute('''VACUUM''');
   }
 
   Future updateItem(Item item) async {

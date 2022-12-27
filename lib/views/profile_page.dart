@@ -18,7 +18,6 @@ class _ProfilePageState extends State<ProfilePage> {
         title: const Text('Profile'),
         leading: IconButton(
           onPressed: (){
-
           }, 
           icon: const Icon(
             Icons.arrow_back,
@@ -87,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(
               height: 30
-             ),
+            ),
           ],
         ),
       ),

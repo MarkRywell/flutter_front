@@ -17,6 +17,9 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
 
+  TextEditingController nameController = TextEditingController();
+  TextEditingController detailsController = TextEditingController();
+
   int currentIndex = 0;
   List routes = [
     Icons.home,
@@ -26,17 +29,17 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
   ];
 
   List <Widget> widgets1 = [
-    Center(child: Text("Home")),
-    Center(child: Text("Listings")),
-    Center(child: Text("Add")),
-    Center(child: Text("Profile")),
+    const Center(child: Text("Home")),
+    const Center(child: Text("Listings")),
+    const Center(child: Text("Add")),
+    const Center(child: Text("Profile")),
   ];
 
   List <Widget> widgets = [
-    HomePage(),
-    MyListingsPage(),
-    AddItem(),
-    ProfilePage()
+    const HomePage(),
+    const MyListingsPage(),
+    const AddItem(),
+    const ProfilePage()
   ];
 
   TextStyle customStyle () {
@@ -56,8 +59,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(20),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(20),
         child: Material(
           elevation: 10,
           borderRadius: BorderRadius.circular(25),
@@ -71,7 +75,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
               data: NavigationBarThemeData(
                 indicatorColor: Colors.blue[100],
                 labelTextStyle: MaterialStateProperty.all(
-                  customStyle()
+                    customStyle()
                 ),
               ),
               child: NavigationBar(
@@ -80,9 +84,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
                 labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
                 destinations: const [
                   NavigationDestination(
-                      icon: Icon(Icons.home_outlined),
-                      selectedIcon: Icon(Icons.home),
-                      label: "Home" ,),
+                    icon: Icon(Icons.home_outlined),
+                    selectedIcon: Icon(Icons.home),
+                    label: "Home" ,),
                   NavigationDestination(
                       icon: Icon(Icons.list_outlined),
                       selectedIcon: Icon(Icons.list),
@@ -106,7 +110,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
               ),
             ),
           ),
-        )
+        ),
       ),
       body: IndexedStack(
         index: currentIndex,

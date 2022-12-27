@@ -28,7 +28,7 @@ class Api {
           userId: jsonResponse[i]['userId'],
           sold: jsonResponse[i]['sold'],
           picture: jsonResponse[i]['picture'],
-          soldTo: jsonResponse[i]['sold_to'],
+          soldTo: jsonResponse[i]['soldTo'],
           createdAt: jsonResponse[i]['created_at'],
           updatedAt: jsonResponse[i]['updatedAt'],
         );
@@ -94,15 +94,21 @@ class Api {
     headers: {
         "Content-type" : "application/json"
       }
-    );
+    ).timeout(const Duration(seconds: 2), onTimeout: () {
 
+      return http.Response("Request Timeout", 500);
+    });
+
+    if(response.statusCode == 500){
+      return response;
+    }
 
     var jsonResponse = await convert.jsonDecode(response.body);
 
     ApiResponse apiResponse = ApiResponse(
         status: jsonResponse['status'],
         message: jsonResponse['message'],
-        data: jsonResponse['data'] ?? new Map());
+        data: jsonResponse['data'] ?? {});
 
     if(response.statusCode != 200) {
       return([apiResponse, 400]);

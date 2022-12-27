@@ -5,6 +5,7 @@ import 'package:flutter_front/models/api_response.dart';
 import 'package:flutter_front/views/main_page.dart';
 import 'package:flutter_front/views/register_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:convert' as convert;
 
 class LoginPage extends StatefulWidget {
@@ -63,9 +64,22 @@ class _LoginPageState extends State<LoginPage> {
       'password' : passwordController.text
     };
 
+    var connectivity = await Connectivity().checkConnectivity();
+    print(connectivity);
+
+    if(connectivity == ConnectivityResult.none) {
+      showStatus(color: Colors.red, text: "No Internet Connection");
+      return;
+    }
+
     var response = await Api.instance.loginUser(credentials);  // Call API Method
 
-
+    if(response.runtimeType != List<Object>){
+      if(response.statusCode == 500){
+        showStatus(color: Colors.red, text: response.body);
+        return;
+      }
+    }
 
     if(response[1] != 200){
       showStatus(color: Colors.red, text: response[0].message);
