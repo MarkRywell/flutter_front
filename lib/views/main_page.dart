@@ -17,6 +17,9 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
 
+  TextEditingController nameController = TextEditingController();
+  TextEditingController detailsController = TextEditingController();
+
   int currentIndex = 0;
   List routes = [
     Icons.home,

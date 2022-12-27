@@ -105,6 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           return (value == '')
                               ? "Please enter your Middle Name"
                               : null;
+                        }
                       ),
                     ],
                   ),

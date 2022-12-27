@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/query_builder.dart';
@@ -155,7 +154,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
               itemList.isEmpty ? itemList = snapshot.data! :null;
 
-              print("dris sa snapshot ${itemList.length}");
+              print("dri sa snapshot ${itemList.length}");
 
               return RefreshIndicator(
                 onRefresh: () async {
