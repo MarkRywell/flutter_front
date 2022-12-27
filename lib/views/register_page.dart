@@ -53,7 +53,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           controller: firstNameController,
                           maxLines: 1,
                           decoration: InputDecoration(
-
                               hintText: 'First Name',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -62,13 +61,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                     width: 0.75,
                                   ),
                                   )),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            return (value == '')
-                                ? "Please Enter your First Name"
-                                : null;
-                          },
-
                         ),
                       ),
                       Padding(
@@ -100,12 +92,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                   width: 0.75,
                                 ),
                                 )),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) {
-                          return (value == '')
-                              ? "Please enter your Middle Name"
-                              : null;
-                        }
                       ),
                     ],
                   ),
@@ -133,13 +119,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                       width: 0.75,
                                     ),
                                    )),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (value) {
-                              return (value == '')
-                                  ? "Please enter your Address"
-                                  : null;
-                            },
                           ))
                     ],
                   ),
@@ -167,13 +146,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                       width: 0.75,
                                     ),
                                     )),
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (value) {
-                              return (value == '')
-                                  ? "Please enter your Email Address"
-                                  : null;
-                            },
                           ))
                     ],
                   ),
