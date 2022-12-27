@@ -71,111 +71,113 @@ class _AddItemState extends State<AddItem> {
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
-        title: Image.asset('assets/OnlySells.png'),
+        title: Image.asset('assets/OnlySells1.png',
+        alignment: Alignment.center,
+        width: 200,
+        fit: BoxFit.fitWidth,),
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
-      body: Card(
-        child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-            child: SingleChildScrollView(child: Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: nameController,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                  style: BorderStyle.solid, color: Colors.blue)),
-                          hintText: 'NAME',
-                        ),
-                        validator: (value) {
-                          return (value == '') ? "Please input a name" : null;
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: detailsController,
-                        decoration: InputDecoration(
-                            hintText: 'Details',
+      body: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+          child: SingleChildScrollView(
+              child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          controller: nameController,
+                          decoration: InputDecoration(
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                    style: BorderStyle.solid,
-                                    color: Colors.blue))),
-                        validator: (value) {
-                          return (value == '') ? "Please input details" : null;
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                        height: 50,
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              children: [
-                                IconButton(
-                                    onPressed: () async {
-                                      pickImage();
-                                    },
-                                    icon: const Icon(Icons.upload),
-                                    iconSize: 40,
-                                    color: Colors.blue
-                                ),
-                                const Padding(
-                                    padding:
-                                    EdgeInsetsDirectional.only(top: 5)),
-                                const Text(
-                                  "Upload Photo",
-                                  style: TextStyle(fontSize: 20),
-                                )
-                              ],
-                            )
-                        )
-                    ),
-                    const SizedBox(
-                      height: 15,
-                      width: 20,
-                    ),
-                    image != null ?
-                    Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black)
-                      ),
-                      child: Image.file(image!), height: 200, width: 200,):
-                    Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.black)
-                      ),
-                      child: Center(
-                          child: const Text("No image selected")),
-                      height: 200,
-                      width: 200,),
-                    const SizedBox(height: 50),
-                    ClipRRect(borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        height: 40,
-                        width: size.width * 0.6,
-                        child: ElevatedButton(
-                            onPressed: addItem,
-                            child: const Text("ADD ITEM")
+                                    style: BorderStyle.solid, color: Colors.blue)),
+                            hintText: 'NAME',
+                          ),
+                          validator: (value) {
+                            return (value == '') ? "Please input a name" : null;
+                          },
                         ),
                       ),
-                    )
-                  ],
-                )
-            )),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          controller: detailsController,
+                          decoration: InputDecoration(
+                              hintText: 'Details',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                      style: BorderStyle.solid,
+                                      color: Colors.blue))),
+                          validator: (value) {
+                            return (value == '') ? "Please input details" : null;
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                          height: 50,
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () async {
+                                        pickImage();
+                                      },
+                                      icon: const Icon(Icons.upload),
+                                      iconSize: 40,
+                                      color: Colors.blue
+                                  ),
+                                  const Padding(
+                                      padding: EdgeInsetsDirectional.only(top: 5)),
+                                  const Text(
+                                    "Upload Photo",
+                                    style: TextStyle(fontSize: 20),
+                                  )
+                                ],
+                              )
+                          )
+                      ),
+                      const SizedBox(
+                        height: 15,
+                        width: 20,
+                      ),
+                      image != null ?
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black)
+                        ),
+                        child: Image.file(image!), height: 200, width: 200,):
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.black)
+                        ),
+                        child: Center(
+                            child: Text("No image selected")),
+                        height: 200,
+                        width: 200,
+                      ),
+                      const SizedBox(height: 50),
+                      ClipRRect(borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          height: 40,
+                          width: size.width * 0.6,
+                          child: ElevatedButton(
+                              onPressed: addItem,
+                              child: const Text("ADD ITEM")
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+              )),
         ),
-      ),
     );
   }
 }
