@@ -12,6 +12,9 @@ class _ProfilePageState extends State<ProfilePage> {
   
   @override
   Widget build(BuildContext context) {
+
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -25,36 +28,43 @@ class _ProfilePageState extends State<ProfilePage> {
           )
         ),
       ),
-      body: Container(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            Center(
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Stack(
                 children: [
-                  Container(
-                    width: 140,
-                    height: 140,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 5,
-                        color: Colors.white
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: 140,
+                        height: 140,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 5,
+                            color: Colors.white
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              spreadRadius: 3,
+                              blurRadius: 10,
+                              color: Colors.blue.withOpacity(0.1)
+                            )
+                          ],
+                          shape: BoxShape.circle,
+                          image: const DecorationImage(
+                            fit: BoxFit.fill, 
+                            image: NetworkImage(
+                              'https://i.mydramalist.com/27Z1Rc.jpg'
+                            )
+                          ),
+                        ),
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          spreadRadius: 3,
-                          blurRadius: 10,
-                          color: Colors.blue.withOpacity(0.1)
-                        )
-                      ],
-                      shape: BoxShape.circle,
-                      image: const DecorationImage(
-                        fit: BoxFit.fill, 
-                        image: NetworkImage(
-                          'https://i.mydramalist.com/27Z1Rc.jpg'
-                        )
-                      ),
-                    ),
+                    ],
                   ),
                   Positioned(
                     bottom: 0,
@@ -84,8 +94,74 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 30
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 10,
+                ),
+                child: Text("Oh Se Hun", 
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  color: Colors.blue,
+                  ),
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text("Email Address:",
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text("ohsehun@gmail.com",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text("Home Address:",
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text("Seoul, South Korea",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text("Mobile Number:",
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text("010-6303-3087",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.black,
+              ),
+              ),
             ),
           ],
         ),
