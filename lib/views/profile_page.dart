@@ -97,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
             const Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  vertical: 30,
+                  vertical: 20,
                   horizontal: 10,
                 ),
                 child: Text("Oh Se Hun", 
@@ -113,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
               padding: EdgeInsets.all(10),
               child: Text("Email Address:",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 color: Colors.grey,
               ),
               ),
@@ -122,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
               padding: EdgeInsets.all(10),
               child: Text("ohsehun@gmail.com",
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 20,
                 color: Colors.black,
               ),
               ),
@@ -131,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
               padding: EdgeInsets.all(10),
               child: Text("Home Address:",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 color: Colors.grey,
               ),
               ),
@@ -140,7 +140,25 @@ class _ProfilePageState extends State<ProfilePage> {
               padding: EdgeInsets.all(10),
               child: Text("Seoul, South Korea",
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 20,
+                color: Colors.black,
+              ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text("Mobile Number:",
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey,
+              ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text("010-6303-3087",
+              style: TextStyle(
+                fontSize: 20,
                 color: Colors.black,
               ),
               ),
