@@ -2,6 +2,7 @@ class Item {
   final int? id;
   final String name;
   final String details;
+  final double price;
   final int? userId;
   final String sold;
   final String picture;
@@ -13,6 +14,7 @@ class Item {
     required this.id,
     required this.name,
     required this.details,
+    required this.price,
     required this.userId,
     required this.sold,
     required this.picture,
@@ -26,6 +28,7 @@ class Item {
       id: json['id'],
       name: json['name'],
       details: json['details'],
+      price: json['price'],
       userId: json['userId'],
       sold: json['sold'],
       picture: json['picture'],
@@ -40,6 +43,7 @@ class Item {
       'id' : id,
       'name' : name,
       'details' : details,
+      'price' : price,
       'userId' : userId,
       'sold' : sold,
       'picture' : picture,

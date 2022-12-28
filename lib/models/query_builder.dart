@@ -19,8 +19,8 @@ class QueryBuilder {
   }
 
   Future <Database> initDatabase() async {
-    Directory appDirectory = await getApplicationDocumentsDirectory();
-    String path = join(appDirectory.path, 'onlysells.db');
+    // Directory appDirectory = await getApplicationDocumentsDirectory();
+    String path = join(await getDatabasesPath(), 'onlysells.db');
     return await openDatabase(
         path,
       version: 1,
@@ -33,11 +33,10 @@ class QueryBuilder {
           CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT, email TEXT,
           address TEXT)
     ''');
-
     await db.execute('''
           CREATE TABLE items(id INTEGER PRIMARY KEY, name TEXT, details TEXT,
-          userId INTEGER, sold TEXT, picture TEXT, soldTo TEXT, created_at TEXT,
-          updated_at TEXT,
+          price REAL, userId INTEGER, sold TEXT, picture TEXT, soldTo TEXT, 
+          created_at TEXT, updated_at TEXT,
           FOREIGN KEY(userId) REFERENCES users(id))
     ''');
   }
@@ -54,6 +53,7 @@ class QueryBuilder {
         id: map[i]['id'],
         name: map[i]['name'],
         details: map[i]['details'],
+        price: map[i]['price'],
         userId: map[i]['userId'],
         sold: map[i]['sold'],
         picture: map[i]['picture'],

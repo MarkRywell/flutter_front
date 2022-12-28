@@ -115,15 +115,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Home Page")
-      ),
+      // appBar: AppBar(
+      //   title: Text("Home Page")
+      // ),
       body: FutureBuilder(
         future: networkStatus != "none" ? fetchOtherItems() : QueryBuilder.instance.items(),
         builder: (context, snapshot) {
 
           if(snapshot.connectionState == ConnectionState.done) {
             if(snapshot.hasError) {
+              print(snapshot.error);
+
               return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -156,30 +158,60 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
               print("dri sa snapshot ${itemList.length}");
 
-              return RefreshIndicator(
-                onRefresh: () async {
-                  itemList = await fetchOtherItems();
-                  setState(() {
-                    itemList;
-                  });
-                },
-                child: ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
+              return NestedScrollView(
+                  floatHeaderSlivers: true,
+                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                    const SliverAppBar(
+                      title: Text("HomePage"),
+                    )
+                  ],
+                  body: RefreshIndicator(
+                    onRefresh: () async {
+                      itemList = await fetchOtherItems();
+                      setState(() {
+                        itemList;
+                      });
+                    },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: GridView.builder(
+                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          childAspectRatio: 1,
+                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 20,
+                        ),
+                        itemCount: itemList.length,
+                        itemBuilder: (context, index) {
 
-                    final item = itemList[index];
+                          final item = itemList[index];
 
-                    return ListTile(
-                      title: Text(item.name),
-                      subtitle: Text(item.sold),
-                    );
-                  },
-                ),
+                          return Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Image.network(item.picture),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                                    child: Text(item.name),
+                                  )
+                                ],
+                              )
+                          );
+                        }),
+                  ),
+                  )
               );
 
             }
           }
-          return Center(
+          return const Center(
             child: Text("Loading"),
               // child: CircularProgressIndicator(
               //   valueColor: colorTween,
