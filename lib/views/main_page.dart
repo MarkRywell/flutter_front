@@ -28,18 +28,18 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
     Icons.person_rounded,
   ];
 
-  List <Widget> widgets1 = [
-    const Center(child: Text("Home")),
-    const Center(child: Text("Listings")),
-    const Center(child: Text("Add")),
-    const Center(child: Text("Profile")),
+  List <Widget> widgets1 = const [
+    Center(child: Text("Home")),
+    Center(child: Text("Listings")),
+    Center(child: Text("Add")),
+    Center(child: Text("Profile")),
   ];
 
-  List <Widget> widgets = [
-    const HomePage(),
-    const MyListingsPage(),
-    const AddItem(),
-    const ProfilePage()
+  List <Widget> widgets = const [
+    HomePage(),
+    MyListingsPage(),
+    AddItem(),
+    ProfilePage()
   ];
 
   TextStyle customStyle () {
@@ -49,6 +49,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
       fontFamily: "Poppins"
     );
   }
+  bool showFAB = false;
 
   @override
   void dispose() {
@@ -59,8 +60,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Padding(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: showFAB ? Padding(
         padding: const EdgeInsets.all(20),
         child: Material(
           elevation: 10,
@@ -111,10 +112,26 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
             ),
           ),
         ),
-      ),
-      body: IndexedStack(
-        index: currentIndex,
-        children: widgets,
+      ) : null,
+      body: NotificationListener<UserScrollNotification>(
+        onNotification: (notification) {
+          if (notification.direction == ScrollDirection.forward) {
+            setState(() {
+              showFAB = true;
+            });
+          }
+          else if (notification.direction == ScrollDirection.reverse) {
+            setState(() {
+              showFAB = false;
+            });
+          }
+
+          return true;
+        },
+        child: IndexedStack(
+          index: currentIndex,
+          children: widgets,
+        ),
       )
     );
   }
