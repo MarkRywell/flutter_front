@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_front/models/api.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -16,10 +17,62 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController middleNameController = TextEditingController();
+  TextEditingController contactNoController = TextEditingController();
   TextEditingController emailAddressController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+
+  showStatus({required Color color, required String text}) {    // Snackbar to show message of API Response
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(text),
+            backgroundColor: color,
+            padding: const EdgeInsets.all(15),
+            behavior: SnackBarBehavior.fixed,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            )
+        )
+    );
+  }
+
+  showSuccess() {
+    
+  }
+
+  registerUser(context) async {
+
+    if(formKey.currentState!.validate()) {
+
+      String fullName = "${firstNameController.text} "
+          "${middleNameController.text} ${lastNameController.text}";
+
+      Map credentials = {
+        'name' : fullName,
+        'contactNo' : contactNoController.text,
+        'address' : addressController.text,
+        'email' : emailAddressController.text,
+        'password' : passwordController.text
+      };
+
+      var response = await Api.instance.registerUser(credentials);
+
+      if(response.runtimeType != List<Object>){
+        if(response.statusCode == 500){
+          showStatus(color: Colors.red, text: response.body);
+          return;
+        }
+      }
+
+      if(response[1] != 201) {
+        showStatus(color: Colors.red, text: response[0].message);
+        return;
+      }
+      showSuccess();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -309,7 +362,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  continued() {
+  continued() async {
     if (_currentStep == 0) {
       if (firstNameController.text.isEmpty ||
           lastNameController.text.isEmpty ||
@@ -317,20 +370,27 @@ class _RegisterPageState extends State<RegisterPage> {
         return null;
       }
     } else if (_currentStep == 1) {
-      if (addressController.text.isEmpty) {
+      if (contactNoController.text.isEmpty) {
         return null;
       }
     } else if (_currentStep == 2) {
-      if (emailAddressController.text.isEmpty) {
+      if (addressController.text.isEmpty) {
         return null;
       }
     } else if (_currentStep == 3) {
+      if (emailAddressController.text.isEmpty) {
+        return null;
+      }
+    } else if (_currentStep == 4) {
       if (passwordController.text.isEmpty ||
           confirmPasswordController.text.isEmpty ||
           passwordController.text != confirmPasswordController.text) {
         return null;
       }
-    }
+    } else if(_currentStep == 5) {
+      await registerUser(context);
+      return null;
+      }
 
     setState(() {
       _currentStep += 1;
