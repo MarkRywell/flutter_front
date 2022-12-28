@@ -30,8 +30,8 @@ class QueryBuilder {
 
   Future onCreate(Database db, int version) async {
     await db.execute('''
-          CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT, email TEXT,
-          address TEXT)
+          CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT, contactNo TEXT, 
+          email TEXT, address TEXT)
     ''');
     await db.execute('''
           CREATE TABLE items(id INTEGER PRIMARY KEY, name TEXT, details TEXT,

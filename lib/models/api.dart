@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/models/api_response.dart';
 import 'package:http/http.dart' as http;
@@ -88,36 +90,54 @@ class Api {
 
   }
 
-  Future loginUser (Map credentials) async {
-
+  Future loginUser(Map credentials) async {
     var url = Uri.parse("${dotenv.env['API_URL']}/login");
+    try {
+      var response = await http.post(url, body: convert.jsonEncode(credentials), headers: { "Content-type": "application/json" }).timeout(Duration(seconds: 2));
+      var jsonResponse = await convert.jsonDecode(response.body);
+      ApiResponse apiResponse = ApiResponse(
+          status: jsonResponse['status'],
+          message: jsonResponse['message'],
+          data: jsonResponse['data'] ?? {});
+      if (response.statusCode != 200) {
+        return [apiResponse, 400];
+      }
+      return [apiResponse, 200];
+    } on TimeoutException {
+      return http.Response("Request Timeout", 500);
+    }
+  }
+
+
+  Future registerUser (Map credentials) async {
+
+    var url = Uri.parse("${dotenv.env['API_URL']}/register");
 
     var response = await http.post(url, body: convert.jsonEncode(credentials),
     headers: {
-        "Content-type" : "application/json"
-      }
+      "Content-type" : "application/json"
+    }
     ).timeout(const Duration(seconds: 2), onTimeout: () {
 
-      return http.Response("Request Timeout", 500);
+      return http.Response('Request Timeout', 500);
     });
 
-    if(response.statusCode == 500){
+    if(response.statusCode == 500) {
       return response;
     }
 
     var jsonResponse = await convert.jsonDecode(response.body);
 
     ApiResponse apiResponse = ApiResponse(
-        status: jsonResponse['status'],
-        message: jsonResponse['message'],
-        data: jsonResponse['data'] ?? {});
+      status: jsonResponse['status'],
+      message: jsonResponse['message'],
+      data: jsonResponse['data'] ?? {});
 
     if(response.statusCode != 200) {
-      return([apiResponse, 400]);
+      return ([apiResponse, 400]);
     }
 
-    return ([apiResponse, 200]);
-
+    return ([apiResponse, 201]);
   }
 
 }
