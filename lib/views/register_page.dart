@@ -154,6 +154,33 @@ class _RegisterPageState extends State<RegisterPage> {
                       : StepState.disabled,
                 ),
                 Step(
+                  title: const Text('Contact No.'),
+                  content: Column(
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: TextFormField(
+                            controller: contactNoController,
+                            maxLines: 1,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                hintText: 'Contact Number',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                    color: Colors.white,
+                                    width: 0.75,
+                                  ),
+                                )),
+                          ))
+                    ],
+                  ),
+                  isActive: _currentStep >= 0,
+                  state: _currentStep >= 1
+                      ? StepState.complete
+                      : StepState.disabled,
+                ),
+                Step(
                   title: const Text('Address'),
                   content: Column(
                     children: [
@@ -176,7 +203,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   isActive: _currentStep >= 0,
-                  state: _currentStep >= 1
+                  state: _currentStep >= 2
                       ? StepState.complete
                       : StepState.disabled,
                 ),
@@ -203,7 +230,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   isActive: _currentStep >= 0,
-                  state: _currentStep >= 1
+                  state: _currentStep >= 3
                       ? StepState.complete
                       : StepState.disabled,
                 ),
@@ -264,7 +291,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   isActive: _currentStep >= 0,
-                  state: _currentStep >= 2
+                  state: _currentStep >= 3
                       ? StepState.complete
                       : StepState.disabled,
                 ),
@@ -321,6 +348,19 @@ class _RegisterPageState extends State<RegisterPage> {
                                 )),
                             Align(
                               alignment: Alignment.topLeft,
+                              child: Text("Contact Number: ${contactNoController.text}",
+                                  style: const TextStyle(
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12)),
+                            ),
+                            const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2),
+                                child: Divider(
+                                  thickness: 2,
+                                )),
+                            Align(
+                              alignment: Alignment.topLeft,
                               child: Text("Address: ${addressController.text}",
                                   style: const TextStyle(
                                       color: Colors.black54,
@@ -343,14 +383,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                             const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 2),
-                                child: Divider(
-                                  thickness: 2,
-                                )),
+                                ),
                           ],
                         )),
                   ),
                   isActive: _currentStep >= 0,
-                  state: _currentStep >= 3
+                  state: _currentStep >= 5
                       ? StepState.complete
                       : StepState.disabled,
                 )
