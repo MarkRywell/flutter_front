@@ -21,6 +21,7 @@ class Api {
 
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
+
       return jsonResponse.isNotEmpty ?
       List.generate(jsonResponse.length, (i) {
         return Item(
@@ -33,7 +34,7 @@ class Api {
           picture: jsonResponse[i]['picture'],
           soldTo: jsonResponse[i]['soldTo'],
           createdAt: jsonResponse[i]['created_at'],
-          updatedAt: jsonResponse[i]['updatedAt'],
+          updatedAt: jsonResponse[i]['updated_at'],
         );
       }) : [];
     }
