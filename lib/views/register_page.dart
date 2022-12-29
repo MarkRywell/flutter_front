@@ -291,7 +291,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   isActive: _currentStep >= 0,
-                  state: _currentStep >= 3
+                  state: _currentStep >= 4
                       ? StepState.complete
                       : StepState.disabled,
                 ),
