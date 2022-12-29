@@ -39,7 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   showSuccess() {
-    
+
   }
 
   registerUser(context) async {
