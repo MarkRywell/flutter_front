@@ -45,14 +45,13 @@ class _RegisterPageState extends State<RegisterPage> {
         useSafeArea: true,
         builder: (BuildContext context) {
 
-          Size size = MediaQuery.of(context).size;
-
           return AlertDialog(
-            title: const Text("Successfully Registered",
+            title: const Center(child: Text("Successful Registration",
               style: TextStyle(
                 color: Colors.green,
                 fontSize: 20
-              ),
+                ),
+              )
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20)
@@ -69,10 +68,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)
                     ),
-                    primary: Colors.black,
                     side: const BorderSide(width: 1.0, color: Colors.green),
-                    fixedSize: Size(120, 40),
-                    textStyle: TextStyle(
+                    fixedSize: const Size(120, 40),
+                    textStyle: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold
                     )
