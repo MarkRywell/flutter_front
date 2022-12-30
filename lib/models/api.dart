@@ -21,6 +21,7 @@ class Api {
 
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
+
       return jsonResponse.isNotEmpty ?
       List.generate(jsonResponse.length, (i) {
         return Item(
@@ -33,7 +34,7 @@ class Api {
           picture: jsonResponse[i]['picture'],
           soldTo: jsonResponse[i]['soldTo'],
           createdAt: jsonResponse[i]['created_at'],
-          updatedAt: jsonResponse[i]['updatedAt'],
+          updatedAt: jsonResponse[i]['updated_at'],
         );
       }) : [];
     }
@@ -45,20 +46,33 @@ class Api {
 
     Future addItem (var newItem) async {
 
-      var url = Uri.parse('${dotenv.env}/items?'
-          '&name=${newItem.title}&details=${newItem.details}'
-          '&userId=${newItem.userId}&picture=${newItem.picture}');
+      Map data = {
+        "name" : newItem.name,
+        "details" : newItem.details,
+        "price" : newItem.price,
+        "userId" : newItem.userId,
+        "sold" : newItem.sold,
+        "picture" : newItem.picture,
+      };
 
-      var response = await http.post(url);
+      var url = Uri.parse("${dotenv.env['API_URL']}/items");
+
+      var response = await http.post(url, body: convert.jsonEncode(data),
+          headers: {
+            "Content-type" : "application/json"
+          });
 
       if(response.statusCode == 201) {
+
+
+
         return response.statusCode;
       }
     }
 
     Future updateItem (var updatedItem) async {
 
-    var url = Uri.parse('${dotenv.env}/items/${updatedItem.id}?'
+    var url = Uri.parse('${dotenv.env['API_URL']}/items/${updatedItem.id}?'
         '&title=${updatedItem.title}&details=${updatedItem.details}'
         '&picture=${updatedItem.picture}');
 
@@ -84,16 +98,41 @@ class Api {
 
   Future setStatus (var updatedItem) async {
 
-    var url = Uri.parse('${dotenv.env}/items/${updatedItem.id}?sold=${updatedItem.sold}');
+    var url = Uri.parse('${dotenv.env['API_URL']}/items/${updatedItem.id}?sold=${updatedItem.sold}');
 
     var response = await http.patch(url);
 
   }
 
+  Future deleteItem (var item) async {
+
+    var url = Uri.parse('${dotenv.env['API_URL']}/items/${item.id}');
+
+    try {
+      var response = await http.delete(url).timeout(const Duration(seconds: 2));
+      var jsonResponse = await convert.jsonDecode(response.body);
+
+      ApiResponse apiResponse = ApiResponse(
+          status: jsonResponse['status'],
+          message: jsonResponse['message'],
+          data: jsonResponse['data'] ?? {});
+
+      if (response.statusCode != 200) {
+        return [apiResponse, 400];
+      }
+      return [apiResponse, 200];
+    } on TimeoutException {
+      return http.Response("Request Timeout", 500);
+    }
+  }
+
   Future loginUser(Map credentials) async {
     var url = Uri.parse("${dotenv.env['API_URL']}/login");
     try {
-      var response = await http.post(url, body: convert.jsonEncode(credentials), headers: { "Content-type": "application/json" }).timeout(Duration(seconds: 2));
+      var response = await http.post(url, body: convert.jsonEncode(credentials),
+          headers: {
+        "Content-type": "application/json"
+      }).timeout(const Duration(seconds: 2));
       var jsonResponse = await convert.jsonDecode(response.body);
       ApiResponse apiResponse = ApiResponse(
           status: jsonResponse['status'],
@@ -133,7 +172,7 @@ class Api {
       message: jsonResponse['message'],
       data: jsonResponse['data'] ?? {});
 
-    if(response.statusCode != 200) {
+    if(response.statusCode != 201) {
       return ([apiResponse, 400]);
     }
 

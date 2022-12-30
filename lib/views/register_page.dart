@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_front/models/api.dart';
+import 'package:flutter_front/views/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -38,8 +39,48 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  showSuccess() {
-    
+  Future showSuccess() {
+    return showDialog(
+        context: context,
+        useSafeArea: true,
+        builder: (BuildContext context) {
+
+          return AlertDialog(
+            title: const Center(child: Text("Successful Registration",
+              style: TextStyle(
+                color: Colors.green,
+                fontSize: 20
+                ),
+              )
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20)
+            ),
+            content: const Icon(Icons.check, size: 60, color: Colors.green),
+            actionsAlignment: MainAxisAlignment.center,
+            actions: [
+              OutlinedButton(
+                  onPressed: () {
+                Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const LoginPage()));
+              },
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)
+                    ),
+                    side: const BorderSide(width: 1.0, color: Colors.green),
+                    fixedSize: const Size(120, 40),
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
+                    )
+                  ),
+                  child: const Text("LOG IN")
+              )
+            ],
+          );
+        }
+    );
   }
 
   registerUser(context) async {
@@ -76,6 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
