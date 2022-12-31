@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_front/models/api.dart';
+import 'package:flutter_front/models/item.dart';
 import 'package:flutter_front/models/query_builder.dart';
 import 'package:flutter_front/views/details_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,19 +31,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     Map user = convert.jsonDecode(pref.getString("user")!);
 
-    List items = await Api.instance.fetchOtherItems(user['id']);
+    List itemResponse = await Api.instance.fetchOtherItems(user['id']);
 
-    if(items.isEmpty) {
+    if(itemResponse.isEmpty) {
       return;
     }
 
     QueryBuilder.instance.truncateTable();
 
-    for(int i = 0; i < items.length; i++) {
-      QueryBuilder.instance.addItem(items[i]);
-    }
-
-    return items;
+    return itemResponse;
   }
 
   Future <void> checkConnectivity() async {
@@ -114,9 +111,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Home Page")
-      // ),
       body: FutureBuilder(
         future: networkStatus != "none" ? fetchOtherItems() : QueryBuilder.instance.items(),
         builder: (context, snapshot) {
@@ -152,7 +146,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             }
             if(snapshot.hasData) {
 
-              itemList.isEmpty ? itemList = snapshot.data! :null;
+              if(itemList.isEmpty){
+
+              for(int i = 0; i < snapshot.data!.length; i++) {
+                snapshot.data![i]['price'] = snapshot.data![i]['price'].toDouble();
+                itemList.add(Item.fromJson(snapshot.data[i]));
+                Map data = snapshot.data![i];
+                Map <String, Object> itemMap = data.map((key, value)=> MapEntry(key, value ?? ""));
+                QueryBuilder.instance.addItemMap(itemMap);
+                }
+              }
 
               return NestedScrollView(
                   floatHeaderSlivers: true,

@@ -64,6 +64,8 @@ class _LoginPageState extends State<LoginPage> {
       'password' : passwordController.text
     };
 
+    print(credentials);
+
     var connectivity = await Connectivity().checkConnectivity();
     print(connectivity);
 
@@ -97,8 +99,9 @@ class _LoginPageState extends State<LoginPage> {
 
     String? data = pref.getString("user");
     print(data);
+
     var data1 = convert.jsonDecode(data!);
-    print(data1['name']);
+
 
     Navigator.push(context,
     MaterialPageRoute(builder: (context) => MainPage()));
