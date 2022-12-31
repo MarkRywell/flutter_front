@@ -3,7 +3,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/api_response.dart';
 import 'package:flutter_front/views/main_page.dart';
-import 'package:flutter_front/views/register_page.dart';
+import 'package:flutter_front/views/auth/register_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:convert' as convert;
@@ -90,11 +90,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   preferences(ApiResponse response) async {
-    print(response.data);
 
     final pref = await SharedPreferences.getInstance();
     pref.setString("token", response.data!['token']);
     pref.setString("user", convert.jsonEncode(response.data!['user']));
+
+    String? data = pref.getString("user");
+    print(data);
+    var data1 = convert.jsonDecode(data!);
+    print(data1['name']);
 
     Navigator.push(context,
     MaterialPageRoute(builder: (context) => MainPage()));

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/query_builder.dart';
+import 'package:flutter_front/views/details_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:convert' as convert;
@@ -46,8 +47,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   Future <void> checkConnectivity() async {
     var result = await Connectivity().checkConnectivity();
-
-    print(result);
 
     if(result == ConnectivityResult.mobile) {
       setState(() {
@@ -124,7 +123,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
           if(snapshot.connectionState == ConnectionState.done) {
             if(snapshot.hasError) {
-              print(snapshot.error);
 
               return Center(
                   child: Column(
@@ -156,8 +154,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
               itemList.isEmpty ? itemList = snapshot.data! :null;
 
-              print("dri sa snapshot ${itemList.length}");
-
               return NestedScrollView(
                   floatHeaderSlivers: true,
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -173,7 +169,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       });
                     },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                     child: GridView.builder(
                         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 200,
@@ -186,23 +182,41 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
                           final item = itemList[index];
 
-                          return Container(
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Image.network(item.picture),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-                                    child: Text(item.name),
-                                  )
-                                ],
-                              )
+                          return GestureDetector(
+                            onTap: () async {
+
+                              String name = await Api.instance.fetchItemSeller(item.userId);
+
+                              Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => DetailsPage(item: item, seller: name)));
+                            },
+                            child: Container(
+                                key: UniqueKey(),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                      image: NetworkImage(item.picture),
+                                          fit: BoxFit.fill),
+                                    ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      constraints: const BoxConstraints(
+                                        minHeight: 20
+                                      ),
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                        color: Colors.white,
+                                      ),
+                                      child: Center(child: Text(item.name))
+                                    )
+                                  ],
+                                ),
+
+                                ),
                           );
                         }),
                   ),
