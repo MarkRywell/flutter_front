@@ -24,7 +24,20 @@ class Api {
       var jsonResponse = convert.jsonDecode(response.body);
 
       return jsonResponse.isNotEmpty ?
-      jsonResponse : [];
+      List.generate(jsonResponse.length, (i) {
+        return Item(
+          id: jsonResponse[i]['id'],
+          name: jsonResponse[i]['name'],
+          details: jsonResponse[i]['details'],
+          price: jsonResponse[i]['price'].toDouble(),
+          userId: jsonResponse[i]['userId'],
+          sold: jsonResponse[i]['sold'],
+          picture: jsonResponse[i]['picture'],
+          soldTo: jsonResponse[i]['soldTo'],
+          createdAt: jsonResponse[i]['created_at'],
+          updatedAt: jsonResponse[i]['updated_at'],
+        );
+      }) : [];
     }
     else {
       Exception(

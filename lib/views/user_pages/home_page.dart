@@ -31,15 +31,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     Map user = convert.jsonDecode(pref.getString("user")!);
 
-    List itemResponse = await Api.instance.fetchOtherItems(user['id']);
+    List items = await Api.instance.fetchOtherItems(user['id']);
 
-    if(itemResponse.isEmpty) {
+    if(items.isEmpty) {
       return;
     }
 
     QueryBuilder.instance.truncateTable();
 
-    return itemResponse;
+    for(int i = 0; i < items.length; i++) {
+      QueryBuilder.instance.addItem(items[i]);
+    }
+
+    return items;
   }
 
   Future <void> checkConnectivity() async {
@@ -146,16 +150,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             }
             if(snapshot.hasData) {
 
-              if(itemList.isEmpty){
-
-              for(int i = 0; i < snapshot.data!.length; i++) {
-                snapshot.data![i]['price'] = snapshot.data![i]['price'].toDouble();
-                itemList.add(Item.fromJson(snapshot.data[i]));
-                Map data = snapshot.data![i];
-                Map <String, Object> itemMap = data.map((key, value)=> MapEntry(key, value ?? ""));
-                QueryBuilder.instance.addItemMap(itemMap);
-                }
-              }
+              itemList.isEmpty ? itemList = snapshot.data! :null;
 
               return NestedScrollView(
                   floatHeaderSlivers: true,
