@@ -70,6 +70,21 @@ class Api {
       }
     }
 
+    Future fetchItemSeller (int userId) async {
+
+      var url = Uri.parse('${dotenv.env['API_URL']}/item/$userId');
+
+      var response = await http.get(url);
+
+      if(response.statusCode == 200) {
+        var jsonResponse = convert.jsonDecode(response.body);
+        return jsonResponse['name'];
+      }
+      else {
+        return "User";
+      }
+    }
+
     Future updateItem (var updatedItem) async {
 
     var url = Uri.parse('${dotenv.env['API_URL']}/items/${updatedItem.id}?'

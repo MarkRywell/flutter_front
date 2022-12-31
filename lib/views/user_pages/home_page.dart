@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/query_builder.dart';
+import 'package:flutter_front/views/details_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:convert' as convert;
@@ -186,23 +187,33 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
                           final item = itemList[index];
 
-                          return Container(
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Image.network(item.picture),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-                                    child: Text(item.name),
-                                  )
-                                ],
-                              )
+                          return GestureDetector(
+                            onTap: () async {
+
+                              String name = await Api.instance.fetchItemSeller(item.userId);
+
+                              Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => DetailsPage(item: item, seller: name)));
+                            },
+                            child: Container(
+                                key: UniqueKey(),
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: Image.network(item.picture),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                                      child: Text(item.name),
+                                    )
+                                  ],
+                                )
+                            ),
                           );
                         }),
                   ),

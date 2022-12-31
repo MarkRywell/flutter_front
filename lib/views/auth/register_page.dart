@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_front/models/api.dart';
-import 'package:flutter_front/views/login_page.dart';
+import 'package:flutter_front/views/auth/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);

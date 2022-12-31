@@ -3,7 +3,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/api_response.dart';
 import 'package:flutter_front/views/main_page.dart';
-import 'package:flutter_front/views/register_page.dart';
+import 'package:flutter_front/views/auth/register_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:convert' as convert;
