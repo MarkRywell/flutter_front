@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_front/custom_widgets/custom_text.dart';
+import 'package:flutter_front/custom_widgets/custom_text1.dart';
 import 'package:flutter_front/models/item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert' as convert;
 
 class DetailsPage extends StatefulWidget {
 
@@ -20,9 +23,125 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
 
   late TabController tabController;
 
+  purchase(String buyerName) async {
+
+
+
+
+  }
+
   buyForm (var item) async {
 
+    final pref = await SharedPreferences.getInstance();
+    final prefData = convert.jsonDecode(pref.getString("user")!);
+    final buyerName = prefData['name'];
 
+
+    var formKey = GlobalKey<FormState>();
+    TextEditingController buyerController = TextEditingController(text: buyerName);
+
+    return showDialog(
+        context: context,
+        useSafeArea: true,
+        // barrierDismissible: false,
+        builder: (BuildContext context) {
+
+          Size size = MediaQuery.of(context).size;
+
+          return AlertDialog(
+            title: const Center(child: Text("Purchase Form",
+            style: TextStyle(
+                color: Colors.blue,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Poppins"))),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20)
+            ),
+            content: Container(
+              height: size.height * 0.5,
+              width: size.width * 0.8,
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    CustomText1(textTitle: "Item Name:", textData: item.name),
+                    CustomText1(textTitle: "Price:", textData: "₱ ${item.price.toString()}"),
+                    TextFormField(
+                      controller: buyerController,
+                      decoration: InputDecoration(
+                        labelText: "Buyer's Name",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                      validator: (value) {
+                        return value == null || value.isEmpty ?
+                        "Customer Name is required" : null;
+                      },
+                    ),
+                    Expanded(
+                      child: Container(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            width: 120,
+                            height: 40,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if(formKey.currentState!.validate()) {
+                                  purchase(buyerController.text);
+                                  Navigator.pop(context);
+                                }
+                              },
+                              style: const ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.green)
+                              ),
+                              child: const Text("PURCHASE",
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600
+                                  )
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            width: 120,
+                            height: 40,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              style: const ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll<Color>(Colors.red)
+                              ),
+                              child: const Text("CANCEL",
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600
+                                  )
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
 
   }
 
@@ -38,9 +157,28 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+                color: Colors.grey
+            ),
+            child: const Icon(Icons.arrow_back,
+              color: Colors.white,
+          ),),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.only(top: 50),
           child: Column(
             children: [
               Container(
@@ -140,8 +278,8 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
         ),
       ),
       bottomNavigationBar: GestureDetector(
-        onTap:() {
-
+        onTap:() async {
+          buyForm(widget.item);
         },
         child: Container(
           height: 60,
@@ -149,7 +287,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Text("Buy Item",
+                Text("Purchase Item",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16

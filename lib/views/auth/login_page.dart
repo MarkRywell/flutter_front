@@ -90,11 +90,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   preferences(ApiResponse response) async {
-    print(response.data);
 
     final pref = await SharedPreferences.getInstance();
     pref.setString("token", response.data!['token']);
     pref.setString("user", convert.jsonEncode(response.data!['user']));
+
+    String? data = pref.getString("user");
+    print(data);
+    var data1 = convert.jsonDecode(data!);
+    print(data1['name']);
 
     Navigator.push(context,
     MaterialPageRoute(builder: (context) => MainPage()));
