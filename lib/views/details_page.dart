@@ -54,7 +54,6 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
         return;
       }
     }
-    
 
   }
 
@@ -68,10 +67,11 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
     var formKey = GlobalKey<FormState>();
     TextEditingController buyerController = TextEditingController(text: buyerName);
 
+
     return showDialog(
         context: context,
         useSafeArea: true,
-        // barrierDismissible: false,
+        barrierDismissible: false,
         builder: (BuildContext context) {
 
           Size size = MediaQuery.of(context).size;
@@ -96,6 +96,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
                     CustomText1(textTitle: "Item Name:", textData: item.name),
                     CustomText1(textTitle: "Price:", textData: "₱ ${item.price.toString()}"),
                     TextFormField(
+                      readOnly: true,
                       controller: buyerController,
                       decoration: InputDecoration(
                         labelText: "Buyer's Name",

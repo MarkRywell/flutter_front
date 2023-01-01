@@ -45,16 +45,16 @@ class Api {
     }
   }
 
-    Future addItem (var newItem) async {
+    Future addItem (var data) async {
 
-      Map data = {
-        "name" : newItem.name,
-        "details" : newItem.details,
-        "price" : newItem.price,
-        "userId" : newItem.userId,
-        "sold" : newItem.sold,
-        "picture" : newItem.picture,
-      };
+      // Map data = {
+      //   "name" : newItem.name,
+      //   "details" : newItem.details,
+      //   "price" : newItem.price,
+      //   "userId" : newItem.userId,
+      //   "sold" : newItem.sold,
+      //   "picture" : newItem.picture,
+      // };
 
       var url = Uri.parse("${dotenv.env['API_URL']}/items");
 
@@ -137,13 +137,11 @@ class Api {
 
   Future purchase (var updatedItem) async {
 
-    var url = Uri.parse('${dotenv.env['API_URL']}/items/${updatedItem.id}?soldTo=${updatedItem.soldTo}&sold=${updatedItem.sold}');
+    var url = Uri.parse('${dotenv.env['API_URL']}/v2/item/${updatedItem.id}?soldTo=${updatedItem.soldTo}&sold=${updatedItem.sold}');
 
     var response = await http.put(url).timeout(const Duration(seconds: 2), onTimeout: () {
       return http.Response('Request Timeout', 500);
     });
-
-    print(response.body);
 
     var jsonResponse = await convert.jsonDecode(response.body);
 

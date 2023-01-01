@@ -100,9 +100,6 @@ class _LoginPageState extends State<LoginPage> {
     String? data = pref.getString("user");
     print(data);
 
-    var data1 = convert.jsonDecode(data!);
-
-
     Navigator.push(context,
     MaterialPageRoute(builder: (context) => MainPage()));
 
