@@ -118,12 +118,59 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: FutureBuilder(
         future: networkStatus != "none" ? fetchOtherItems() : QueryBuilder.instance.items(),
         builder: (context, snapshot) {
           if(snapshot.connectionState == ConnectionState.done) {
             if(snapshot.hasError) {
+
+              return NestedScrollView(
+                floatHeaderSlivers: true,
+                headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                  const SliverAppBar(
+                    title: Text("HomePage"),
+                  )
+                ],
+                body: RefreshIndicator(
+                    onRefresh: () async {
+                      itemList = await fetchOtherItems();
+                      setState(() {
+                        itemList;
+                      });
+                    },
+                    child: SingleChildScrollView(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 100,
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: const Icon(Icons.error_outline,
+                                  size: 100,
+                                  color: Colors.redAccent
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Text("Database Error: Problem Fetching Data",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    height: 1.5,
+                                    fontSize: 20
+                                ),),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                ),
+              );
 
               return Center(
                   child: Column(
@@ -152,7 +199,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               );
             }
             if(snapshot.hasData) {
-
               if(snapshot.data.isEmpty) {
 
                 return NestedScrollView(
@@ -175,6 +221,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
+                              padding: EdgeInsets.only(),
                               child: Text("No Item Available"),
                             )
                           ],

@@ -45,89 +45,106 @@ class Api {
     }
   }
 
-    Future addItem (var data) async {
+  Future <dynamic> fetchMyItems (int id) async {
 
-      // Map data = {
-      //   "name" : newItem.name,
-      //   "details" : newItem.details,
-      //   "price" : newItem.price,
-      //   "userId" : newItem.userId,
-      //   "sold" : newItem.sold,
-      //   "picture" : newItem.picture,
-      // };
+    var url = Uri.parse('${dotenv.env['API_URL']}/v2/items/$id');
 
-      var url = Uri.parse("${dotenv.env['API_URL']}/items");
+    var response = await http.get(url);
 
-      var request = await http.MultipartRequest('POST', url);
+    if (response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
 
-      request.files.add(await http.MultipartFile.fromPath('picture', data['picture']));
-      request.fields['name'] = data['name'];
-      request.fields['details'] = data['details'];
-      request.fields['price'] = data['price'].toString();
-      request.fields['userId'] = data['userId'].toString();
-      request.fields['sold'] = data['sold'];
-
-      final Streamresponse = await request.send();
-      var response = await http.Response.fromStream(Streamresponse);
-
-      // var response = await http.post(url, body: convert.jsonEncode(data),
-      //     headers: {
-      //       "Content-type" : "application/json"
-      //     }).timeout(const Duration(seconds: 2), onTimeout: () {
-      //       return http.Response('Request Timeout', 500);
-      // });
-
-      if(response.statusCode == 500){
-        return response;
-      }
-
-      var jsonResponse = await convert.jsonDecode(response.body);
-
-      ApiResponse apiResponse = ApiResponse(
-          status: jsonResponse['status'],
-          message: jsonResponse['message'],
-          data: jsonResponse['data'] ?? {});
-
-      if(response.statusCode != 201) {
-        return ([apiResponse, 400]);
-      }
-
-      print(Streamresponse);
-
-      return ([apiResponse, 201]);
+      return jsonResponse.isNotEmpty ?
+      List.generate(jsonResponse.length, (i) {
+        return Item(
+          id: jsonResponse[i]['id'],
+          name: jsonResponse[i]['name'],
+          details: jsonResponse[i]['details'],
+          price: jsonResponse[i]['price'].toDouble(),
+          userId: jsonResponse[i]['userId'],
+          sold: jsonResponse[i]['sold'],
+          picture: jsonResponse[i]['picture'],
+          soldTo: jsonResponse[i]['soldTo'],
+          createdAt: jsonResponse[i]['created_at'],
+          updatedAt: jsonResponse[i]['updated_at'],
+        );
+      }) : [];
+    }
+    else {
+      Exception(
+          "Error Fetching Data with a Status Code: ${response.statusCode}");
     }
 
-    Future fetchPicture (String picture) async {
-      
-      var url = Uri.parse('${dotenv.env['API_URL']}/picture/$picture');
+  }
 
-      var response = await http.get(url);
+  Future addItem (var data) async {
 
-      if(response.statusCode == 200) {
-        var jsonResponse = convert.jsonDecode(response.body);
-        return jsonResponse;
-      }
-      else {
-        Exception("Error with a status code: ${response.statusCode}");
-      }
+    var url = Uri.parse("${dotenv.env['API_URL']}/items");
+
+    var request = await http.MultipartRequest('POST', url);
+
+    request.files.add(await http.MultipartFile.fromPath('picture', data['picture']));
+    request.fields['name'] = data['name'];
+    request.fields['details'] = data['details'];
+    request.fields['price'] = data['price'].toString();
+    request.fields['userId'] = data['userId'].toString();
+    request.fields['sold'] = data['sold'];
+
+    final Streamresponse = await request.send();
+    var response = await http.Response.fromStream(Streamresponse);
+
+
+    if(response.statusCode == 500){
+      return response;
     }
 
-    Future fetchItemSeller (int userId) async {
+    var jsonResponse = await convert.jsonDecode(response.body);
 
-      var url = Uri.parse('${dotenv.env['API_URL']}/item/$userId');
+    ApiResponse apiResponse = ApiResponse(
+        status: jsonResponse['status'],
+        message: jsonResponse['message'],
+        data: jsonResponse['data'] ?? {});
 
-      var response = await http.get(url);
-
-      if(response.statusCode == 200) {
-        var jsonResponse = convert.jsonDecode(response.body);
-        return jsonResponse['name'];
-      }
-      else {
-        return "User";
-      }
+    if(response.statusCode != 201) {
+      return ([apiResponse, 400]);
     }
 
-    Future updateItem (var updatedItem) async {
+    print(Streamresponse);
+
+    return ([apiResponse, 201]);
+  }
+
+  Future fetchPicture (String picture) async {
+
+    var url = Uri.parse('${dotenv.env['API_URL']}/picture/$picture');
+
+    var response = await http.get(url);
+
+    if(response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+      return jsonResponse;
+    }
+    else {
+      Exception("Error with a status code: ${response.statusCode}");
+    }
+  }
+
+  Future fetchItemSeller (int userId) async {
+
+    var url = Uri.parse('${dotenv.env['API_URL']}/item/$userId');
+
+    var response = await http.get(url);
+
+    if(response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+      return jsonResponse['name'];
+    }
+    else {
+      return "User";
+    }
+  }
+
+  Future updateItem (var updatedItem) async {
 
     var url = Uri.parse('${dotenv.env['API_URL']}/items/${updatedItem.id}');
 
@@ -140,9 +157,9 @@ class Api {
     };
 
     var response = await http.put(url, body: convert.jsonEncode(data),
-      headers: {
-        "Content-type" : "application/json"
-      }).timeout(const Duration(seconds: 2), onTimeout: () {
+        headers: {
+          "Content-type" : "application/json"
+        }).timeout(const Duration(seconds: 2), onTimeout: () {
       return http.Response('Request Timeout', 500);
     });
 
@@ -188,11 +205,15 @@ class Api {
 
   Future deleteItem (var item) async {
 
+    print("item ID ${item.id}");
+
     var url = Uri.parse('${dotenv.env['API_URL']}/items/${item.id}');
 
     try {
       var response = await http.delete(url).timeout(const Duration(seconds: 2));
+      print("response ${response}");
       var jsonResponse = await convert.jsonDecode(response.body);
+
 
       ApiResponse apiResponse = ApiResponse(
           status: jsonResponse['status'],
