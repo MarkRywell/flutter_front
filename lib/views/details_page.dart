@@ -184,6 +184,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
+    print(widget.item.picture);
 
     return Scaffold(
       extendBodyBehindAppBar: true,

@@ -168,8 +168,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     child: SingleChildScrollView(
                       child: Center(
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("No Item Available")
+                            Container(
+                              child: Text("No Item Available"),
+                            )
                           ],
                         ),
                       ),
