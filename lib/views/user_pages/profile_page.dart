@@ -37,11 +37,11 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: EdgeInsets.symmetric(vertical: 40),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 width: size.width,
                 height: size.height * 0.3,
-                color: Colors.red,
                 child: Stack(
                   children: [
                     Container(
@@ -49,29 +49,37 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: size.height * 0.2,
                       color: Colors.blue
                     ),
-                    CircleAvatar(
-
-                    )
+                    Positioned(
+                      left: 10,
+                      bottom: 10,
+                      child: CircleAvatar(
+                        radius: 80,
+                        backgroundColor: Colors.white,
+                        child: CircleAvatar(
+                          radius: 75,
+                          backgroundColor: Colors.blue.withOpacity(0.4),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 180,
+                        bottom: 20,
+                        child: SizedBox(
+                          width: size.width * 0.4,
+                          height: 50,
+                          child: Text("Mark Rywell G. Gaje",
+                              maxLines: 2,
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold
+                              )),
+                        ))
                   ],
                 ),
               ),
-              const Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 20,
-                    horizontal: 10,
-                  ),
-                  child: Text("Oh Se Hun",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25,
-                    color: Colors.blue,
-                    ),
-                  ),
-                ),
-              ),
+              const Divider(thickness: 8, height: 5),
               const Padding(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.fromLTRB(10, 40, 10, 10),
                 child: Text("Email Address:",
                 style: TextStyle(
                   fontSize: 18,
