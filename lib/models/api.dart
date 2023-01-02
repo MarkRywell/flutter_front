@@ -58,12 +58,24 @@ class Api {
 
       var url = Uri.parse("${dotenv.env['API_URL']}/items");
 
-      var response = await http.post(url, body: convert.jsonEncode(data),
-          headers: {
-            "Content-type" : "application/json"
-          }).timeout(const Duration(seconds: 2), onTimeout: () {
-            return http.Response('Request Timeout', 500);
-      });
+      var request = await http.MultipartRequest('POST', url);
+
+      request.files.add(await http.MultipartFile.fromPath('picture', data['picture']));
+      request.fields['name'] = data['name'];
+      request.fields['details'] = data['details'];
+      request.fields['price'] = data['price'].toString();
+      request.fields['userId'] = data['userId'].toString();
+      request.fields['sold'] = data['sold'];
+
+      final Streamresponse = await request.send();
+      var response = await http.Response.fromStream(Streamresponse);
+
+      // var response = await http.post(url, body: convert.jsonEncode(data),
+      //     headers: {
+      //       "Content-type" : "application/json"
+      //     }).timeout(const Duration(seconds: 2), onTimeout: () {
+      //       return http.Response('Request Timeout', 500);
+      // });
 
       if(response.statusCode == 500){
         return response;
@@ -80,7 +92,24 @@ class Api {
         return ([apiResponse, 400]);
       }
 
+      print(Streamresponse);
+
       return ([apiResponse, 201]);
+    }
+
+    Future fetchPicture (String picture) async {
+      
+      var url = Uri.parse('${dotenv.env['API_URL']}/picture/$picture');
+
+      var response = await http.get(url);
+
+      if(response.statusCode == 200) {
+        var jsonResponse = convert.jsonDecode(response.body);
+        return jsonResponse;
+      }
+      else {
+        Exception("Error with a status code: ${response.statusCode}");
+      }
     }
 
     Future fetchItemSeller (int userId) async {

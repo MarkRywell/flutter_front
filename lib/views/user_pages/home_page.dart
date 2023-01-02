@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/item.dart';
 import 'package:flutter_front/models/query_builder.dart';
@@ -31,6 +32,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     Map user = convert.jsonDecode(pref.getString("user")!);
 
+    if(networkStatus == "none") {
+      return QueryBuilder.instance.items();
+    }
+
     List items = await Api.instance.fetchOtherItems(user['id']);
 
     if(items.isEmpty) {
@@ -42,7 +47,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     for(int i = 0; i < items.length; i++) {
       QueryBuilder.instance.addItem(items[i]);
     }
-    print("return items $items");
     return items;
   }
 
@@ -180,8 +184,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 );
               }
-              else{
-                itemList.isEmpty ? itemList = snapshot.data! :null;
+              else {
+                itemList.isEmpty ? itemList = snapshot.data! : null;
 
                 return NestedScrollView(
                     floatHeaderSlivers: true,
@@ -225,7 +229,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     border: Border.all(color: Colors.black),
                                     borderRadius: BorderRadius.circular(10),
                                     image: DecorationImage(
-                                        image: NetworkImage(item.picture),
+                                        image: NetworkImage('${dotenv.env['API_URL']}/picture/${item.picture}'),
                                         fit: BoxFit.fill),
                                   ),
                                   child: Column(
@@ -240,7 +244,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                                             color: Colors.white,
                                           ),
-                                          child: Center(child: Text(item.name))
+                                          child: Center(child: Text(item.name,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold
+                                          ),))
                                       )
                                     ],
                                   ),
