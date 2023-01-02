@@ -1,8 +1,14 @@
+import 'dart:convert' as convert;
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/views/main_page.dart';
+import 'package:flutter_front/views/user_pages/my_listings_page.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/item.dart';
 
 class AddItem extends StatefulWidget {
@@ -23,54 +29,147 @@ class _AddItemState extends State<AddItem> {
 
   List<Item> itemList = [];
   File? image;
+  String? filePath;
 
-  Future<void> addItem() async {
-    if(formKey.currentState!.validate()) {
+  Future addItem(Item newItem) async {
 
-      Item newItem = Item(
-        id: null,
-        name: nameController.text,
-        details: detailsController.text,
-        price: double.parse(priceController.text),
-        userId: null,
-        sold: '',
-        picture: '',
-      );
+    var data = newItem.toMap();
 
-      setState(() {
-        itemList.add(newItem);
+    var response = await Api.instance.addItem(data);
+
+    if(response.runtimeType != List<Object>){
+      if(response.statusCode == 500){
+        showStatus(color: Colors.red, text: response.body);
+        return;
       }
-      );
-
-      nameController.clear();
-      detailsController.clear();
-
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const MainPage()));
     }
+
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => MainPage()));
+
   }
 
-  Future pickImage() async {
+  Future <ImageSource?> chooseMedia() async {
+
+    var source = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+
+          Size size = MediaQuery.of(context).size;
+
+          return AlertDialog(
+            content: Container(
+              width: size.width * 0.7,
+              height: 100,
+              child: Column(
+                children: [
+                  Container(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context, ImageSource.camera);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.camera),
+                          SizedBox(width: 20),
+                          Text("Camera")
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context, ImageSource.gallery);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.photo),
+                          SizedBox(width: 20),
+                          Text("Gallery")
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
+          );
+        }
+    );
+    if(source == null) {
+      return null;
+    };
+
+    pickImage(source);
+
+  }
+
+  Future pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(
-          source: ImageSource.gallery,
+          source: source,
           maxWidth: 200,
           maxHeight: 200
       );
 
       if(image == null) return;
 
-      final imageTemp = File(image.path);
+      final imagePerm = await saveImage(image.path);
+      filePath = imagePerm.path;
 
-      setState(() => this.image = imageTemp);
+      setState(() => this.image = imagePerm);
+
     } on PlatformException catch(e) {
       print('Failed to pick image: $e');
     }
   }
 
+  Future <File> saveImage (String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = path.basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    return File(imagePath).copy(image.path);
+  }
+
+  showStatus({required Color color, required String text}) {    // Snackbar to show message of API Response
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(text),
+            backgroundColor: color,
+            padding: const EdgeInsets.all(15),
+            behavior: SnackBarBehavior.fixed,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            )
+        )
+    );
+  }
+
+  @override
+  void initState() {
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameController;
+    detailsController;
+    priceController;
+    filePath;
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+
     Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -87,7 +186,7 @@ class _AddItemState extends State<AddItem> {
                 child: Scrollbar(
                     interactive: true,
                     thickness: 8.0,
-                    radius: Radius.circular(5),
+                    radius: const Radius.circular(5),
                     child: Form(
                     key: formKey,
                     child: Column(
@@ -153,7 +252,7 @@ class _AddItemState extends State<AddItem> {
                                   children: [
                                     IconButton(
                                         onPressed: () async {
-                                          pickImage();
+                                          chooseMedia();
                                         },
                                         icon: const Icon(Icons.upload),
                                         iconSize: 40,
@@ -175,6 +274,10 @@ class _AddItemState extends State<AddItem> {
                         ),
                         image != null ?
                         Container(
+                          constraints: BoxConstraints(
+                            minHeight: 150,
+                            maxWidth: 150
+                          ),
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.black)
                           ),
@@ -195,7 +298,26 @@ class _AddItemState extends State<AddItem> {
                             height: 40,
                             width: size.width * 0.6,
                             child: ElevatedButton(
-                                onPressed: addItem,
+                                onPressed: () async {
+                                  if(formKey.currentState!.validate()) {
+
+                                    final pref = await SharedPreferences.getInstance();
+                                    String data = pref.getString("user")!;
+                                    var userData = convert.jsonDecode(data);
+
+                                    var newItem = Item(
+                                      id: null,
+                                      name: nameController.text,
+                                      details: detailsController.text,
+                                      price: double.parse(priceController.text),
+                                      userId: userData["id"],
+                                      picture: filePath ?? "assets/OnlySells1.png",
+                                      sold: "Available"
+                                    );
+
+                                    addItem(newItem);
+                                  }
+                                },
                                 child: const Text("ADD ITEM")
                             ),
                           ),

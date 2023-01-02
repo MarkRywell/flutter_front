@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_front/models/api.dart';
+import 'package:flutter_front/models/item.dart';
 import 'package:flutter_front/models/query_builder.dart';
 import 'package:flutter_front/views/details_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     List items = await Api.instance.fetchOtherItems(user['id']);
 
     if(items.isEmpty) {
-      return;
+      return [];
     }
 
     QueryBuilder.instance.truncateTable();
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     for(int i = 0; i < items.length; i++) {
       QueryBuilder.instance.addItem(items[i]);
     }
-
+    print("return items $items");
     return items;
   }
 
@@ -114,13 +115,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Home Page")
-      // ),
       body: FutureBuilder(
         future: networkStatus != "none" ? fetchOtherItems() : QueryBuilder.instance.items(),
         builder: (context, snapshot) {
-
           if(snapshot.connectionState == ConnectionState.done) {
             if(snapshot.hasError) {
 
@@ -152,15 +149,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             }
             if(snapshot.hasData) {
 
-              itemList.isEmpty ? itemList = snapshot.data! :null;
+              if(snapshot.data.isEmpty) {
 
-              return NestedScrollView(
-                  floatHeaderSlivers: true,
-                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    const SliverAppBar(
-                      title: Text("HomePage"),
-                    )
-                  ],
+                return NestedScrollView(
+                    floatHeaderSlivers: true,
+                    headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                      const SliverAppBar(
+                        title: Text("HomePage"),
+                      )
+                    ],
                   body: RefreshIndicator(
                     onRefresh: () async {
                       itemList = await fetchOtherItems();
@@ -168,61 +165,93 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         itemList;
                       });
                     },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                    child: GridView.builder(
-                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          childAspectRatio: 1,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 20,
+                    child: SingleChildScrollView(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Text("No Item Available"),
+                            )
+                          ],
                         ),
-                        itemCount: itemList.length,
-                        itemBuilder: (context, index) {
+                      ),
+                    )
+                  ),
+                );
+              }
+              else{
+                itemList.isEmpty ? itemList = snapshot.data! :null;
 
-                          final item = itemList[index];
+                return NestedScrollView(
+                    floatHeaderSlivers: true,
+                    headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                      const SliverAppBar(
+                        title: Text("HomePage"),
+                      )
+                    ],
+                    body: RefreshIndicator(
+                      onRefresh: () async {
+                        itemList = await fetchOtherItems();
+                        setState(() {
+                          itemList;
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                        child: GridView.builder(
+                            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 200,
+                              childAspectRatio: 1,
+                              crossAxisSpacing: 20,
+                              mainAxisSpacing: 20,
+                            ),
+                            itemCount: itemList.length,
+                            itemBuilder: (context, index) {
 
-                          return GestureDetector(
-                            onTap: () async {
+                              final item = itemList[index];
 
-                              String name = await Api.instance.fetchItemSeller(item.userId);
+                              return GestureDetector(
+                                onTap: () async {
 
-                              Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => DetailsPage(item: item, seller: name)));
-                            },
-                            child: Container(
-                                key: UniqueKey(),
-                                decoration: BoxDecoration(
+                                  String name = await Api.instance.fetchItemSeller(item.userId);
+
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) => DetailsPage(item: item, seller: name)));
+                                },
+                                child: Container(
+                                  key: UniqueKey(),
+                                  decoration: BoxDecoration(
                                     border: Border.all(color: Colors.black),
                                     borderRadius: BorderRadius.circular(10),
                                     image: DecorationImage(
-                                      image: NetworkImage(item.picture),
-                                          fit: BoxFit.fill),
-                                    ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      constraints: const BoxConstraints(
-                                        minHeight: 20
-                                      ),
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                        color: Colors.white,
-                                      ),
-                                      child: Center(child: Text(item.name))
-                                    )
-                                  ],
-                                ),
+                                        image: NetworkImage(item.picture),
+                                        fit: BoxFit.fill),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                          width: double.infinity,
+                                          constraints: const BoxConstraints(
+                                              minHeight: 20
+                                          ),
+                                          decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                            color: Colors.white,
+                                          ),
+                                          child: Center(child: Text(item.name))
+                                      )
+                                    ],
+                                  ),
 
                                 ),
-                          );
-                        }),
-                  ),
-                  )
-              );
-
+                              );
+                            }),
+                      ),
+                    )
+                );
+              }
             }
           }
           return const Center(

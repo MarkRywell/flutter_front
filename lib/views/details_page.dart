@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_front/custom_widgets/custom_text.dart';
 import 'package:flutter_front/custom_widgets/custom_text1.dart';
+import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
@@ -23,10 +24,36 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
 
   late TabController tabController;
 
+  showStatus({required Color color, required String text}) {    // Snackbar to show message of API Response
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(text),
+            backgroundColor: color,
+            padding: const EdgeInsets.all(15),
+            behavior: SnackBarBehavior.fixed,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            )
+        )
+    );
+  }
+
   purchase(String buyerName) async {
 
+    Item item = Item(id: widget.item.id, name: widget.item.name,
+        details: widget.item.details, price: widget.item.price,
+        userId: widget.item.userId, sold: "Sold", soldTo: buyerName,
+        picture: widget.item.picture);
 
+    var response = await Api.instance.purchase(item);
 
+    if(response.runtimeType != List<Object>){
+      if(response.statusCode == 500){
+        showStatus(color: Colors.red, text: response.body);
+        return;
+      }
+    }
 
   }
 
@@ -40,10 +67,11 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
     var formKey = GlobalKey<FormState>();
     TextEditingController buyerController = TextEditingController(text: buyerName);
 
+
     return showDialog(
         context: context,
         useSafeArea: true,
-        // barrierDismissible: false,
+        barrierDismissible: false,
         builder: (BuildContext context) {
 
           Size size = MediaQuery.of(context).size;
@@ -68,6 +96,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
                     CustomText1(textTitle: "Item Name:", textData: item.name),
                     CustomText1(textTitle: "Price:", textData: "₱ ${item.price.toString()}"),
                     TextFormField(
+                      readOnly: true,
                       controller: buyerController,
                       decoration: InputDecoration(
                         labelText: "Buyer's Name",
@@ -155,6 +184,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
+    print(widget.item.picture);
 
     return Scaffold(
       extendBodyBehindAppBar: true,

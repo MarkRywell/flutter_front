@@ -72,6 +72,15 @@ class QueryBuilder {
     return status;
   }
 
+  Future addItemMap(Map <String, Object> item) async {
+
+    Database db = await instance.getDatabase();
+
+    int status = await db.insert('items', item);
+
+    return status;
+  }
+
   Future deleteItem(int id) async {
 
     Database db = await instance.getDatabase();

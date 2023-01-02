@@ -24,6 +24,9 @@ class Item {
   });
 
   factory Item.fromJson(Map <String, dynamic> json) {
+
+    print(json);
+
     return Item(
       id: json['id'],
       name: json['name'],
@@ -52,4 +55,5 @@ class Item {
       'updated_at' : updatedAt,
     };
   }
+
 }
