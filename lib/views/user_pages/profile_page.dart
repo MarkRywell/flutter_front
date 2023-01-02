@@ -16,6 +16,23 @@ class _ProfilePageState extends State<ProfilePage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (BuildContext context) => <PopupMenuEntry> [
+              PopupMenuItem(
+                onTap: () {
+
+                },
+                child: Text("Log Out"))
+            ],
+          )
+        ],
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 40),
         child: SingleChildScrollView(
@@ -25,6 +42,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 width: size.width,
                 height: size.height * 0.3,
                 color: Colors.red,
+                child: Stack(
+                  children: [
+                    Container(
+                      width: size.width,
+                      height: size.height * 0.2,
+                      color: Colors.blue
+                    ),
+                    CircleAvatar(
+
+                    )
+                  ],
+                ),
               ),
               const Center(
                 child: Padding(
