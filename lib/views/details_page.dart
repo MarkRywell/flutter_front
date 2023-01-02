@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/custom_widgets/custom_text.dart';
 import 'package:flutter_front/custom_widgets/custom_text1.dart';
 import 'package:flutter_front/models/api.dart';
@@ -184,7 +185,6 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
   Widget build(BuildContext context) {
 
     Size size = MediaQuery.of(context).size;
-    print(widget.item.picture);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -214,7 +214,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
               Container(
                 width: size.width,
                 height: size.height * 0.4,
-                child: Image.network(widget.item.picture,
+                child: Image.network('${dotenv.env['API_URL']}/picture/${widget.item.picture}',
                 fit: BoxFit.fitWidth,),
               ),
               Row(
