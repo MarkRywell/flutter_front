@@ -47,6 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: [
           PopupMenuButton(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            color: Colors.grey[300],
             icon: Icon(Icons.person),
             itemBuilder: (BuildContext context) => <PopupMenuEntry> [
               PopupMenuItem(

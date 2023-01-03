@@ -137,10 +137,10 @@ class Api {
 
     if(response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
-      return jsonResponse['name'];
+      return jsonResponse;
     }
     else {
-      return "User";
+      return {'name': "User", 'address' : "Address"};
     }
   }
 
@@ -203,9 +203,29 @@ class Api {
     return ([apiResponse, 200]);
   }
 
-  Future deleteItem (var item) async {
+  Future removeItem (var item) async {
+    var url = Uri.parse('${dotenv.env['API_URL']}/item/${item.id}');
 
-    print("item ID ${item.id}");
+    try {
+      var response = await http.patch(url).timeout(const Duration(seconds: 2));
+
+      var jsonResponse = await convert.jsonDecode(response.body);
+
+      ApiResponse apiResponse = ApiResponse(
+          status: jsonResponse['status'],
+          message: jsonResponse['message'],
+          data: jsonResponse['data'] ?? {});
+
+      if (response.statusCode != 200) {
+        return [apiResponse, 400];
+      }
+      return [apiResponse, 200];
+    } on TimeoutException {
+      return http.Response("Request Timeout", 500);
+    }
+  }
+
+  Future deleteItem (var item) async {
 
     var url = Uri.parse('${dotenv.env['API_URL']}/items/${item.id}');
 

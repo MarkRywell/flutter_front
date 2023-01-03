@@ -1,11 +1,8 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_front/views/main_page.dart';
+import 'package:flutter_front/views/navigated_pages/main_page.dart';
 import 'package:flutter_front/views/auth/login_page.dart';
-import 'package:flutter_front/views/user_pages/home_page.dart';
-import 'package:flutter_front/views/user_pages/profile_page.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {

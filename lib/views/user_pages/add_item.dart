@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_front/models/api.dart';
-import 'package:flutter_front/views/main_page.dart';
+import 'package:flutter_front/views/navigated_pages/main_page.dart';
 import 'package:flutter_front/views/user_pages/my_listings_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
