@@ -101,13 +101,10 @@ class _LoginPageState extends State<LoginPage> {
     String? data = pref.getString("user");
     print(data);
 
-    Navigator.push(context,
-    MaterialPageRoute(builder: (context) => MainPage()));
-
-    // Navigator.pushAndRemoveUntil(context,
-    //     MaterialPageRoute(
-    //       builder: (context) => MainPage()
-    //     ), (route) => false);
+    Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(
+          builder: (context) => const MainPage()
+        ), (route) => false);
   }
 
   @override

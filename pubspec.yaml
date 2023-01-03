@@ -68,15 +68,15 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/OnlySells.png"
+  image_path: "assets/OS.png"
 
   web:
     generate: true
-    image_path: "assets/OnlySells.png"
+    image_path: "assets/OS.png"
 
   windows:
     generate: true
-    image_path: "assets/OnlySells.png"
+    image_path: "assets/OS.png"
     icon_size: 48 # min:48, max:256, default: 48
 
 

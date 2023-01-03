@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/models/api_response.dart';
+import 'package:flutter_front/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter_front/models/item.dart';
@@ -18,7 +19,14 @@ class Api {
 
     var url = Uri.parse('${dotenv.env['API_URL']}/items/$id');
 
-    var response = await http.get(url);
+    var response = await http.get(url).timeout(const Duration(seconds: 2),
+        onTimeout: () {
+          return http.Response('Request Timeout', 500);
+        });
+
+    if(response.statusCode == 500) {
+      return response;
+    }
 
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
@@ -163,7 +171,7 @@ class Api {
       return http.Response('Request Timeout', 500);
     });
 
-    if(response.statusCode == 500){
+    if(response.statusCode == 500) {
       return response;
     }
 
@@ -231,7 +239,7 @@ class Api {
 
     try {
       var response = await http.delete(url).timeout(const Duration(seconds: 2));
-      print("response ${response}");
+
       var jsonResponse = await convert.jsonDecode(response.body);
 
 
@@ -300,6 +308,40 @@ class Api {
     }
 
     return ([apiResponse, 201]);
+  }
+
+  Future <dynamic> fetchUsers () async {
+    
+    var url = Uri.parse('${dotenv.env['API_URL']}/users');
+
+    var response = await http.get(url).timeout(const Duration(seconds: 2),
+        onTimeout: () {
+          return http.Response('Request Timeout', 500);
+        });
+
+    if(response.statusCode == 500) {
+      return response;
+    }
+
+    if(response.statusCode == 200) {
+      var jsonResponse = await convert.jsonDecode(response.body);
+
+      return jsonResponse.isNotEmpty ?
+      List.generate(jsonResponse.length, (i) {
+        return User(
+          id: jsonResponse[i]['id'],
+          name: jsonResponse[i]['name'],
+          contactNo: jsonResponse[i]['contactNo'],
+          picture: jsonResponse[i]['picture'],
+          email: jsonResponse[i]['email'],
+          address: jsonResponse[i]['address'],
+        );
+      }) : [];
+    }
+    else {
+      Exception(
+          "Error Fetching Data with a Status Code: ${response.statusCode}");
+    }
   }
 
 }
