@@ -132,6 +132,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 floatHeaderSlivers: true,
                 headerSliverBuilder: (context, innerBoxIsScrolled) => [
                   const SliverAppBar(
+                    automaticallyImplyLeading: false,
                     title: Text("HomePage"),
                   )
                 ],
@@ -205,6 +206,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (context, innerBoxIsScrolled) => [
                       const SliverAppBar(
+                        automaticallyImplyLeading: false,
                         title: Text("HomePage"),
                       )
                     ],
@@ -238,6 +240,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (context, innerBoxIsScrolled) => [
                       const SliverAppBar(
+                        automaticallyImplyLeading: false,
                         title: Text("HomePage"),
                       )
                     ],

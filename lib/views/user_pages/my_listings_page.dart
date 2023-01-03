@@ -187,7 +187,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                         listings.remove(item);
                                       });
                                     },
-                                    child: Text("Delete"),
+                                    child: Text("Remove"),
 
                                   ),
                                 ],
