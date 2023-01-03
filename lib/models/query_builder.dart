@@ -1,9 +1,7 @@
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
-import 'dart:io';
-import 'package:flutter_front/models/item.dart';
 import 'package:flutter_front/models/user.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:flutter_front/models/item.dart';
 
 
 class QueryBuilder {
@@ -31,7 +29,7 @@ class QueryBuilder {
   Future onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT, contactNo TEXT, 
-          email TEXT, address TEXT)
+          picture TEXT, email TEXT, address TEXT)
     ''');
     await db.execute('''
           CREATE TABLE items(id INTEGER PRIMARY KEY, name TEXT, details TEXT,
@@ -39,6 +37,43 @@ class QueryBuilder {
           created_at TEXT, updated_at TEXT,
           FOREIGN KEY(userId) REFERENCES users(id))
     ''');
+  }
+
+  Future <dynamic> users() async {
+
+    Database db = await instance.getDatabase();
+
+    final List<Map<String, dynamic>> map = await db.query('users');
+
+    return map.isNotEmpty ?
+        List.generate(map.length, (i) {
+          return User(
+            id: map[i]['id'],
+            name: map[i]['name'],
+            contactNo: map[i]['contactNo'],
+            picture: map[i]['picture'],
+            email: map[i]['email'],
+            address: map[i]['address'],
+          );
+        }) : [];
+  }
+
+  Future <dynamic> fetchUser(int id) async {
+
+    Database db = await instance.getDatabase();
+
+    final List<Map<String, Object?>> map = await db.query('users', columns: ['name', 'contactNo', 'address'], where: 'id', whereArgs: [id]);
+
+    return User.fromMapObject(map[0]);
+  }
+
+  Future addUser (User user) async {
+
+    Database db = await instance.getDatabase();
+
+    int status = await db.insert('users', user.toMap());
+
+    return status;
   }
 
   Future <List<Item>> items() async {
@@ -112,11 +147,11 @@ class QueryBuilder {
     return status;
   }
 
-  Future truncateTable() async {
+  Future truncateTable(String tableName) async {
 
     Database db = await instance.getDatabase();
 
-    await db.execute('''DELETE FROM items''');
+    await db.execute('''DELETE FROM $tableName''');
     await db.execute('''VACUUM''');
   }
 

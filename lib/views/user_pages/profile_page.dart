@@ -1,7 +1,12 @@
 import 'dart:convert' as convert;
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_front/views/auth/login_page.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
 class ProfilePage extends StatefulWidget {
 
@@ -14,6 +19,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
 
   Map userData = {};
+  File? image;
+  String? filePath;
 
   getPreferences () async {
     final pref = await SharedPreferences.getInstance();
@@ -27,6 +34,92 @@ class _ProfilePageState extends State<ProfilePage> {
     var userPref = await getPreferences();
 
     return userPref;
+  }
+
+  Future <ImageSource?> chooseMedia() async {
+
+    var source = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+
+          Size size = MediaQuery.of(context).size;
+
+          return AlertDialog(
+              content: Container(
+                width: size.width * 0.7,
+                height: 100,
+                child: Column(
+                  children: [
+                    Container(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context, ImageSource.camera);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.camera),
+                            SizedBox(width: 20),
+                            Text("Camera")
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context, ImageSource.gallery);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.photo),
+                            SizedBox(width: 20),
+                            Text("Gallery")
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+          );
+        }
+    );
+    if(source == null) {
+      return null;
+    };
+
+    pickImage(source);
+
+  }
+
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(
+          source: source,
+          maxWidth: 200,
+          maxHeight: 200
+      );
+
+      if(image == null) return;
+
+      final imagePerm = await saveImage(image.path);
+      filePath = imagePerm.path;
+
+      setState(() => this.image = imagePerm);
+
+    } on PlatformException catch(e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  Future <File> saveImage (String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = path.basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    return File(imagePath).copy(image.path);
   }
 
   @override

@@ -37,7 +37,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
       return [];
     }
 
-    QueryBuilder.instance.truncateTable();
+    // QueryBuilder.instance.truncateTable();
 
     return items;
   }
@@ -72,8 +72,8 @@ class _MyListingsPageState extends State<MyListingsPage> {
                           listings;
                         });
                       },
-                      child: SingleChildScrollView(
-                        child: Center(
+                      child: Center(
+                        child: SingleChildScrollView(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

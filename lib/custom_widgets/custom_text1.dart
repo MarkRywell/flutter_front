@@ -21,16 +21,16 @@ class CustomText1 extends StatelessWidget {
             child: Container(
               width: 100,
               child: Text(textTitle,
-              style: TextStyle(
+              style: const TextStyle(
                fontSize: 16,
               )),
             ),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           Expanded(
             child: Container(
               child: Text(textData,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold
               )),

@@ -36,13 +36,29 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       return QueryBuilder.instance.items();
     }
 
-    List items = await Api.instance.fetchOtherItems(user['id']);
+    var users = await Api.instance.fetchUsers();
+
+    QueryBuilder.instance.truncateTable("users");
+
+    for(var user in users) {
+      await QueryBuilder.instance.addUser(user);
+    }
+
+    var items = await Api.instance.fetchOtherItems(user['id']);
+
+
+    // if(items.runtimeType != List<Object>) {
+    //   if(items.statusCode == 500){
+    //     showStatus(color: Colors.red, text: items.body);
+    //     return;
+    //   }
+    // }
 
     if(items.isEmpty) {
       return [];
     }
 
-    QueryBuilder.instance.truncateTable();
+    QueryBuilder.instance.truncateTable("items");
 
     for(int i = 0; i < items.length; i++) {
       QueryBuilder.instance.addItem(items[i]);
@@ -92,8 +108,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
     colorTween = animationController.drive(
         ColorTween(
-            begin: Colors.indigo,
-            end: Colors.amber
+            begin: Colors.black45,
+            end: Colors.lightBlue
         ));
     animationController.repeat();
 
@@ -122,121 +138,61 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: FutureBuilder(
-        future: networkStatus != "none" ? fetchOtherItems() : QueryBuilder.instance.items(),
-        builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.done) {
-            if(snapshot.hasError) {
-
-              return NestedScrollView(
-                floatHeaderSlivers: true,
-                headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                  const SliverAppBar(
-                    automaticallyImplyLeading: false,
-                    title: Text("HomePage"),
-                  )
-                ],
-                body: RefreshIndicator(
-                    onRefresh: () async {
-                      itemList = await fetchOtherItems();
-                      setState(() {
-                        itemList;
-                      });
-                    },
-                    child: Center(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 100,
-                              height: 100,
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: const Icon(Icons.error_outline,
-                                  size: 100,
-                                  color: Colors.redAccent
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Text("Database Error: Problem Fetching Data",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    height: 1.5,
-                                    fontSize: 20
-                                ),),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                ),
-              );
-
-              return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 100,
-                        height: 100,
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: const Icon(Icons.error_outline,
-                            size: 100,
-                            color: Colors.redAccent
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text("Database Error: Problem Fetching Data",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              height: 1.5,
-                              fontSize: 20
-                          ),),
-                      )
-                    ],
-                  )
-              );
-            }
-            if(snapshot.hasData) {
-              if(snapshot.data.isEmpty) {
+        body: FutureBuilder(
+          future: fetchOtherItems(),
+          builder: (context, snapshot) {
+            if(snapshot.connectionState == ConnectionState.done) {
+              if(snapshot.hasError) {
 
                 return NestedScrollView(
-                    floatHeaderSlivers: true,
-                    headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                      const SliverAppBar(
-                        automaticallyImplyLeading: false,
-                        title: Text("HomePage"),
-                      )
-                    ],
-                  body: RefreshIndicator(
-                    onRefresh: () async {
-                      itemList = await fetchOtherItems();
-                      setState(() {
-                        itemList;
-                      });
-                    },
-                    child: Center(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(),
-                              child: Text("No Item Available"),
-                            )
-                          ],
-                        ),
-                      ),
+                  floatHeaderSlivers: true,
+                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                    const SliverAppBar(
+                      automaticallyImplyLeading: false,
+                      title: Text("HomePage"),
                     )
+                  ],
+                  body: RefreshIndicator(
+                      onRefresh: () async {
+                        itemList = await fetchOtherItems();
+                        setState(() {
+                          itemList;
+                        });
+                      },
+                      child: Center(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 100,
+                                height: 100,
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: const Icon(Icons.error_outline,
+                                    size: 100,
+                                    color: Colors.redAccent
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Text("Database Error: Problem Fetching Data",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      height: 1.5,
+                                      fontSize: 20
+                                  ),),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
                   ),
                 );
               }
-              else {
-                itemList.isEmpty ? itemList = snapshot.data! : null;
+              if(snapshot.hasData) {
+                if(snapshot.data.isEmpty) {
 
-                return NestedScrollView(
+                  return NestedScrollView(
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (context, innerBoxIsScrolled) => [
                       const SliverAppBar(
@@ -245,80 +201,139 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       )
                     ],
                     body: RefreshIndicator(
-                      onRefresh: () async {
-                        itemList = await fetchOtherItems();
-                        setState(() {
-                          itemList;
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                        child: GridView.builder(
-                            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 200,
-                              childAspectRatio: 1,
-                              crossAxisSpacing: 20,
-                              mainAxisSpacing: 20,
+                        onRefresh: () async {
+                          itemList = await fetchOtherItems();
+                          setState(() {
+                            itemList;
+                          });
+                        },
+                        child: Center(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(),
+                                  child: Text("No Item Available"),
+                                )
+                              ],
                             ),
-                            itemCount: itemList.length,
-                            itemBuilder: (context, index) {
+                          ),
+                        )
+                    ),
+                  );
+                }
+                else {
+                  itemList.isEmpty ? itemList = snapshot.data! : null;
 
-                              final item = itemList[index];
+                  return NestedScrollView(
+                      floatHeaderSlivers: true,
+                      headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                        const SliverAppBar(
+                          automaticallyImplyLeading: false,
+                          title: Text("HomePage"),
+                        )
+                      ],
+                      body: RefreshIndicator(
+                        onRefresh: () async {
+                          itemList = await fetchOtherItems();
+                          setState(() {
+                            itemList;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                          child: GridView.builder(
+                              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 200,
+                                childAspectRatio: 1,
+                                crossAxisSpacing: 20,
+                                mainAxisSpacing: 20,
+                              ),
+                              itemCount: itemList.length,
+                              itemBuilder: (context, index) {
 
-                              return GestureDetector(
-                                onTap: () async {
+                                final item = itemList[index];
 
-                                  Map sellerDetails = await Api.instance.fetchItemSeller(item.userId);
+                                return GestureDetector(
+                                  onTap: () async {
+                                    Map sellerDetails;
 
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) => DetailsPage(item: item, seller: sellerDetails)));
-                                },
-                                child: Container(
-                                  key: UniqueKey(),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
-                                        image: NetworkImage('${dotenv.env['API_URL']}/picture/${item.picture}'),
-                                        fit: BoxFit.fill),
+                                    // networkStatus == "none" ? sellerDetails = await :
+                                    sellerDetails = await Api.instance.fetchItemSeller(item.userId);
+
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) =>
+                                            DetailsPage(item: item, seller: sellerDetails)));
+                                  },
+                                  child: Container(
+                                    key: UniqueKey(),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black),
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: networkStatus == "none" ?
+                                      DecorationImage(
+                                          image: AssetImage('assets/OnlySells.png'),
+                                          fit: BoxFit.fill) :
+                                      DecorationImage(
+                                          image: NetworkImage('${dotenv.env['API_URL']}/picture/${item.picture}'),
+                                          fit: BoxFit.fill),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                            width: double.infinity,
+                                            constraints: const BoxConstraints(
+                                                minHeight: 20
+                                            ),
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                              color: Colors.white,
+                                            ),
+                                            child: Center(child: Text(item.name,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold
+                                              ),))
+                                        )
+                                      ],
+                                    ),
+
                                   ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                          width: double.infinity,
-                                          constraints: const BoxConstraints(
-                                              minHeight: 20
-                                          ),
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                            color: Colors.white,
-                                          ),
-                                          child: Center(child: Text(item.name,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold
-                                          ),))
-                                      )
-                                    ],
-                                  ),
-
-                                ),
-                              );
-                            }),
-                      ),
-                    )
-                );
+                                );
+                              }),
+                        ),
+                      )
+                  );
+                }
               }
             }
-          }
-          return const Center(
-            child: Text("Loading"),
-              // child: CircularProgressIndicator(
-              //   valueColor: colorTween,
-              // )
-          );
-        },
-      )
+            return NestedScrollView(
+              floatHeaderSlivers: true,
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                const SliverAppBar(
+                  automaticallyImplyLeading: false,
+                  title: Text("HomePage"),
+                )
+              ],
+              body: RefreshIndicator(
+                  onRefresh: () async {
+                      itemList = await fetchOtherItems();
+                      setState(() {
+                        itemList;
+                      });
+                  },
+                  child: Center(
+                    child: SingleChildScrollView(
+                        child: CircularProgressIndicator(
+                          valueColor: colorTween,
+                        )
+                    ),
+                  )
+              ),
+            );
+          },
+        )
     );
   }
 }
