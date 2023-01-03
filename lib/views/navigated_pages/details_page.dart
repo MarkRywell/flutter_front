@@ -10,7 +10,7 @@ import 'dart:convert' as convert;
 class DetailsPage extends StatefulWidget {
 
   final Item item;
-  final String seller;
+  final Map seller;
 
   const DetailsPage({
     required this.item,
@@ -278,7 +278,8 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomText(icon: const Icon(Icons.person), textTitle: 'Name', textData: widget.seller)
+                          CustomText(icon: const Icon(Icons.person), textTitle: 'Name', textData: widget.seller['name']),
+                          CustomText(icon: const Icon(Icons.place), textTitle: 'Address', textData: widget.seller['address'])
                         ],
                       ),
                       SingleChildScrollView(
