@@ -96,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
     final pref = await SharedPreferences.getInstance();
     pref.setString("token", response.data!['token']);
     pref.setString("user", convert.jsonEncode(response.data!['user']));
+    pref.setBool("loggedIn", true);
 
     String? data = pref.getString("user");
     print(data);
