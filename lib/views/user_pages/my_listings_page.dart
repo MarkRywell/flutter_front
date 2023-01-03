@@ -53,63 +53,16 @@ class _MyListingsPageState extends State<MyListingsPage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: FutureBuilder(
-        future: fetchMyItems(),
-        builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.done) {
-            if(snapshot.hasError) {
-              return NestedScrollView(
-                floatHeaderSlivers: true,
-                headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                  const SliverAppBar(
-                    title: Text("HomePage"),
-                  )
-                ],
-                body: RefreshIndicator(
-                    onRefresh: () async {
-                      listings = await fetchMyItems();
-                      setState(() {
-                        listings;
-                      });
-                    },
-                    child: SingleChildScrollView(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 100,
-                              height: 100,
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: const Icon(Icons.error_outline,
-                                  size: 100,
-                                  color: Colors.redAccent
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.all(20),
-                              child: Text("Database Error: Problem Fetching Data",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    height: 1.5,
-                                    fontSize: 20
-                                ),),
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                ),
-              );
-            }
-            if(snapshot.hasData) {
-
-              if(snapshot.data.isEmpty) {
+        body: FutureBuilder(
+          future: fetchMyItems(),
+          builder: (context, snapshot) {
+            if(snapshot.connectionState == ConnectionState.done) {
+              if(snapshot.hasError) {
                 return NestedScrollView(
                   floatHeaderSlivers: true,
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
                     const SliverAppBar(
-                      title: Text("My Listings"),
+                      title: Text("HomePage"),
                     )
                   ],
                   body: RefreshIndicator(
@@ -120,41 +73,84 @@ class _MyListingsPageState extends State<MyListingsPage> {
                         });
                       },
                       child: SingleChildScrollView(
-                        child: Container(
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(top: size.height * 0.4),
-                                  child: Text("No Item in your Listings"),
-                                )
-                              ],
-                            ),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 100,
+                                height: 100,
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: const Icon(Icons.error_outline,
+                                    size: 100,
+                                    color: Colors.redAccent
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Text("Database Error: Problem Fetching Data",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      height: 1.5,
+                                      fontSize: 20
+                                  ),),
+                              )
+                            ],
                           ),
                         ),
                       )
                   ),
                 );
               }
-              else {
+              if(snapshot.hasData) {
 
-                listings.isEmpty? listings = snapshot.data! : null;
+                if(snapshot.data.isEmpty) {
+                  return NestedScrollView(
+                    floatHeaderSlivers: true,
+                    headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                      const SliverAppBar(
+                        title: Text("My Listings"),
+                      )
+                    ],
+                    body: RefreshIndicator(
+                        onRefresh: () async {
+                          listings = await fetchMyItems();
+                          setState(() {
+                            listings;
+                          });
+                        },
+                        child: Center(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Container(
+                                  child: Text("No Item in your Listings"),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                    ),
+                  );
+                }
+                else {
 
-                return NestedScrollView(
-                  floatHeaderSlivers: true,
-                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    const SliverAppBar(
-                      title: Text("My Listings"),
-                    )
-                  ],
-                  body: RefreshIndicator(
-                    onRefresh: () async {
-                      listings = await fetchMyItems();
-                      setState(() {
-                        listings;
-                      });
-                    },
+                  listings.isEmpty? listings = snapshot.data! : null;
+
+                  return NestedScrollView(
+                    floatHeaderSlivers: true,
+                    headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                      const SliverAppBar(
+                        title: Text("My Listings"),
+                      )
+                    ],
+                    body: RefreshIndicator(
+                      onRefresh: () async {
+                        listings = await fetchMyItems();
+                        setState(() {
+                          listings;
+                        });
+                      },
                       child: ListView.builder(
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,
@@ -168,10 +164,12 @@ class _MyListingsPageState extends State<MyListingsPage> {
                               title: Text(item.name),
                               subtitle: Text(item.sold),
                               trailing: PopupMenuButton(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                color: Colors.grey[300],
                                 itemBuilder: (BuildContext context) => <PopupMenuEntry>[
                                   PopupMenuItem(
                                     onTap: () {
-                                      
+
                                     },
                                     child: Text("View"),
                                   ),
@@ -189,7 +187,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                         listings.remove(item);
                                       });
                                     },
-                                    child: Text("Delete"),
+                                    child: Text("Remove"),
 
                                   ),
                                 ],
@@ -199,19 +197,19 @@ class _MyListingsPageState extends State<MyListingsPage> {
                         },
                       ),
                     ),
-                );
+                  );
+                }
               }
             }
-          }
-          return const Center(
-            child: Text("Loading"),
-            // child: CircularProgressIndicator(
-            //   valueColor: colorTween,
-            // )
-          );
-        },
+            return const Center(
+              child: Text("Loading"),
+              // child: CircularProgressIndicator(
+              //   valueColor: colorTween,
+              // )
+            );
+          },
 
-      )
+        )
     );
   }
 }

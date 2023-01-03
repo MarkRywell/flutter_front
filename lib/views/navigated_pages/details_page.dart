@@ -10,7 +10,7 @@ import 'dart:convert' as convert;
 class DetailsPage extends StatefulWidget {
 
   final Item item;
-  final String seller;
+  final Map seller;
 
   const DetailsPage({
     required this.item,
@@ -116,50 +116,54 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            width: 120,
-                            height: 40,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if(formKey.currentState!.validate()) {
-                                  purchase(buyerController.text);
-                                  Navigator.pop(context);
-                                }
-                              },
-                              style: const ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.green)
-                              ),
-                              child: const Text("PURCHASE",
-                                  style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600
-                                  )
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              width: size.width * 0.3,
+                              height: 40,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if(formKey.currentState!.validate()) {
+                                    purchase(buyerController.text);
+                                    Navigator.pop(context);
+                                  }
+                                },
+                                style: const ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.green)
+                                ),
+                                child: const Text("PURCHASE",
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600
+                                    )
+                                ),
                               ),
                             ),
                           ),
                         ),
                         SizedBox(width: 10),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            width: 120,
-                            height: 40,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              style: const ButtonStyle(
-                                backgroundColor: MaterialStatePropertyAll<Color>(Colors.red)
-                              ),
-                              child: const Text("CANCEL",
-                                  style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600
-                                  )
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                                  width: size.width * 0.3,
+                                  height: 40,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                style: const ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.red)
+                                ),
+                                child: const Text("CANCEL",
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600
+                                    )
+                                ),
                               ),
                             ),
                           ),
@@ -278,7 +282,8 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomText(icon: const Icon(Icons.person), textTitle: 'Name', textData: widget.seller)
+                          CustomText(icon: const Icon(Icons.person), textTitle: 'Name', textData: widget.seller['name']),
+                          CustomText(icon: const Icon(Icons.place), textTitle: 'Address', textData: widget.seller['address'])
                         ],
                       ),
                       SingleChildScrollView(

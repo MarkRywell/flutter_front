@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/item.dart';
 import 'package:flutter_front/models/query_builder.dart';
-import 'package:flutter_front/views/details_page.dart';
+import 'package:flutter_front/views/navigated_pages/details_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:convert' as convert;
@@ -132,6 +132,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 floatHeaderSlivers: true,
                 headerSliverBuilder: (context, innerBoxIsScrolled) => [
                   const SliverAppBar(
+                    automaticallyImplyLeading: false,
                     title: Text("HomePage"),
                   )
                 ],
@@ -142,8 +143,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         itemList;
                       });
                     },
-                    child: SingleChildScrollView(
-                      child: Center(
+                    child: Center(
+                      child: SingleChildScrollView(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -205,6 +206,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (context, innerBoxIsScrolled) => [
                       const SliverAppBar(
+                        automaticallyImplyLeading: false,
                         title: Text("HomePage"),
                       )
                     ],
@@ -215,8 +217,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         itemList;
                       });
                     },
-                    child: SingleChildScrollView(
-                      child: Center(
+                    child: Center(
+                      child: SingleChildScrollView(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -238,6 +240,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (context, innerBoxIsScrolled) => [
                       const SliverAppBar(
+                        automaticallyImplyLeading: false,
                         title: Text("HomePage"),
                       )
                     ],
@@ -265,10 +268,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               return GestureDetector(
                                 onTap: () async {
 
-                                  String name = await Api.instance.fetchItemSeller(item.userId);
+                                  Map sellerDetails = await Api.instance.fetchItemSeller(item.userId);
 
                                   Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) => DetailsPage(item: item, seller: name)));
+                                      MaterialPageRoute(builder: (context) => DetailsPage(item: item, seller: sellerDetails)));
                                 },
                                 child: Container(
                                   key: UniqueKey(),
