@@ -43,7 +43,6 @@ class _SplashScreenState extends State<SplashScreen> {
     print(loggedIn);
   }
 
-
   @override
   void initState() {
     getPreferences();

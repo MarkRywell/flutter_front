@@ -22,6 +22,10 @@ class _ViewItemState extends State<ViewItem> with SingleTickerProviderStateMixin
 
   late TabController tabController;
 
+  setColor(String sold) {
+    return sold == "Available" ? Colors.green : Colors.red;
+  }
+
   @override
   void initState() {
     tabController = TabController(length: 2, vsync: this);
@@ -79,16 +83,33 @@ class _ViewItemState extends State<ViewItem> with SingleTickerProviderStateMixin
             ),
             Row(
               children: [
-                Container(
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 30, 0),
+                    width: 150,
+                    height: 50,
+                    child: Text("₱ ${widget.item.price.toString()}",
+                      style: const TextStyle(
+                          fontSize: 16
+                      ),),
+                  ),
+                ),
+              
+              Expanded(
+                child: Container(
                   padding: const EdgeInsets.fromLTRB(20, 0, 30, 0),
                   width: 150,
                   height: 50,
-                  child: Text("₱ ${widget.item.price.toString()}",
-                    style: const TextStyle(
-                        fontSize: 16
+                  child: Text(widget.item.sold,
+                    style: TextStyle(
+                      color: setColor(widget.item.sold),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
                     ),),
                 ),
-              ],
+              ),
+              ]
             ),
             const Divider(height: 5, thickness: 10),
             Container(
