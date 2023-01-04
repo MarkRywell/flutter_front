@@ -1,8 +1,14 @@
+import 'dart:io';
+import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
+import 'package:flutter_front/models/item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateItem extends StatefulWidget {
-
-  const UpdateItem({Key? key}) : super(key: key);
+  final Item item;
+  const UpdateItem({
+    required this.item,
+    Key? key}) : super(key: key);
 
   @override
   State<UpdateItem> createState() => _UpdateItemState();
@@ -10,14 +16,20 @@ class UpdateItem extends StatefulWidget {
 
 class _UpdateItemState extends State<UpdateItem> {
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController detailsController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
+  late TextEditingController nameController =
+  TextEditingController(text: widget.item.name);
+  late TextEditingController detailsController =
+  TextEditingController(text: widget.item.details);
+  late TextEditingController priceController =
+  TextEditingController(text: widget.item.price.toString());
 
   var formKey = GlobalKey<FormState>();
+  File? image;
+  String? filePath;
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -128,16 +140,54 @@ class _UpdateItemState extends State<UpdateItem> {
                 ),
                 image != null ?
                 Container(
-                  constraints: BoxConstraints(
-                    minHeight: 150,
-                    maxWidth: 150
+                  constraints: const BoxConstraints(
+                      minHeight: 150,
+                      maxWidth: 150
                   ),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black)
+                      border: Border.all(color: Colors.black)
                   ),
-                  child: Image.file(image!), height: 200, width: 200,
-                ):
-                    Container()
+                  child: Image.file(image!), height: 200, width: 200,):
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          color: Colors.black)
+                  ),
+                  child: Center(
+                      child: Text("No image selected")),
+                  height: 200,
+                  width: 200,
+                ),
+                const SizedBox(height: 50),
+                ClipRRect(borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    height: 40,
+                    width: size.width * 0.6,
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          if(formKey.currentState!.validate()) {
+
+                            final pref = await SharedPreferences.getInstance();
+                            String data = pref.getString("user")!;
+                            var userData = convert.jsonDecode(data);
+
+                            var updatedItem = Item(
+                                id: null,
+                                name: nameController.text,
+                                details: detailsController.text,
+                                price: double.parse(priceController.text),
+                                userId: userData["id"],
+                                picture: filePath ?? "assets/OnlySells1.png",
+                                sold: "Available"
+                            );
+
+                            // updateItem(updatedItem);
+                          }
+                        },
+                        child: const Text("UPDATE ITEM")
+                    ),
+                  ),
+                )
               ],
             )
         ),

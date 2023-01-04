@@ -27,7 +27,7 @@ class _AddItemState extends State<AddItem> {
 
   var formKey = GlobalKey<FormState>();
 
-  List<Item> itemList = [];
+  // List<Item> itemList = [];
   File? image;
   String? filePath;
 
