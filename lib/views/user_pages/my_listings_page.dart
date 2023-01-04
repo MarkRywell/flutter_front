@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/query_builder.dart';
+import 'package:flutter_front/views/mylistings_pages/view_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 
@@ -168,8 +169,15 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                 color: Colors.grey[300],
                                 itemBuilder: (BuildContext context) => <PopupMenuEntry>[
                                   PopupMenuItem(
-                                    onTap: () {
+                                    onTap: () async {
 
+                                      Map sellerDetails;
+
+                                      sellerDetails = await Api.instance.fetchItemSeller(item.userId);
+
+                                      Navigator.push(context,
+                                      MaterialPageRoute(builder: (context)
+                                      => ViewItem(item: item, seller: sellerDetails)));
                                     },
                                     child: Text("View"),
                                   ),

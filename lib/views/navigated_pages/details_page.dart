@@ -200,7 +200,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
           icon: Container(
             width: 50,
             height: 50,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
                 color: Colors.grey
             ),
