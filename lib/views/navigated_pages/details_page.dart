@@ -230,7 +230,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
                       child: Text(widget.item.name,
                       style: const TextStyle(
                         fontSize: 18,
-                        fontFamily: "Poppins"
+                        fontWeight: FontWeight.bold
                       ))
                   ),
                 ],

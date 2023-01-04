@@ -121,91 +121,94 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
         body: Container(
-            padding: const EdgeInsets.only(top: 180, left: 40, right: 40),
-            child: SingleChildScrollView(
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      Image.asset('assets/OnlySells1.png'),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 50, bottom: 10, left: 5),
-                        child: Row(
-                          children: const [
-                            Text("Log in",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold
+            margin: const EdgeInsets.only(left: 40, right: 40),
+            child: Center(
+              child: SingleChildScrollView(
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/OnlySells1.png'),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 50, bottom: 10, left: 5),
+                          child: Row(
+                            children: const [
+                              Text("Log in",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold
+                                ),
                               ),
+                            ],
+                          )
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: TextFormField(
+                            controller: emailController,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                prefixIcon: const Icon(Icons.email_rounded),
+                                hintText: "Email"
                             ),
-                          ],
-                        )
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: TextFormField(
-                          controller: emailController,
-                          decoration: InputDecoration(
+                            onChanged: (value) {
+                              return value.isEmpty ?
+                              "The Email field is required" : setState(() {
+                                email = value;
+                              });
+                            },
+                          ),
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: TextFormField(
+                            controller: passwordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10)
                               ),
-                              prefixIcon: const Icon(Icons.email_rounded),
-                              hintText: "Email"
-                          ),
-                          onChanged: (value) {
-                            return value.isEmpty ?
-                            "The Email field is required" : setState(() {
-                              email = value;
-                            });
-                          },
-                        ),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: TextFormField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
+                              prefixIcon: const Icon(Icons.lock),
+                              hintText: "Password",
                             ),
-                            prefixIcon: const Icon(Icons.lock),
-                            hintText: "Password",
+                            onChanged: (value) {
+                              return value.isEmpty ?
+                              "The Password field is required" : setState(() {
+                                password = value;
+                              });
+                            },
                           ),
-                          onChanged: (value) {
-                            return value.isEmpty ?
-                            "The Password field is required" : setState(() {
-                              password = value;
-                            });
-                          },
                         ),
-                      ),
-                      const SizedBox(height: 30),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          width: size.width * 0.8,
-                          height: 40,
-                          child: ElevatedButton(
-                              onPressed: validate(email, password) ? () => login(context) : null,
-                              child: const Text("LOG IN",
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600
-                                ),)),
+                        const SizedBox(height: 30),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            width: size.width * 0.8,
+                            height: 40,
+                            child: ElevatedButton(
+                                onPressed: validate(email, password) ? () => login(context) : null,
+                                child: const Text("LOG IN",
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600
+                                  ),)),
+                          ),
                         ),
-                      ),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => const RegisterPage()));
-                          },
-                          child: const Text("Sign Up for Only Sells"))
-                    ],
-                  ),
-                )
+                        TextButton(
+                            onPressed: () {
+                              Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => const RegisterPage()));
+                            },
+                            child: const Text("Sign Up for Only Sells"))
+                      ],
+                    ),
+                  )
+              ),
             )
         )
     );
