@@ -72,7 +72,7 @@ class _ViewItemState extends State<ViewItem> with SingleTickerProviderStateMixin
                     child: Text(widget.item.name,
                         style: const TextStyle(
                             fontSize: 18,
-                            fontFamily: "Poppins"
+                            fontWeight: FontWeight.bold
                         ))
                 ),
               ],

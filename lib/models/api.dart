@@ -19,7 +19,7 @@ class Api {
 
     var url = Uri.parse('${dotenv.env['API_URL']}/items/$id');
 
-    var response = await http.get(url).timeout(const Duration(seconds: 2),
+    var response = await http.get(url).timeout(const Duration(seconds: 5),
         onTimeout: () {
           return http.Response('Request Timeout', 500);
         });

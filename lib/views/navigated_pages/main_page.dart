@@ -85,7 +85,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
                 labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
                 destinations: const [
                   NavigationDestination(
-                    icon: Icon(Icons.home_outlined),
+                    icon: Icon(Icons.home),
                     selectedIcon: Icon(Icons.home),
                     label: "Home" ,),
                   NavigationDestination(
