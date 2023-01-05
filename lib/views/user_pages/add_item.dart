@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/views/navigated_pages/main_page.dart';
-import 'package:flutter_front/views/user_pages/my_listings_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -27,7 +26,6 @@ class _AddItemState extends State<AddItem> {
 
   var formKey = GlobalKey<FormState>();
 
-  // List<Item> itemList = [];
   File? image;
   String? filePath;
 
@@ -43,10 +41,9 @@ class _AddItemState extends State<AddItem> {
         return;
       }
     }
-
+    showStatus(color: Colors.greenAccent, text: "Item Added");
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => MainPage()));
-
   }
 
   Future <ImageSource?> chooseMedia() async {
@@ -119,6 +116,8 @@ class _AddItemState extends State<AddItem> {
 
       final imagePerm = await saveImage(image.path);
       filePath = imagePerm.path;
+
+      print(filePath);
 
       setState(() => this.image = imagePerm);
 

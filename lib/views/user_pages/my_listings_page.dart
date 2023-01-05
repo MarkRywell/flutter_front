@@ -174,7 +174,6 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                 itemBuilder: (BuildContext context) => <PopupMenuEntry>[
                                   PopupMenuItem(
                                     onTap: () async {
-                                      print(item.picture);
                                       Map sellerDetails;
 
                                       sellerDetails = await Api.instance.fetchItemSeller(item.userId);

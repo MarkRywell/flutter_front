@@ -1,8 +1,14 @@
 import 'dart:io';
 import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/item.dart';
+import 'package:flutter_front/views/navigated_pages/main_page.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateItem extends StatefulWidget {
@@ -28,8 +34,136 @@ class _UpdateItemState extends State<UpdateItem> {
   File? image;
   String? filePath;
 
-  updateItem(Item updatedItem) {
+  updateItem(Item updatedItem) async {
 
+    var response = await Api.instance.updateItem(updatedItem);
+
+    if(updatedItem.picture.isNotEmpty) {
+      var picResponse = await Api.instance.updatePicture(updatedItem);
+      if(picResponse[1] != 200) {
+        showStatus(color: Colors.red, text: response[0].message);
+      }
+    }
+
+    if(response.runtimeType != List<Object>){
+      if(response.statusCode == 500){
+        showStatus(color: Colors.red, text: response.body);
+        return;
+      }
+    }
+
+    if(response[1] != 200) {
+      showStatus(color: Colors.red, text: response[0].message);
+    }
+
+
+
+    showStatus(color: Colors.blueAccent, text: "Item Updated");
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => MainPage()));
+  }
+
+  Future <ImageSource?> chooseMedia() async {
+
+    var source = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+
+          Size size = MediaQuery.of(context).size;
+
+          return AlertDialog(
+              content: Container(
+                width: size.width * 0.7,
+                height: 100,
+                child: Column(
+                  children: [
+                    Container(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context, ImageSource.camera);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.camera),
+                            SizedBox(width: 20),
+                            Text("Camera")
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context, ImageSource.gallery);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.photo),
+                            SizedBox(width: 20),
+                            Text("Gallery")
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )
+          );
+        }
+    );
+    if(source == null) {
+      return null;
+    };
+
+    pickImage(source);
+
+  }
+
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(
+          source: source,
+          maxWidth: 200,
+          maxHeight: 200
+      );
+
+      if(image == null) return;
+
+      final imagePerm = await saveImage(image.path);
+      filePath = imagePerm.path;
+
+      print(filePath);
+
+      setState(() => this.image = imagePerm);
+
+    } on PlatformException catch(e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  Future <File> saveImage (String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = path.basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    return File(imagePath).copy(image.path);
+  }
+
+  showStatus({required Color color, required String text}) {    // Snackbar to show message of API Response
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(text),
+            backgroundColor: color,
+            padding: const EdgeInsets.all(15),
+            behavior: SnackBarBehavior.fixed,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            )
+        )
+    );
   }
 
   @override
@@ -127,7 +261,7 @@ class _UpdateItemState extends State<UpdateItem> {
                           children: [
                             IconButton(
                                 onPressed: () async {
-
+                                  chooseMedia();
                                 },
                               icon: const Icon(Icons.upload),
                               iconSize: 40,
@@ -181,13 +315,15 @@ class _UpdateItemState extends State<UpdateItem> {
                                 String data = pref.getString("user")!;
                                 var userData = convert.jsonDecode(data);
 
+                                print("filepath $filePath");
+
                                 var updatedItem = Item(
-                                    id: null,
+                                    id: widget.item.id,
                                     name: nameController.text,
                                     details: detailsController.text,
                                     price: double.parse(priceController.text),
                                     userId: userData["id"],
-                                    picture: filePath ?? "assets/OnlySells1.png",
+                                    picture: filePath ?? "",
                                     sold: "Available"
                                 );
 
