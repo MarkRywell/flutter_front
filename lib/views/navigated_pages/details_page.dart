@@ -56,6 +56,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
       }
     }
 
+    return response;
   }
 
   buyForm (var item) async {
@@ -123,7 +124,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
                               width: size.width * 0.3,
                               height: 40,
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   if(formKey.currentState!.validate()) {
                                     purchase(buyerController.text);
                                     Navigator.pop(context);
@@ -314,7 +315,10 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
       ),
       bottomNavigationBar: GestureDetector(
         onTap:() async {
-          buyForm(widget.item);
+          var response = await buyForm(widget.item);
+          if(response != null) {
+            Navigator.pop(context);
+          }
         },
         child: Container(
           height: 60,

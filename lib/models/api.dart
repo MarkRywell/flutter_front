@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:typed_data';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/models/api_response.dart';
 import 'package:flutter_front/models/user.dart';
@@ -19,14 +21,7 @@ class Api {
 
     var url = Uri.parse('${dotenv.env['API_URL']}/items/$id');
 
-    var response = await http.get(url).timeout(const Duration(seconds: 5),
-        onTimeout: () {
-          return http.Response('Request Timeout', 500);
-        });
-
-    if(response.statusCode == 500) {
-      return response;
-    }
+    var response = await http.get(url);
 
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
@@ -89,18 +84,28 @@ class Api {
 
     var url = Uri.parse("${dotenv.env['API_URL']}/items");
 
-    var request = await http.MultipartRequest('POST', url);
+    var request = http.MultipartRequest('POST', url);
 
-    request.files.add(await http.MultipartFile.fromPath('picture', data['picture']));
+    var file;
+
+    if(data['picture'].picture == "assets/OnlySells1.png") {
+      ByteData byteData = await rootBundle.load('assets/OnlySells1.png');
+      List <int> imageData = byteData.buffer.asUint8List();
+      file = http.MultipartFile.fromBytes('picture', imageData, filename: "OnlySells1.png");
+    }
+    else {
+      file = await http.MultipartFile.fromPath('picture', data['picture']);
+    }
+
+    request.files.add(file);
     request.fields['name'] = data['name'];
     request.fields['details'] = data['details'];
     request.fields['price'] = data['price'].toString();
     request.fields['userId'] = data['userId'].toString();
     request.fields['sold'] = data['sold'];
 
-    final Streamresponse = await request.send();
-    var response = await http.Response.fromStream(Streamresponse);
-
+    final streamResponse = await request.send();
+    var response = await http.Response.fromStream(streamResponse);
 
     if(response.statusCode == 500){
       return response;
@@ -117,7 +122,7 @@ class Api {
       return ([apiResponse, 400]);
     }
 
-    print(Streamresponse);
+    print(streamResponse);
 
     return ([apiResponse, 201]);
   }
@@ -160,8 +165,8 @@ class Api {
       'name' : updatedItem.name,
       'details' : updatedItem.details,
       'price' : updatedItem.price,
+      'userId' : updatedItem.userId,
       'sold' : updatedItem.sold,
-      'picture' : updatedItem.picture
     };
 
     var response = await http.put(url, body: convert.jsonEncode(data),
@@ -182,12 +187,39 @@ class Api {
         message: jsonResponse['message'],
         data: jsonResponse['data'] ?? {});
 
-    if(response.statusCode != 201) {
+    if(response.statusCode != 200) {
       return ([apiResponse, 400]);
     }
 
-    return ([apiResponse, 201]);
+    return ([apiResponse, 200]);
   }
+
+  Future updatePicture (var updateData) async {
+
+    var url = Uri.parse('${dotenv.env['API_URL']}/picture/${updateData.id}');
+
+    var request = http.MultipartRequest('POST', url);
+
+    request.files.add(await http.MultipartFile.fromPath('picture', updateData.picture));
+
+    final streamResponse = await request.send();
+    var response = await http.Response.fromStream(streamResponse);
+
+    var jsonResponse = convert.jsonDecode(response.body);
+
+    ApiResponse apiResponse = ApiResponse(
+        status: jsonResponse['status'],
+        message: jsonResponse['message'],
+        data: jsonResponse['data'] ?? {});
+
+    if(response.statusCode != 200) {
+      return ([apiResponse, 400]);
+    }
+
+    return ([apiResponse, 200]);
+  }
+
+
 
   Future purchase (var updatedItem) async {
 
