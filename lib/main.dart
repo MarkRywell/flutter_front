@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
       splash: Image.asset('assets/OnlySells.png'),
       splashIconSize: 1000,
       duration: 3000,
-      nextScreen:
+      nextScreen: loggedIn == null || loggedIn == false ? const LoginPage() : MainPage(),
     );
   }
 }

@@ -4,7 +4,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/query_builder.dart';
+import 'package:flutter_front/views/mylistings_pages/update_item.dart';
 import 'package:flutter_front/views/mylistings_pages/view_item.dart';
+import 'package:flutter_front/views/user_pages/profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 
@@ -160,6 +162,8 @@ class _MyListingsPageState extends State<MyListingsPage> {
 
                           final item = listings[index];
 
+
+
                           return Card(
                             child: ListTile(
                               title: Text(item.name),
@@ -170,7 +174,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                 itemBuilder: (BuildContext context) => <PopupMenuEntry>[
                                   PopupMenuItem(
                                     onTap: () async {
-
+                                      print(item.picture);
                                       Map sellerDetails;
 
                                       sellerDetails = await Api.instance.fetchItemSeller(item.userId);
@@ -182,8 +186,12 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                     child: Text("View"),
                                   ),
                                   PopupMenuItem(
-                                    onTap: () {
+                                    onTap: () async {
 
+                                      var updateItem = await item;
+
+                                      Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) => UpdateItem(item: updateItem)));
                                     },
                                     child: Text("Update"),
                                   ),

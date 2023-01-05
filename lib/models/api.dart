@@ -19,14 +19,7 @@ class Api {
 
     var url = Uri.parse('${dotenv.env['API_URL']}/items/$id');
 
-    var response = await http.get(url).timeout(const Duration(seconds: 5),
-        onTimeout: () {
-          return http.Response('Request Timeout', 500);
-        });
-
-    if(response.statusCode == 500) {
-      return response;
-    }
+    var response = await http.get(url);
 
     if (response.statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
@@ -101,7 +94,6 @@ class Api {
     final Streamresponse = await request.send();
     var response = await http.Response.fromStream(Streamresponse);
 
-
     if(response.statusCode == 500){
       return response;
     }
@@ -154,14 +146,14 @@ class Api {
 
   Future updateItem (var updatedItem) async {
 
-    var url = Uri.parse('${dotenv.env['API_URL']}/items/${updatedItem.id}');
+    var url = Uri.parse('http://192.168.1.5:8000/api/items/${updatedItem.id}');
 
     Map data = {
       'name' : updatedItem.name,
       'details' : updatedItem.details,
       'price' : updatedItem.price,
+      'userId' : updatedItem.userId,
       'sold' : updatedItem.sold,
-      'picture' : updatedItem.picture
     };
 
     var response = await http.put(url, body: convert.jsonEncode(data),
@@ -182,11 +174,11 @@ class Api {
         message: jsonResponse['message'],
         data: jsonResponse['data'] ?? {});
 
-    if(response.statusCode != 201) {
+    if(response.statusCode != 200) {
       return ([apiResponse, 400]);
     }
 
-    return ([apiResponse, 201]);
+    return ([apiResponse, 200]);
   }
 
   Future purchase (var updatedItem) async {
