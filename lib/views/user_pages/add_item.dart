@@ -99,9 +99,7 @@ class _AddItemState extends State<AddItem> {
     if(source == null) {
       return null;
     };
-
     pickImage(source);
-
   }
 
   Future pickImage(ImageSource source) async {

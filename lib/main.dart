@@ -53,8 +53,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return  AnimatedSplashScreen(
-      splash: Image.asset('assets/OnlySells.png'),
-      splashIconSize: 1000,
+      splash: Image.asset('assets/OnlySells.png', height: 250, width: 250),
+      splashIconSize: 100,
       duration: 3000,
       nextScreen: loggedIn == null || loggedIn == false ? const LoginPage() : MainPage(),
     );

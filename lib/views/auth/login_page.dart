@@ -129,9 +129,9 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/OnlySells1.png'),
+                        Image.asset('assets/OnlySells.png', height: 150, width: 250),
                         Padding(
-                          padding: const EdgeInsets.only(top: 50, bottom: 10, left: 5),
+                          padding: const EdgeInsets.only(bottom: 10, left: 5),
                           child: Row(
                             children: const [
                               Text("Log in",
