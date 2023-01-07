@@ -21,6 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Map userData = {};
   File? image;
   String? filePath;
+  File? profilePic;
 
   getPreferences () async {
     final pref = await SharedPreferences.getInstance();
@@ -46,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
           return AlertDialog(
               content: Container(
-                width: size.width * 0.7,
+                width: size.width * 0.6,
                 height: 100,
                 child: Column(
                   children: [
@@ -107,7 +108,15 @@ class _ProfilePageState extends State<ProfilePage> {
       final imagePerm = await saveImage(image.path);
       filePath = imagePerm.path;
 
-      setState(() => this.image = imagePerm);
+      final pref = await SharedPreferences.getInstance();
+      pref.setString("picture", filePath!);
+
+      
+
+      setState(() {
+        this.profilePic = File(filePath!);
+        this.image = imagePerm;
+      } );
 
     } on PlatformException catch(e) {
       print('Failed to pick image: $e');
@@ -232,6 +241,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: CircleAvatar(
                                   radius: 75,
                                   backgroundColor: Colors.blue.withOpacity(0.4),
+                                  backgroundImage: userData['picture'] == null ? null : FileImage(profilePic!)
                                 ),
                               ),
                             ),
@@ -241,7 +251,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: CircleAvatar(
                                   child: IconButton(
                                     onPressed: () {
-
+                                      chooseMedia();
                                     },
                                     icon: Icon(Icons.edit),
                                   ),
