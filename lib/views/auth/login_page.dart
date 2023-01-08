@@ -98,8 +98,10 @@ class _LoginPageState extends State<LoginPage> {
     pref.setString("user", convert.jsonEncode(response.data!['user']));
     pref.setBool("loggedIn", true);
 
-    String? data = pref.getString("user");
-    print(data);
+    var data = convert.jsonDecode(pref.getString("user")!);
+    print(data['id']);
+
+
 
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(
