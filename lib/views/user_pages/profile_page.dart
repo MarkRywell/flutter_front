@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/views/auth/login_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -109,9 +110,10 @@ class _ProfilePageState extends State<ProfilePage> {
       filePath = imagePerm.path;
 
       final pref = await SharedPreferences.getInstance();
-      pref.setString("picture", filePath!);
 
-      
+      var userData = convert.jsonDecode(pref.getString("user")!);
+
+      Api.instance.updateProfPic(userData['id'], filePath!);
 
       setState(() {
         this.profilePic = File(filePath!);
