@@ -64,8 +64,10 @@ class _MyListingsPageState extends State<MyListingsPage> {
                 return NestedScrollView(
                   floatHeaderSlivers: true,
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    const SliverAppBar(
-                      title: Text("HomePage"),
+                    SliverAppBar(
+                      title: Image.asset('assets/appbar/MyListings.png'),
+                      centerTitle: true,
+                      backgroundColor: Colors.white,
                     )
                   ],
                   body: RefreshIndicator(
@@ -111,8 +113,9 @@ class _MyListingsPageState extends State<MyListingsPage> {
                   return NestedScrollView(
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                      const SliverAppBar(
-                        title: Text("My Listings"),
+                      SliverAppBar(
+                        title: Image.asset('assets/appbar/MyListings.png'),
+                        centerTitle: true,
                       )
                     ],
                     body: RefreshIndicator(
@@ -143,8 +146,14 @@ class _MyListingsPageState extends State<MyListingsPage> {
                   return NestedScrollView(
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                      const SliverAppBar(
-                        title: Text("My Listings"),
+                      SliverAppBar(
+                        title: Image.asset('assets/appbar/MyListings.png',
+                            alignment: Alignment.center,
+                            width: 200,
+                            fit: BoxFit.fitWidth,
+                        ),
+                        centerTitle: true,
+                        backgroundColor: Colors.white,
                       )
                     ],
                     body: RefreshIndicator(
