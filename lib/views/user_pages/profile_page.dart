@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/views/auth/login_page.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
@@ -24,7 +25,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Map userData = {};
   File? image;
   String? filePath;
-  File? profilePic;
 
   getPreferences () async {
     final pref = await SharedPreferences.getInstance();
@@ -38,6 +38,21 @@ class _ProfilePageState extends State<ProfilePage> {
     var userPref = await getPreferences();
 
     return userPref;
+  }
+
+  showStatus({required Color color, required String text}) {    // Snackbar to show message of API Response
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(text),
+            backgroundColor: color,
+            padding: const EdgeInsets.all(15),
+            behavior: SnackBarBehavior.fixed,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            )
+        )
+    );
   }
 
   Future <ImageSource?> chooseMedia() async {
@@ -109,18 +124,33 @@ class _ProfilePageState extends State<ProfilePage> {
       if(image == null) return;
 
       final imagePerm = await saveImage(image.path);
+
       filePath = imagePerm.path;
 
       final pref = await SharedPreferences.getInstance();
 
       var userData = convert.jsonDecode(pref.getString("user")!);
 
-      Api.instance.updateProfPic(userData['id'], filePath!);
+      var response = await Api.instance.updateProfPic(userData['id'], filePath!);
+
+      if(response.runtimeType != List<Object>){
+        if(response.statusCode == 500){
+          showStatus(color: Colors.red, text: response.body);
+          return;
+        }
+      }
+
+      if(response[1] != 200){
+        showStatus(color: Colors.red, text: response[0].message);
+        return;
+      }
 
       setState(() {
-        this.profilePic = File(filePath!);
+        userData['picture'] = response[0].data['picture'];
         this.image = imagePerm;
       } );
+
+
 
     } on PlatformException catch(e) {
       print('Failed to pick image: $e');
@@ -154,7 +184,7 @@ class _ProfilePageState extends State<ProfilePage> {
           PopupMenuButton(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             color: Colors.grey[300],
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person, color: Colors.blueGrey),
             itemBuilder: (BuildContext context) => <PopupMenuEntry> [
               PopupMenuItem(
                 onTap: () async {
@@ -199,10 +229,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 100,
                             padding: const EdgeInsets.only(bottom: 10),
                             child: Lottie.asset('assets/lotties/error.json')
-                            // const Icon(Icons.error_outline,
-                            //     size: 100,
-                            //     color: Colors.redAccent
-                            // ),
                           ),
                           const Padding(
                             padding: EdgeInsets.all(20),
@@ -222,7 +248,6 @@ class _ProfilePageState extends State<ProfilePage> {
             if(snapshot.hasData) {
 
               userData.isEmpty ? userData = snapshot.data! : null;
-              print(userData);
 
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
@@ -247,12 +272,21 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: CircleAvatar(
                                 radius: 80,
                                 backgroundColor: Colors.white,
-                                child: CircleAvatar(
-                                  radius: 75,
-                                  backgroundColor: Colors.blue.withOpacity(0.4),
-                                  backgroundImage: userData['picture'] != null ? NetworkImage('${dotenv.env['API_URL']}/picture/${userData['picture']}') : null,
-                                  child: userData['picture'] != null ? null : Lottie.asset('assets/lotties/profile.json'),
-                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Container(
+                                    height: 145,
+                                    width: 145,
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue.withOpacity(0.4)
+                                    ),
+                                    child: userData['picture'] == null ?
+                                      Lottie.asset('assets/lotties/profile.json') :
+                                      FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: '${dotenv.env['API_URL']}/picture/${userData['picture']}')
+                                  ),
+                                )
                               ),
                             ),
                             Positioned(
