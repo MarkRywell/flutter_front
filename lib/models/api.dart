@@ -77,7 +77,36 @@ class Api {
       Exception(
           "Error Fetching Data with a Status Code: ${response.statusCode}");
     }
+  }
 
+  Future fetchPicture (String picture) async {
+
+    var url = Uri.parse('${dotenv.env['API_URL']}/picture/$picture');
+
+    var response = await http.get(url);
+
+    if(response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+      return jsonResponse;
+    }
+    else {
+      Exception("Error with a status code: ${response.statusCode}");
+    }
+  }
+
+  Future fetchItemSeller (int userId) async {
+
+    var url = Uri.parse('${dotenv.env['API_URL']}/item/$userId');
+
+    var response = await http.get(url);
+
+    if(response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+      return jsonResponse;
+    }
+    else {
+      return {'name': "User", 'address' : "Address"};
+    }
   }
 
   Future addItem (var data) async {
@@ -88,7 +117,7 @@ class Api {
 
     var file;
 
-    if(data['picture'].picture == "assets/OnlySells1.png") {
+    if(data['picture'] == "assets/OnlySells1.png") {
       ByteData byteData = await rootBundle.load('assets/OnlySells1.png');
       List <int> imageData = byteData.buffer.asUint8List();
       file = http.MultipartFile.fromBytes('picture', imageData, filename: "OnlySells1.png");
@@ -125,36 +154,6 @@ class Api {
     print(streamResponse);
 
     return ([apiResponse, 201]);
-  }
-
-  Future fetchPicture (String picture) async {
-
-    var url = Uri.parse('${dotenv.env['API_URL']}/picture/$picture');
-
-    var response = await http.get(url);
-
-    if(response.statusCode == 200) {
-      var jsonResponse = convert.jsonDecode(response.body);
-      return jsonResponse;
-    }
-    else {
-      Exception("Error with a status code: ${response.statusCode}");
-    }
-  }
-
-  Future fetchItemSeller (int userId) async {
-
-    var url = Uri.parse('${dotenv.env['API_URL']}/item/$userId');
-
-    var response = await http.get(url);
-
-    if(response.statusCode == 200) {
-      var jsonResponse = convert.jsonDecode(response.body);
-      return jsonResponse;
-    }
-    else {
-      return {'name': "User", 'address' : "Address"};
-    }
   }
 
   Future updateItem (var updatedItem) async {
@@ -289,6 +288,38 @@ class Api {
     }
   }
 
+  Future <dynamic> fetchMyPurchases(String name) async {
+
+    var url = Uri.parse("${dotenv.env['API_URL']}/myPurchases/$name");
+
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+
+      return jsonResponse.isNotEmpty ?
+      List.generate(jsonResponse.length, (i) {
+        return Item(
+          id: jsonResponse[i]['id'],
+          name: jsonResponse[i]['name'],
+          details: jsonResponse[i]['details'],
+          price: jsonResponse[i]['price'].toDouble(),
+          userId: jsonResponse[i]['userId'],
+          sold: jsonResponse[i]['sold'],
+          picture: jsonResponse[i]['picture'],
+          soldTo: jsonResponse[i]['soldTo'],
+          createdAt: jsonResponse[i]['created_at'],
+          updatedAt: jsonResponse[i]['updated_at'],
+        );
+      }) : [];
+    }
+    else {
+      Exception(
+          "Error Fetching Data with a Status Code: ${response.statusCode}");
+    }
+
+  }
+
   Future loginUser(Map credentials) async {
     var url = Uri.parse("${dotenv.env['API_URL']}/login");
     try {
@@ -374,6 +405,31 @@ class Api {
       Exception(
           "Error Fetching Data with a Status Code: ${response.statusCode}");
     }
+  }
+
+  Future updateProfPic (int id, String filePath) async {
+
+      var url = Uri.parse('${dotenv.env['API_URL']}/users/picture/$id');
+
+      var request = http.MultipartRequest('POST', url);
+
+      request.files.add(await http.MultipartFile.fromPath('picture', filePath));
+
+      final streamResponse = await request.send();
+      var response = await http.Response.fromStream(streamResponse);
+
+      var jsonResponse = convert.jsonDecode(response.body);
+
+      ApiResponse apiResponse = ApiResponse(
+          status: jsonResponse['status'],
+          message: jsonResponse['message'],
+          data: {'picture' : jsonResponse['data']});
+
+      if(response.statusCode != 200) {
+        return ([apiResponse, 400]);
+      }
+
+      return ([apiResponse, 200]);
   }
 
 }

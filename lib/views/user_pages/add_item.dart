@@ -99,9 +99,7 @@ class _AddItemState extends State<AddItem> {
     if(source == null) {
       return null;
     };
-
     pickImage(source);
-
   }
 
   Future pickImage(ImageSource source) async {
@@ -171,10 +169,10 @@ class _AddItemState extends State<AddItem> {
 
     return Scaffold(
       appBar: AppBar(
-        elevation: 1,
-        title: Image.asset('assets/OnlySells1.png',
+        elevation: 0,
+        title: Image.asset('assets/appbar/SellItem.png',
         alignment: Alignment.center,
-        width: 200,
+        width: 150,
         fit: BoxFit.fitWidth,),
         centerTitle: true,
         backgroundColor: Colors.white,

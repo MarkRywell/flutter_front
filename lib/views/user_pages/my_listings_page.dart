@@ -53,8 +53,6 @@ class _MyListingsPageState extends State<MyListingsPage> {
   @override
   Widget build(BuildContext context) {
 
-    Size size = MediaQuery.of(context).size;
-
     return Scaffold(
         body: FutureBuilder(
           future: fetchMyItems(),
@@ -64,8 +62,13 @@ class _MyListingsPageState extends State<MyListingsPage> {
                 return NestedScrollView(
                   floatHeaderSlivers: true,
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    const SliverAppBar(
-                      title: Text("HomePage"),
+                    SliverAppBar(
+                      title: Image.asset('assets/appbar/HomePage.png',
+                        alignment: Alignment.center,
+                        width: 200,
+                        fit: BoxFit.fitWidth,),
+                      centerTitle: true,
+                      backgroundColor: Colors.white,
                     )
                   ],
                   body: RefreshIndicator(
@@ -111,8 +114,13 @@ class _MyListingsPageState extends State<MyListingsPage> {
                   return NestedScrollView(
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                      const SliverAppBar(
-                        title: Text("My Listings"),
+                      SliverAppBar(
+                        title: Image.asset('assets/appbar/HomePage.png',
+                          alignment: Alignment.center,
+                          width: 200,
+                          fit: BoxFit.fitWidth,),
+                        centerTitle: true,
+                        backgroundColor: Colors.white,
                       )
                     ],
                     body: RefreshIndicator(
@@ -125,10 +133,12 @@ class _MyListingsPageState extends State<MyListingsPage> {
                         child: Center(
                           child: SingleChildScrollView(
                             child: Column(
-                              children: [
-                                Container(
-                                  child: Text("No Item in your Listings"),
-                                )
+                              children: const [
+                                Text("No Item in your Listings",
+                                    style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontSize: 18
+                                    ))
                               ],
                             ),
                           ),
@@ -143,8 +153,14 @@ class _MyListingsPageState extends State<MyListingsPage> {
                   return NestedScrollView(
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                      const SliverAppBar(
-                        title: Text("My Listings"),
+                      SliverAppBar(
+                        title: Image.asset('assets/appbar/MyListings.png',
+                            alignment: Alignment.center,
+                            width: 200,
+                            fit: BoxFit.fitWidth,
+                        ),
+                        centerTitle: true,
+                        backgroundColor: Colors.white,
                       )
                     ],
                     body: RefreshIndicator(
@@ -182,7 +198,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                       MaterialPageRoute(builder: (context)
                                       => ViewItem(item: item, seller: sellerDetails)));
                                     },
-                                    child: Text("View"),
+                                    child: const Text("View"),
                                   ),
                                   PopupMenuItem(
                                     onTap: () async {
@@ -192,7 +208,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                       Navigator.push(context,
                                       MaterialPageRoute(builder: (context) => UpdateItem(item: updateItem)));
                                     },
-                                    child: Text("Update"),
+                                    child: const Text("Update"),
                                   ),
                                   PopupMenuItem(
                                     onTap: () async {
@@ -202,7 +218,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                         listings.remove(item);
                                       });
                                     },
-                                    child: Text("Remove"),
+                                    child: const Text("Remove"),
 
                                   ),
                                 ],
@@ -216,14 +232,33 @@ class _MyListingsPageState extends State<MyListingsPage> {
                 }
               }
             }
-            return const Center(
-              child: Text("Loading"),
-              // child: CircularProgressIndicator(
-              //   valueColor: colorTween,
-              // )
+            return NestedScrollView(
+              floatHeaderSlivers: true,
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverAppBar(
+                  title: Image.asset('assets/appbar/MyListings.png',
+                    alignment: Alignment.center,
+                    width: 200,
+                    fit: BoxFit.fitWidth,),
+                  centerTitle: true,
+                  backgroundColor: Colors.white,
+                )
+              ],
+              body: RefreshIndicator(
+                  onRefresh: () async {
+                    listings = await fetchMyItems();
+                    setState(() {
+                      listings;
+                    });
+                  },
+                  child: const Center(
+                    child: SingleChildScrollView(
+                        child: CircularProgressIndicator()
+                    ),
+                  )
+              ),
             );
           },
-
         )
     );
   }
