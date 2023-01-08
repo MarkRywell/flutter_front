@@ -171,13 +171,20 @@ class _UpdateItemState extends State<UpdateItem> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        elevation: 1,
-        title: Image.asset('assets/OnlySells1.png',
+        elevation: 0,
+        title: Image.asset('assets/appbar/SellItem.png',
           alignment: Alignment.center,
-          width: 200,
+          width: 150,
           fit: BoxFit.fitWidth,),
-          centerTitle: true,
-          backgroundColor: Colors.white,
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_outlined),
+          color: Colors.blueGrey,
+        )
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 40 , right: 40),
