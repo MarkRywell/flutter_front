@@ -3,9 +3,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/views/auth/login_page.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -159,6 +161,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   final pref = await SharedPreferences.getInstance();
 
                   pref.remove('loggedIn');
+                  pref.remove('token');
+                  pref.remove('user');
                   Navigator.push(context,
                   MaterialPageRoute(builder: (context)=>LoginPage()));
                 },
@@ -194,10 +198,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             width: 100,
                             height: 100,
                             padding: const EdgeInsets.only(bottom: 10),
-                            child: const Icon(Icons.error_outline,
-                                size: 100,
-                                color: Colors.redAccent
-                            ),
+                            child: Lottie.asset('assets/lotties/error.json')
+                            // const Icon(Icons.error_outline,
+                            //     size: 100,
+                            //     color: Colors.redAccent
+                            // ),
                           ),
                           const Padding(
                             padding: EdgeInsets.all(20),
@@ -217,6 +222,7 @@ class _ProfilePageState extends State<ProfilePage> {
             if(snapshot.hasData) {
 
               userData.isEmpty ? userData = snapshot.data! : null;
+              print(userData);
 
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40),
@@ -232,7 +238,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             Container(
                                 width: size.width,
                                 height: size.height * 0.2,
-                                color: Colors.blue
+                                color: Colors.blue[100],
+                                child: Image.asset('assets/OnlySells1.png')
                             ),
                             Positioned(
                               left: 10,
@@ -243,7 +250,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: CircleAvatar(
                                   radius: 75,
                                   backgroundColor: Colors.blue.withOpacity(0.4),
-                                  backgroundImage: userData['picture'] == null ? null : FileImage(profilePic!)
+                                  backgroundImage: userData['picture'] != null ? NetworkImage('${dotenv.env['API_URL']}/picture/${userData['picture']}') : null,
+                                  child: userData['picture'] != null ? null : Lottie.asset('assets/lotties/profile.json'),
                                 ),
                               ),
                             ),

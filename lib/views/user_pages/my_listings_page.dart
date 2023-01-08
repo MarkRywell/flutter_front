@@ -65,7 +65,10 @@ class _MyListingsPageState extends State<MyListingsPage> {
                   floatHeaderSlivers: true,
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
                     SliverAppBar(
-                      title: Image.asset('assets/appbar/MyListings.png'),
+                      title: Image.asset('assets/appbar/HomePage.png',
+                        alignment: Alignment.center,
+                        width: 200,
+                        fit: BoxFit.fitWidth,),
                       centerTitle: true,
                       backgroundColor: Colors.white,
                     )
@@ -114,8 +117,12 @@ class _MyListingsPageState extends State<MyListingsPage> {
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (context, innerBoxIsScrolled) => [
                       SliverAppBar(
-                        title: Image.asset('assets/appbar/MyListings.png'),
+                        title: Image.asset('assets/appbar/HomePage.png',
+                          alignment: Alignment.center,
+                          width: 200,
+                          fit: BoxFit.fitWidth,),
                         centerTitle: true,
+                        backgroundColor: Colors.white,
                       )
                     ],
                     body: RefreshIndicator(
@@ -225,14 +232,33 @@ class _MyListingsPageState extends State<MyListingsPage> {
                 }
               }
             }
-            return const Center(
-              child: Text("Loading"),
-              // child: CircularProgressIndicator(
-              //   valueColor: colorTween,
-              // )
+            return NestedScrollView(
+              floatHeaderSlivers: true,
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverAppBar(
+                  title: Image.asset('assets/appbar/MyListings.png',
+                    alignment: Alignment.center,
+                    width: 200,
+                    fit: BoxFit.fitWidth,),
+                  centerTitle: true,
+                  backgroundColor: Colors.white,
+                )
+              ],
+              body: RefreshIndicator(
+                  onRefresh: () async {
+                    listings = await fetchMyItems();
+                    setState(() {
+                      listings;
+                    });
+                  },
+                  child: const Center(
+                    child: SingleChildScrollView(
+                        child: CircularProgressIndicator()
+                    ),
+                  )
+              ),
             );
           },
-
         )
     );
   }

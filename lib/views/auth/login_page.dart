@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
     pref.setBool("loggedIn", true);
 
     var data = convert.jsonDecode(pref.getString("user")!);
-    print(data['id']);
+    print(data['picture']);
 
 
 

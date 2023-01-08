@@ -233,9 +233,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   return NestedScrollView(
                       floatHeaderSlivers: true,
                       headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                        const SliverAppBar(
-                          automaticallyImplyLeading: false,
-                          title: Text("HomePage"),
+                        SliverAppBar(
+                          title: Image.asset('assets/appbar/HomePage.png',
+                            alignment: Alignment.center,
+                            width: 200,
+                            fit: BoxFit.fitWidth,),
+                          centerTitle: true,
+                          backgroundColor: Colors.white,
                         )
                       ],
                       body: RefreshIndicator(
@@ -315,9 +319,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             return NestedScrollView(
               floatHeaderSlivers: true,
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                const SliverAppBar(
-                  automaticallyImplyLeading: false,
-                  title: Text("HomePage"),
+                SliverAppBar(
+                  title: Image.asset('assets/appbar/HomePage.png',
+                    alignment: Alignment.center,
+                    width: 200,
+                    fit: BoxFit.fitWidth,),
+                  centerTitle: true,
+                  backgroundColor: Colors.white,
                 )
               ],
               body: RefreshIndicator(
