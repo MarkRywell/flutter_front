@@ -288,7 +288,7 @@ class Api {
     }
   }
 
-  Future <dynamic> myPurchases(String name) async {
+  Future <dynamic> fetchMyPurchases(String name) async {
 
     var url = Uri.parse("${dotenv.env['API_URL']}/myPurchases/$name");
 
