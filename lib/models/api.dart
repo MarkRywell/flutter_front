@@ -117,7 +117,7 @@ class Api {
 
     var file;
 
-    if(data['picture'].picture == "assets/OnlySells1.png") {
+    if(data['picture'] == "assets/OnlySells1.png") {
       ByteData byteData = await rootBundle.load('assets/OnlySells1.png');
       List <int> imageData = byteData.buffer.asUint8List();
       file = http.MultipartFile.fromBytes('picture', imageData, filename: "OnlySells1.png");
