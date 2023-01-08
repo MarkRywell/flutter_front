@@ -101,8 +101,6 @@ class _LoginPageState extends State<LoginPage> {
     var data = convert.jsonDecode(pref.getString("user")!);
     print(data['picture']);
 
-
-
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(
           builder: (context) => const MainPage()
