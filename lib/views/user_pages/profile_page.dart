@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/views/auth/login_page.dart';
+import 'package:flutter_front/views/navigated_pages/my_purchases_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
@@ -63,39 +64,35 @@ class _ProfilePageState extends State<ProfilePage> {
           Size size = MediaQuery.of(context).size;
 
           return AlertDialog(
-              content: Container(
+              content: SizedBox(
                 width: size.width * 0.6,
                 height: 100,
                 child: Column(
                   children: [
-                    Container(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context, ImageSource.camera);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.camera),
-                            SizedBox(width: 20),
-                            Text("Camera")
-                          ],
-                        ),
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context, ImageSource.camera);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.camera),
+                          SizedBox(width: 20),
+                          Text("Camera")
+                        ],
                       ),
                     ),
-                    Container(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context, ImageSource.gallery);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.photo),
-                            SizedBox(width: 20),
-                            Text("Gallery")
-                          ],
-                        ),
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context, ImageSource.gallery);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.photo),
+                          SizedBox(width: 20),
+                          Text("Gallery")
+                        ],
                       ),
                     )
                   ],
@@ -106,9 +103,10 @@ class _ProfilePageState extends State<ProfilePage> {
     );
     if(source == null) {
       return null;
-    };
+    }
 
     pickImage(source);
+    return null;
 
   }
 
@@ -126,9 +124,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
       filePath = imagePerm.path;
 
-      final pref = await SharedPreferences.getInstance();
-
-      var userPref = convert.jsonDecode(pref.getString("user")!);
 
       var response = await Api.instance.updateProfPic(userData['id'], filePath!);
 
@@ -181,7 +176,7 @@ class _ProfilePageState extends State<ProfilePage> {
             PopupMenuButton(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               color: Colors.grey[300],
-              icon: Icon(Icons.person, color: Colors.blueGrey),
+              icon: const Icon(Icons.person, color: Colors.blueGrey),
               itemBuilder: (BuildContext context) => <PopupMenuEntry> [
                 PopupMenuItem(
                     onTap: () async {
@@ -191,9 +186,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       pref.remove('token');
                       pref.remove('user');
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context)=>LoginPage()));
+                          MaterialPageRoute(builder: (context)=>const LoginPage()));
                     },
-                    child: Row(children: [
+                    child: Row(children: const [
                       Icon(Icons.logout, color: Colors.black),
                       Text("Log Out")
                     ],))
@@ -291,7 +286,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         onPressed: () {
                                           chooseMedia();
                                         },
-                                        icon: Icon(Icons.edit),
+                                        icon: const Icon(Icons.edit),
                                       ),
                                     )),
                                 Positioned(
@@ -316,7 +311,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: const EdgeInsets.fromLTRB(20, 40, 20, 10),
                             child: GestureDetector(
                                 onTap: () {
-                                  print("Go to Purchases");
+                                  Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => const MyPurchasesPage()));
                                 },
                                 child: Row(
                                   children: const [

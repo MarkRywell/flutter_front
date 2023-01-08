@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/models/api.dart';
-import 'package:flutter_front/models/item.dart';
 import 'package:flutter_front/models/query_builder.dart';
 import 'package:flutter_front/views/navigated_pages/details_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -135,7 +134,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
 
-    Size size = MediaQuery.of(context).size;
 
     return Scaffold(
         body: FutureBuilder(
@@ -215,11 +213,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           child: SingleChildScrollView(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(),
-                                  child: Text("No Item Available"),
-                                )
+                              children: const [
+                                Text("No Item Available",
+                                    style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontSize: 18
+                                    )),
                               ],
                             ),
                           ),
@@ -280,7 +279,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       border: Border.all(color: Colors.black),
                                       borderRadius: BorderRadius.circular(10),
                                       image: networkStatus == "none" ?
-                                      DecorationImage(
+                                      const DecorationImage(
                                           image: AssetImage('assets/OnlySells.png'),
                                           fit: BoxFit.fill) :
                                       DecorationImage(
@@ -300,7 +299,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                               color: Colors.white,
                                             ),
                                             child: Center(child: Text(item.name,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.bold
                                               ),))
                                         )
@@ -330,10 +329,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ],
               body: RefreshIndicator(
                   onRefresh: () async {
-                      itemList = await fetchOtherItems();
-                      setState(() {
-                        itemList;
-                      });
+                    itemList = await fetchOtherItems();
+                    setState(() {
+                      itemList;
+                    });
                   },
                   child: Center(
                     child: SingleChildScrollView(

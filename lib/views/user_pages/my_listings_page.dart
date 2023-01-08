@@ -53,8 +53,6 @@ class _MyListingsPageState extends State<MyListingsPage> {
   @override
   Widget build(BuildContext context) {
 
-    Size size = MediaQuery.of(context).size;
-
     return Scaffold(
         body: FutureBuilder(
           future: fetchMyItems(),
@@ -135,10 +133,12 @@ class _MyListingsPageState extends State<MyListingsPage> {
                         child: Center(
                           child: SingleChildScrollView(
                             child: Column(
-                              children: [
-                                Container(
-                                  child: Text("No Item in your Listings"),
-                                )
+                              children: const [
+                                Text("No Item in your Listings",
+                                    style: TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontSize: 18
+                                    ))
                               ],
                             ),
                           ),
@@ -198,7 +198,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                       MaterialPageRoute(builder: (context)
                                       => ViewItem(item: item, seller: sellerDetails)));
                                     },
-                                    child: Text("View"),
+                                    child: const Text("View"),
                                   ),
                                   PopupMenuItem(
                                     onTap: () async {
@@ -208,7 +208,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                       Navigator.push(context,
                                       MaterialPageRoute(builder: (context) => UpdateItem(item: updateItem)));
                                     },
-                                    child: Text("Update"),
+                                    child: const Text("Update"),
                                   ),
                                   PopupMenuItem(
                                     onTap: () async {
@@ -218,7 +218,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                         listings.remove(item);
                                       });
                                     },
-                                    child: Text("Remove"),
+                                    child: const Text("Remove"),
 
                                   ),
                                 ],
