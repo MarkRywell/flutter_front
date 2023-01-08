@@ -288,6 +288,38 @@ class Api {
     }
   }
 
+  Future <dynamic> myPurchases(String name) async {
+
+    var url = Uri.parse("${dotenv.env['API_URL']}/myPurchases/$name");
+
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+
+      return jsonResponse.isNotEmpty ?
+      List.generate(jsonResponse.length, (i) {
+        return Item(
+          id: jsonResponse[i]['id'],
+          name: jsonResponse[i]['name'],
+          details: jsonResponse[i]['details'],
+          price: jsonResponse[i]['price'].toDouble(),
+          userId: jsonResponse[i]['userId'],
+          sold: jsonResponse[i]['sold'],
+          picture: jsonResponse[i]['picture'],
+          soldTo: jsonResponse[i]['soldTo'],
+          createdAt: jsonResponse[i]['created_at'],
+          updatedAt: jsonResponse[i]['updated_at'],
+        );
+      }) : [];
+    }
+    else {
+      Exception(
+          "Error Fetching Data with a Status Code: ${response.statusCode}");
+    }
+
+  }
+
   Future loginUser(Map credentials) async {
     var url = Uri.parse("${dotenv.env['API_URL']}/login");
     try {
