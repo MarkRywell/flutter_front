@@ -4,6 +4,7 @@ import 'package:flutter_front/custom_widgets/custom_text.dart';
 import 'package:flutter_front/custom_widgets/custom_text1.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/item.dart';
+import 'package:flutter_front/views/navigated_pages/main_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 
@@ -56,6 +57,7 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
       }
     }
 
+    showStatus(color: Colors.greenAccent, text: "Item Purchased");
     return response;
   }
 
@@ -127,7 +129,8 @@ class _DetailsPageState extends State<DetailsPage> with SingleTickerProviderStat
                                 onPressed: () async {
                                   if(formKey.currentState!.validate()) {
                                     purchase(buyerController.text);
-                                    Navigator.pop(context);
+                                    Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) => MainPage()));
                                   }
                                 },
                                 style: const ButtonStyle(
