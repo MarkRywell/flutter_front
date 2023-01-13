@@ -45,14 +45,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     var items = await Api.instance.fetchOtherItems(user['id']);
 
-
-    // if(items.runtimeType != List<Object>) {
-    //   if(items.statusCode == 500){
-    //     showStatus(color: Colors.red, text: items.body);
-    //     return;
-    //   }
-    // }
-
     if(items.isEmpty) {
       return [];
     }
@@ -266,7 +258,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   onTap: () async {
                                     Map sellerDetails;
 
-                                    // networkStatus == "none" ? sellerDetails = await :
+                                    networkStatus == "none" ?
+                                    sellerDetails = await QueryBuilder.instance.fetchItemSeller(item.userId) :
                                     sellerDetails = await Api.instance.fetchItemSeller(item.userId);
 
                                     Navigator.push(context,
