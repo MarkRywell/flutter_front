@@ -7,6 +7,7 @@ import 'package:flutter_front/views/navigated_pages/main_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/item.dart';
 
@@ -77,7 +78,8 @@ class _AddItemState extends State<AddItem> {
                   ),
                   Container(
                     child: OutlinedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        await checkPermissions() == null ? Navigator.pop(context) :
                         Navigator.pop(context, ImageSource.gallery);
                       },
                       child: Row(
@@ -145,6 +147,25 @@ class _AddItemState extends State<AddItem> {
             )
         )
     );
+  }
+
+  checkPermissions() async {
+    Map <Permission, PermissionStatus> statuses = await [
+      Permission.storage,
+    ].request();
+
+    print(statuses);
+
+    if (statuses[Permission.storage]!.isDenied) {
+      return Permission.storage.isDenied;
+    }
+    else if (statuses[Permission.storage]!.isPermanentlyDenied) {
+      openAppSettings();
+    }
+    else if(statuses[Permission.storage]!.isGranted) {
+      return Permission.storage.isGranted;
+    }
+
   }
 
   @override
