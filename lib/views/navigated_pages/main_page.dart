@@ -6,6 +6,7 @@ import 'package:flutter_front/views/user_pages/add_item.dart';
 import 'package:flutter_front/views/user_pages/home_page.dart';
 import 'package:flutter_front/views/user_pages/my_listings_page.dart';
 import 'package:flutter_front/views/user_pages/profile_page.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MainPage extends StatefulWidget {
 
@@ -17,8 +18,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController detailsController = TextEditingController();
+  PermissionStatus permissionStatus = PermissionStatus.denied;
 
   int currentIndex = 0;
   List routes = [
@@ -53,7 +53,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin{
 
   @override
   void dispose() {
-
     super.dispose();
   }
 
