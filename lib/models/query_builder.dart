@@ -98,6 +98,21 @@ class QueryBuilder {
     }) : [];
   }
 
+  Future fetchItemSeller (int userId) async {
+
+    Database db = await instance.getDatabase();
+
+    final List<Map<String, dynamic>> map = await db.query('users', where: "id = ?", whereArgs: [userId]);
+
+    Map seller = {
+      'name' : map[0]['name'],
+      'address' : map[0]['address']
+    };
+
+    return map.isNotEmpty ?
+        seller : {'name' : "User", 'address' : "Address"};
+  }
+
   Future <List<Item>> myListings(int id) async {
 
     Database db = await instance.getDatabase();

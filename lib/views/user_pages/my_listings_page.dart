@@ -27,21 +27,27 @@ class _MyListingsPageState extends State<MyListingsPage> {
 
     Map user = convert.jsonDecode(pref.getString("user")!);
 
+    List items = [];
+
     var connectivity = await Connectivity().checkConnectivity();
 
     if (connectivity == ConnectivityResult.none) {
-      List items = await QueryBuilder.instance.myListings(user['id']);
-      return items;
+      return await QueryBuilder.instance.myListings(user['id']);
     }
 
-    List items = await Api.instance.fetchMyItems(user['id']);
+    items = await Api.instance.fetchMyItems(user['id']);
+
+    QueryBuilder.instance.truncateTable("items");
+
+    for(var item in items) {
+      await QueryBuilder.instance.addItem(item);
+    }
 
     if (items.isEmpty) {
       return [];
     }
 
     // QueryBuilder.instance.truncateTable();
-
     return items;
   }
 
@@ -177,8 +183,6 @@ class _MyListingsPageState extends State<MyListingsPage> {
                         itemBuilder: (context, index) {
 
                           final item = listings[index];
-
-
 
                           return Card(
                             child: ListTile(
