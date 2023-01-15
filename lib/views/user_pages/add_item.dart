@@ -44,7 +44,7 @@ class _AddItemState extends State<AddItem> {
     }
     showStatus(color: Colors.greenAccent, text: "Item Added");
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => MainPage()));
+        MaterialPageRoute(builder: (context) => const MainPage()));
   }
 
   Future <ImageSource?> chooseMedia() async {
@@ -56,40 +56,36 @@ class _AddItemState extends State<AddItem> {
           Size size = MediaQuery.of(context).size;
 
           return AlertDialog(
-            content: Container(
+            content: SizedBox(
               width: size.width * 0.7,
               height: 100,
               child: Column(
                 children: [
-                  Container(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        Navigator.pop(context, ImageSource.camera);
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.camera),
-                          SizedBox(width: 20),
-                          Text("Camera")
-                        ],
-                      ),
+                  OutlinedButton(
+                    onPressed: () {
+                      Navigator.pop(context, ImageSource.camera);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.camera),
+                        SizedBox(width: 20),
+                        Text("Camera")
+                      ],
                     ),
                   ),
-                  Container(
-                    child: OutlinedButton(
-                      onPressed: () async {
-                        await checkPermissions() == null ? Navigator.pop(context) :
-                        Navigator.pop(context, ImageSource.gallery);
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.photo),
-                          SizedBox(width: 20),
-                          Text("Gallery")
-                        ],
-                      ),
+                  OutlinedButton(
+                    onPressed: () async {
+                      await checkPermissions() == PermissionStatus.denied ? Navigator.pop(context, null) :
+                      Navigator.pop(context, ImageSource.gallery);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.photo),
+                        SizedBox(width: 20),
+                        Text("Gallery")
+                      ],
                     ),
                   )
                 ],
@@ -100,8 +96,9 @@ class _AddItemState extends State<AddItem> {
     );
     if(source == null) {
       return null;
-    };
+    }
     pickImage(source);
+    return null;
   }
 
   Future pickImage(ImageSource source) async {
@@ -117,12 +114,10 @@ class _AddItemState extends State<AddItem> {
       final imagePerm = await saveImage(image.path);
       filePath = imagePerm.path;
 
-      print(filePath);
-
       setState(() => this.image = imagePerm);
 
-    } on PlatformException catch(e) {
-      print('Failed to pick image: $e');
+    } on PlatformException {
+      showStatus(color: Colors.red, text: "Failed to pick image");
     }
   }
 
@@ -292,27 +287,27 @@ class _AddItemState extends State<AddItem> {
                         ),
                         image != null ?
                         Container(
-                          constraints: BoxConstraints(
+                          constraints: const BoxConstraints(
                             minHeight: 150,
                             maxWidth: 150
                           ),
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.black)
-                          ),
-                          child: Image.file(image!), height: 200, width: 200,):
+                          ), height: 200, width: 200,
+                          child: Image.file(image!),):
                         Container(
                           decoration: BoxDecoration(
                               border: Border.all(
                                   color: Colors.black)
                           ),
-                          child: Center(
-                              child: Text("No image selected")),
                           height: 200,
                           width: 200,
+                          child: const Center(
+                              child: Text("No image selected")),
                         ),
                         const SizedBox(height: 50),
                         ClipRRect(borderRadius: BorderRadius.circular(20),
-                          child: Container(
+                          child: SizedBox(
                             height: 40,
                             width: size.width * 0.6,
                             child: ElevatedButton(
