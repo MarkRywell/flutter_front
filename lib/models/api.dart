@@ -114,7 +114,7 @@ class Api {
 
     var request = http.MultipartRequest('POST', url);
 
-    var file;
+    http.MultipartFile file;
 
     if(data['picture'] == "assets/OnlySells1.png") {
       ByteData byteData = await rootBundle.load('assets/OnlySells1.png');
