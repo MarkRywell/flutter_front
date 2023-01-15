@@ -64,10 +64,8 @@ class _LoginPageState extends State<LoginPage> {
       'password' : passwordController.text
     };
 
-    print(credentials);
 
     var connectivity = await Connectivity().checkConnectivity();
-    print(connectivity);
 
     if(connectivity == ConnectivityResult.none) {
       showStatus(color: Colors.red, text: "No Internet Connection");
@@ -98,8 +96,6 @@ class _LoginPageState extends State<LoginPage> {
     pref.setString("user", convert.jsonEncode(response.data!['user']));
     pref.setBool("loggedIn", true);
 
-    var data = convert.jsonDecode(pref.getString("user")!);
-    print(data['picture']);
 
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(
@@ -186,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(height: 30),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Container(
+                          child: SizedBox(
                             width: size.width * 0.8,
                             height: 40,
                             child: ElevatedButton(

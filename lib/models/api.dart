@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -151,7 +150,6 @@ class Api {
       return ([apiResponse, 400]);
     }
 
-    print(streamResponse);
 
     return ([apiResponse, 201]);
   }

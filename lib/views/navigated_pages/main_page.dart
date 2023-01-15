@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/views/user_pages/add_item.dart';
 import 'package:flutter_front/views/user_pages/home_page.dart';
 import 'package:flutter_front/views/user_pages/my_listings_page.dart';
