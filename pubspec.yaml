@@ -51,6 +51,7 @@ dependencies:
   connectivity_plus: ^3.0.2
   file_picker: ^5.2.4
   transparent_image: ^2.0.0
+  permission_handler: ^10.2.0
 
 
 dev_dependencies:

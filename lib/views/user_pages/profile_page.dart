@@ -144,8 +144,8 @@ class _ProfilePageState extends State<ProfilePage> {
         this.image = imagePerm;
       } );
 
-    } on PlatformException catch(e) {
-      print('Failed to pick image: $e');
+    } on PlatformException {
+      showStatus(color: Colors.red, text: "Failed to pick image");
     }
   }
 

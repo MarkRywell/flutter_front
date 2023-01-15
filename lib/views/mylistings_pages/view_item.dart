@@ -61,7 +61,7 @@ class _ViewItemState extends State<ViewItem> with SingleTickerProviderStateMixin
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               width: size.width,
               height: size.height * 0.4,
               child: Image.network('${dotenv.env['API_URL']}/picture/${widget.item.picture}',

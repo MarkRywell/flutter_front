@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/views/navigated_pages/main_page.dart';
 import 'package:flutter_front/views/auth/login_page.dart';
-import 'package:flutter_front/views/mylistings_pages/update_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -41,7 +40,6 @@ class _SplashScreenState extends State<SplashScreen> {
       loggedIn = pref.getBool("loggedIn");
     });
 
-    print(loggedIn);
   }
 
   @override
@@ -56,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
       splash: Image.asset('assets/OnlySells.png', height: 250, width: 250),
       splashIconSize: 100,
       duration: 3000,
-      nextScreen: loggedIn == null || loggedIn == false ? const LoginPage() : MainPage(),
+      nextScreen: loggedIn == null || loggedIn == false ? const LoginPage() : const MainPage(),
     );
   }
 }
