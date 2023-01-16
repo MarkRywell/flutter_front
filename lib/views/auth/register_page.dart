@@ -13,7 +13,7 @@ class _RegisterPageState extends State<RegisterPage> {
   int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
 
-  bool passwordVisible = true;
+
   var formKey = GlobalKey<FormState>();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -23,6 +23,43 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController addressController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+
+  bool passwordVisible = true;
+  bool confirmVisible = true;
+  late Icon eyeIcon = const Icon(Icons.remove_red_eye_outlined);
+  late Icon eyeIcon1 = const Icon(Icons.remove_red_eye_outlined);
+
+  showPassword() {
+    if(passwordVisible == false) {
+      setState(() {
+        eyeIcon = const Icon(Icons.remove_red_eye_outlined);
+        passwordVisible = true;
+      });
+    }
+    else {
+      setState(() {
+        eyeIcon = const Icon(Icons.remove_red_eye);
+
+        passwordVisible = false;
+      });
+    }
+  }
+
+  showPassword1() {
+    if(confirmVisible == false) {
+      setState(() {
+        eyeIcon1 = const Icon(Icons.remove_red_eye_outlined);
+        confirmVisible = true;
+      });
+    }
+    else {
+      setState(() {
+        eyeIcon1 = const Icon(Icons.remove_red_eye);
+        confirmVisible = false;
+      });
+    }
+  }
+
 
   showStatus({required Color color, required String text}) {    // Snackbar to show message of API Response
 
@@ -113,6 +150,12 @@ class _RegisterPageState extends State<RegisterPage> {
       }
       showSuccess();
     }
+  }
+
+  @override
+  void initState(){
+
+    super.initState();
   }
 
   @override
@@ -299,6 +342,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   width: 0.75,
                                 ),
                                 ),
+                            suffixIcon: IconButton(
+                              icon: eyeIcon,
+                              onPressed: () {
+                                showPassword();
+                              },
+                            )
                           ),
                         ),
                       ),
@@ -307,7 +356,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: TextFormField(
                           controller: confirmPasswordController,
                           keyboardType: TextInputType.visiblePassword,
-                          obscureText: passwordVisible,
+                          obscureText: confirmVisible,
                           enableSuggestions: false,
                           autocorrect: false,
                           maxLines: 1,
@@ -321,6 +370,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   width: 0.75,
                                 ),
                                 ),
+                              suffixIcon: IconButton(
+                                icon: eyeIcon1,
+                                onPressed: () {
+                                  showPassword1();
+                                },
+                              )
                           ),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (value) {
