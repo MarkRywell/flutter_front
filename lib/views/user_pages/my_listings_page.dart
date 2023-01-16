@@ -1,12 +1,9 @@
-// import 'dart:html';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_front/models/api.dart';
 import 'package:flutter_front/models/query_builder.dart';
 import 'package:flutter_front/views/mylistings_pages/update_item.dart';
 import 'package:flutter_front/views/mylistings_pages/view_item.dart';
-import 'package:flutter_front/views/user_pages/profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 

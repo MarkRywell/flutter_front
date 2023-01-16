@@ -60,7 +60,7 @@ class _UpdateItemState extends State<UpdateItem> {
 
     showStatus(color: Colors.blueAccent, text: "Item Updated");
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => MainPage()));
+        MaterialPageRoute(builder: (context) => const MainPage()));
   }
 
   Future <ImageSource?> chooseMedia() async {
@@ -72,39 +72,35 @@ class _UpdateItemState extends State<UpdateItem> {
           Size size = MediaQuery.of(context).size;
 
           return AlertDialog(
-              content: Container(
+              content: SizedBox(
                 width: size.width * 0.7,
                 height: 100,
                 child: Column(
                   children: [
-                    Container(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context, ImageSource.camera);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.camera),
-                            SizedBox(width: 20),
-                            Text("Camera")
-                          ],
-                        ),
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context, ImageSource.camera);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.camera),
+                          SizedBox(width: 20),
+                          Text("Camera")
+                        ],
                       ),
                     ),
-                    Container(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context, ImageSource.gallery);
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.photo),
-                            SizedBox(width: 20),
-                            Text("Gallery")
-                          ],
-                        ),
+                    OutlinedButton(
+                      onPressed: () {
+                        Navigator.pop(context, ImageSource.gallery);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.photo),
+                          SizedBox(width: 20),
+                          Text("Gallery")
+                        ],
                       ),
                     )
                   ],
@@ -115,9 +111,10 @@ class _UpdateItemState extends State<UpdateItem> {
     );
     if(source == null) {
       return null;
-    };
+    }
 
     pickImage(source);
+    return null;
 
   }
 
@@ -134,12 +131,11 @@ class _UpdateItemState extends State<UpdateItem> {
       final imagePerm = await saveImage(image.path);
       filePath = imagePerm.path;
 
-      print(filePath);
 
       setState(() => this.image = imagePerm);
 
-    } on PlatformException catch(e) {
-      print('Failed to pick image: $e');
+    } on PlatformException {
+      showStatus(color: Colors.red, text: "Failed to pick image");
     }
   }
 
@@ -297,8 +293,8 @@ class _UpdateItemState extends State<UpdateItem> {
                       ),
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.black)
-                      ),
-                      child: Image.file(image!), height: 200, width: 200,):
+                      ), height: 200, width: 200,
+                      child: Image.file(image!),):
                     Container(
                       constraints: const BoxConstraints(
                           minHeight: 150,
@@ -311,7 +307,7 @@ class _UpdateItemState extends State<UpdateItem> {
                       child: Image.network('${dotenv.env['API_URL']}/picture/${widget.item.picture}')),
                     const SizedBox(height: 50),
                     ClipRRect(borderRadius: BorderRadius.circular(20),
-                      child: Container(
+                      child: SizedBox(
                         height: 40,
                         width: size.width * 0.6,
                         child: ElevatedButton(
@@ -322,7 +318,6 @@ class _UpdateItemState extends State<UpdateItem> {
                                 String data = pref.getString("user")!;
                                 var userData = convert.jsonDecode(data);
 
-                                print("filepath $filePath");
 
                                 var updatedItem = Item(
                                     id: widget.item.id,
