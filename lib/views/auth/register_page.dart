@@ -12,6 +12,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
+  final emailRegex = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
   bool passwordVisible = true;
   var formKey = GlobalKey<FormState>();
@@ -268,7 +269,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                       width: 0.75,
                                     ),
                                     )),
-                          ))
+                         autovalidateMode: AutovalidateMode.onUserInteraction,
+                         validator: (value) {
+                            if (!emailRegex.hasMatch(value!)) {
+                            return 'Please enter a valid email address';
+                            }
+                            return null;
+                         },
+                          ),
+
+                      ),
                     ],
                   ),
                   isActive: _currentStep >= 0,
@@ -458,7 +468,7 @@ class _RegisterPageState extends State<RegisterPage> {
         return null;
       }
     } else if (_currentStep == 3) {
-      if (emailAddressController.text.isEmpty) {
+      if (emailAddressController.text.isEmpty || !emailRegex.hasMatch(emailAddressController.text)) {
         return null;
       }
     } else if (_currentStep == 4) {
