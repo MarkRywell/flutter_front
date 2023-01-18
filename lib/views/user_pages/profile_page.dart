@@ -104,10 +104,8 @@ class _ProfilePageState extends State<ProfilePage> {
     if(source == null) {
       return null;
     }
-
     pickImage(source);
     return null;
-
   }
 
   Future pickImage(ImageSource source) async {
@@ -299,6 +297,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         child: Text(userData['name'],
                                             maxLines: 2,
                                             style: TextStyle(
+                                                fontFamily: "Poppins",
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.blue[900]
@@ -317,11 +316,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                   },
                                   child: Row(
                                     children: const [
-                                      Icon(Icons.shopping_bag),
+                                      Icon(Icons.shopping_bag_outlined),
                                       SizedBox(width: 10),
                                       Text("View Purchases",
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold
+                                            fontSize: 16,
+                                          fontFamily: "Poppins"
                                         ),)
                                     ],
                                   )
@@ -340,6 +340,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                               child: Text(userData['email'],
                                 style: const TextStyle(
+                                  fontFamily: "Poppins",
                                   fontSize: 18,
                                   color: Colors.black,
                                 ),
@@ -358,6 +359,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                               child: Text(userData['address'],
                                 style: const TextStyle(
+                                  fontFamily: "Poppins",
                                   fontSize: 18,
                                   color: Colors.black,
                                 ),
@@ -376,6 +378,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                               child: Text(userData['contactNo'],
                                 style: const TextStyle(
+                                  fontFamily: "Poppins",
                                   fontSize: 18,
                                   color: Colors.black,
                                 ),
