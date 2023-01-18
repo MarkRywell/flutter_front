@@ -248,139 +248,141 @@ class _ProfilePageState extends State<ProfilePage> {
                           userData;
                         });
                       },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: size.width,
-                            height: size.height * 0.3,
-                            child: Stack(
-                              children: [
-                                Container(
-                                    width: size.width,
-                                    height: size.height * 0.2,
-                                    color: Colors.blue[100],
-                                    child: Image.asset('assets/OnlySells1.png')
-                                ),
-                                Positioned(
-                                    left: 10,
-                                    bottom: 10,
-                                    child: CircleAvatar(
-                                      radius: 80,
-                                      backgroundColor: Colors.white,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: size.width,
+                              height: size.height * 0.3,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                      width: size.width,
+                                      height: size.height * 0.2,
+                                      color: Colors.blue[100],
+                                      child: Image.asset('assets/OnlySells1.png')
+                                  ),
+                                  Positioned(
+                                      left: 10,
+                                      bottom: 10,
                                       child: CircleAvatar(
-                                        radius: 75,
-                                        backgroundColor: Colors.blue.withOpacity(0.4),
-                                        backgroundImage: userData['picture'] != null ?
-                                        NetworkImage('${dotenv.env['API_URL']}/picture/${userData['picture']}')
-                                            : null,
-                                        child: userData['picture'] != null ? null : Lottie.asset('assets/lotties/profile.json'),
-                                      ),
-                                    )
+                                        radius: 80,
+                                        backgroundColor: Colors.white,
+                                        child: CircleAvatar(
+                                          radius: 75,
+                                          backgroundColor: Colors.blue.withOpacity(0.4),
+                                          backgroundImage: userData['picture'] != null ?
+                                          NetworkImage('${dotenv.env['API_URL']}/picture/${userData['picture']}')
+                                              : null,
+                                          child: userData['picture'] != null ? null : Lottie.asset('assets/lotties/profile.json'),
+                                        ),
+                                      )
+                                  ),
+                                  Positioned(
+                                      left: 120,
+                                      bottom: 20,
+                                      child: CircleAvatar(
+                                        child: IconButton(
+                                          onPressed: () {
+                                            chooseMedia();
+                                          },
+                                          icon: const Icon(Icons.edit),
+                                        ),
+                                      )),
+                                  Positioned(
+                                      left: 180,
+                                      bottom: 20,
+                                      child: SizedBox(
+                                        width: size.width * 0.4,
+                                        height: 50,
+                                        child: Text(userData['name'],
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.blue[900]
+                                            )),
+                                      ))
+                                ],
+                              ),
+                            ),
+                            const Divider(thickness: 8, height: 5),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 40, 20, 10),
+                              child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) => const MyPurchasesPage()));
+                                  },
+                                  child: Row(
+                                    children: const [
+                                      Icon(Icons.shopping_bag),
+                                      SizedBox(width: 10),
+                                      Text("View Purchases",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold
+                                        ),)
+                                    ],
+                                  )
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                              child: Text("Email Address:",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
                                 ),
-                                Positioned(
-                                    left: 120,
-                                    bottom: 20,
-                                    child: CircleAvatar(
-                                      child: IconButton(
-                                        onPressed: () {
-                                          chooseMedia();
-                                        },
-                                        icon: const Icon(Icons.edit),
-                                      ),
-                                    )),
-                                Positioned(
-                                    left: 180,
-                                    bottom: 20,
-                                    child: SizedBox(
-                                      width: size.width * 0.4,
-                                      height: 50,
-                                      child: Text(userData['name'],
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.blue[900]
-                                          )),
-                                    ))
-                              ],
-                            ),
-                          ),
-                          const Divider(thickness: 8, height: 5),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 40, 20, 10),
-                            child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => const MyPurchasesPage()));
-                                },
-                                child: Row(
-                                  children: const [
-                                    Icon(Icons.shopping_bag),
-                                    SizedBox(width: 10),
-                                    Text("View Purchases",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold
-                                      ),)
-                                  ],
-                                )
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                            child: Text("Email Address:",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                            child: Text(userData['email'],
-                              style: const TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                              child: Text(userData['email'],
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                            child: Text("Home Address:",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                              child: Text("Home Address:",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                            child: Text(userData['address'],
-                              style: const TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                              child: Text(userData['address'],
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                            child: Text("Mobile Number:",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                              child: Text("Mobile Number:",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                            child: Text(userData['contactNo'],
-                              style: const TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                              child: Text(userData['contactNo'],
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       )
                 );
               }

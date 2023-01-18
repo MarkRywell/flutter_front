@@ -12,7 +12,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
-
+  final emailRegex = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  final numberRegex = RegExp("^(?:[+0]9)?[0-9]{11}");
 
   var formKey = GlobalKey<FormState>();
   TextEditingController firstNameController = TextEditingController();
@@ -257,6 +258,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                     width: 0.75,
                                   ),
                                 )),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if(!numberRegex.hasMatch(value!) || value.length != 11){
+                                return "Invalid format";
+                              }
+                              return null;
+                            },
                           ))
                     ],
                   ),
@@ -311,7 +319,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                       width: 0.75,
                                     ),
                                     )),
-                          ))
+                         autovalidateMode: AutovalidateMode.onUserInteraction,
+                         validator: (value) {
+                            if (!emailRegex.hasMatch(value!)) {
+                            return 'Please enter a valid email address';
+                            }
+                            return null;
+                         },
+                          ),
+
+                      ),
                     ],
                   ),
                   isActive: _currentStep >= 0,
@@ -505,7 +522,7 @@ class _RegisterPageState extends State<RegisterPage> {
         return null;
       }
     } else if (_currentStep == 1) {
-      if (contactNoController.text.isEmpty) {
+      if (contactNoController.text.isEmpty || !numberRegex.hasMatch(contactNoController.text) || contactNoController.text.length != 11 ){
         return null;
       }
     } else if (_currentStep == 2) {
@@ -513,7 +530,7 @@ class _RegisterPageState extends State<RegisterPage> {
         return null;
       }
     } else if (_currentStep == 3) {
-      if (emailAddressController.text.isEmpty) {
+      if (emailAddressController.text.isEmpty || !emailRegex.hasMatch(emailAddressController.text)) {
         return null;
       }
     } else if (_currentStep == 4) {

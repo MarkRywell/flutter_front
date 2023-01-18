@@ -267,29 +267,41 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                             DetailsPage(item: item, seller: sellerDetails)));
                                   },
                                   child: Container(
+                                    padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
                                     key: UniqueKey(),
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.black),
+                                      color: Colors.blue[100],
+                                      border: Border.all(color: Colors.blue),
                                       borderRadius: BorderRadius.circular(10),
-                                      image: networkStatus == "none" ?
-                                      const DecorationImage(
-                                          image: AssetImage('assets/OnlySells.png'),
-                                          fit: BoxFit.fill) :
-                                      DecorationImage(
-                                          image: NetworkImage('${dotenv.env['API_URL']}/picture/${item.picture}'),
-                                          fit: BoxFit.fill),
                                     ),
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
+                                        Expanded(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(color: Colors.blueGrey),
+                                              borderRadius: BorderRadius.circular(10),
+                                              image: networkStatus == "none" ?
+                                              const DecorationImage(
+                                                  image: AssetImage('assets/OnlySells.png'),
+                                                  fit: BoxFit.fill) :
+                                              DecorationImage(
+                                                  image: NetworkImage('${dotenv.env['API_URL']}/picture/${item.picture}'),
+                                                  fit: BoxFit.fill),
+                                            ),
+                                          ),
+                                        ),
+
                                         Container(
+                                            margin: const EdgeInsets.only(top:10),
                                             width: double.infinity,
                                             constraints: const BoxConstraints(
                                                 minHeight: 20
                                             ),
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                              color: Colors.white,
+                                            decoration: BoxDecoration(
+                                              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                              color: Colors.blue[100]
                                             ),
                                             child: Center(child: Text(item.name,
                                               style: const TextStyle(
