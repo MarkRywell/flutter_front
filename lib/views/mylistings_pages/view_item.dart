@@ -146,7 +146,10 @@ class _ViewItemState extends State<ViewItem> with SingleTickerProviderStateMixin
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomText(icon: const Icon(Icons.person), textTitle: 'Name', textData: widget.seller['name']),
-                        CustomText(icon: const Icon(Icons.place), textTitle: 'Address', textData: widget.seller['address'])
+                        CustomText(icon: const Icon(Icons.place), textTitle: 'Address', textData: widget.seller['address']),
+                        const SizedBox(height: 10),
+                        Container(child: widget.item.soldTo != null ? CustomText(icon: Icon(Icons.lock_person_rounded),
+                            textTitle: "Buyer", textData: widget.item.soldTo!) : null)
                       ],
                     ),
                     SingleChildScrollView(
