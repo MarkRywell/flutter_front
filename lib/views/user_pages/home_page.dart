@@ -287,7 +287,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   image: AssetImage('assets/OnlySells.png'),
                                                   fit: BoxFit.fill) :
                                               DecorationImage(
-                                                  image: NetworkImage('${dotenv.env['API_URL']}/picture/${item.picture}'),
+                                                  image: NetworkImage('${dotenv.env['API_URL']}/picture/${item.picture}'), // Change to Network Cache Image
                                                   fit: BoxFit.fill),
                                             ),
                                           ),
