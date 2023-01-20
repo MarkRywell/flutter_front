@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/custom_widgets/custom_text.dart';
@@ -64,7 +65,8 @@ class _ViewItemState extends State<ViewItem> with SingleTickerProviderStateMixin
             SizedBox(
               width: size.width,
               height: size.height * 0.4,
-              child: Image.network('${dotenv.env['API_URL']}/picture/${widget.item.picture}',
+              child: CachedNetworkImage(
+                imageUrl: '${dotenv.env['API_URL']}/picture/${widget.item.picture}',
                 fit: BoxFit.fitWidth,),
             ),
             Row(
@@ -148,7 +150,7 @@ class _ViewItemState extends State<ViewItem> with SingleTickerProviderStateMixin
                         CustomText(icon: const Icon(Icons.person), textTitle: 'Name', textData: widget.seller['name']),
                         CustomText(icon: const Icon(Icons.place), textTitle: 'Address', textData: widget.seller['address']),
                         const SizedBox(height: 10),
-                        Container(child: widget.item.soldTo != null ? CustomText(icon: Icon(Icons.lock_person_rounded),
+                        Container(child: widget.item.soldTo != null ? CustomText(icon: const Icon(Icons.lock_person_rounded),
                             textTitle: "Buyer", textData: widget.item.soldTo!) : null)
                       ],
                     ),

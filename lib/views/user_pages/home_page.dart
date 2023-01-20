@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/models/api.dart';
@@ -39,11 +40,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     QueryBuilder.instance.truncateTable("users");
 
+    print(users);
+
     for(var user in users) {
       await QueryBuilder.instance.addUser(user);
     }
 
     var items = await Api.instance.fetchOtherItems(user['id']);
+
+    print(items);
 
     if(items.isEmpty) {
       return [];
@@ -134,12 +139,18 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             if(snapshot.connectionState == ConnectionState.done) {
               if(snapshot.hasError) {
 
+                print(snapshot.error);
+
                 return NestedScrollView(
                   floatHeaderSlivers: true,
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    const SliverAppBar(
-                      automaticallyImplyLeading: false,
-                      title: Text("HomePage"),
+                    SliverAppBar(
+                      title: Image.asset('assets/appbar/HomePage.png',
+                        alignment: Alignment.center,
+                        width: 200,
+                        fit: BoxFit.fitWidth,),
+                      centerTitle: true,
+                      backgroundColor: Colors.white,
                     )
                   ],
                   body: RefreshIndicator(
@@ -287,8 +298,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   image: AssetImage('assets/OnlySells.png'),
                                                   fit: BoxFit.fill) :
                                               DecorationImage(
-                                                  image: NetworkImage('${dotenv.env['API_URL']}/picture/${item.picture}'),
-                                                  fit: BoxFit.fill),
+                                                image: CachedNetworkImageProvider(
+                                                    '${dotenv.env['API_URL']}/picture/${item.picture}',
+                                                ), // Change to Network Cache Image
+                                                fit: BoxFit.fill),
                                             ),
                                           ),
                                         ),
