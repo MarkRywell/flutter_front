@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_front/custom_widgets/custom_text.dart';
@@ -64,7 +65,8 @@ class _ViewItemState extends State<ViewItem> with SingleTickerProviderStateMixin
             SizedBox(
               width: size.width,
               height: size.height * 0.4,
-              child: Image.network('${dotenv.env['API_URL']}/picture/${widget.item.picture}',
+              child: CachedNetworkImage(
+                imageUrl: '${dotenv.env['API_URL']}/picture/${widget.item.picture}',
                 fit: BoxFit.fitWidth,),
             ),
             Row(
