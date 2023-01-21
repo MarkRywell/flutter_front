@@ -38,17 +38,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
     var users = await Api.instance.fetchUsers();
 
-    QueryBuilder.instance.truncateTable("users");
-
-    print(users);
+    await QueryBuilder.instance.truncateTable("users");
 
     for(var user in users) {
       await QueryBuilder.instance.addUser(user);
     }
 
     var items = await Api.instance.fetchOtherItems(user['id']);
-
-    print(items);
 
     if(items.isEmpty) {
       return [];
@@ -130,17 +126,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
         body: FutureBuilder(
           future: fetchOtherItems(),
           builder: (context, snapshot) {
             if(snapshot.connectionState == ConnectionState.done) {
               if(snapshot.hasError) {
-
-                print(snapshot.error);
-
                 return NestedScrollView(
                   floatHeaderSlivers: true,
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
