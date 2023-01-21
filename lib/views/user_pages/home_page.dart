@@ -33,15 +33,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     Map user = convert.jsonDecode(pref.getString("user")!);
 
     if(networkStatus == "none") {
-      return QueryBuilder.instance.items();
+      return QueryBuilder.instance.otherItems(user['id']);
     }
 
     var users = await Api.instance.fetchUsers();
 
     await QueryBuilder.instance.truncateTable("users");
 
-    for(var user in users) {
-      await QueryBuilder.instance.addUser(user);
+    for(var userData in users) {
+      await QueryBuilder.instance.addUser(userData);
     }
 
     var items = await Api.instance.fetchOtherItems(user['id']);
@@ -132,6 +132,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           builder: (context, snapshot) {
             if(snapshot.connectionState == ConnectionState.done) {
               if(snapshot.hasError) {
+                print(snapshot.error);
                 return NestedScrollView(
                   floatHeaderSlivers: true,
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
