@@ -34,17 +34,22 @@ class _AddItemState extends State<AddItem> {
 
     var data = newItem.toMap();
 
-    var response = await Api.instance.addItem(data);
+    try {
+      var response = await Api.instance.addItem(data);
 
-    if(response.runtimeType != List<Object>){
-      if(response.statusCode == 500){
-        showStatus(color: Colors.red, text: response.body);
-        return;
+      if(response.runtimeType != List<Object>) {
+        if(response.statusCode == 500) {
+          showStatus(color: Colors.red, text: response.body);
+          return;
+        }
       }
+      showStatus(color: Colors.greenAccent, text: "Item Added");
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const MainPage()));
+    } catch (error) {
+      showStatus(color: Colors.red, text: error.toString());
     }
-    showStatus(color: Colors.greenAccent, text: "Item Added");
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const MainPage()));
+
   }
 
   Future <ImageSource?> chooseMedia() async {
@@ -148,8 +153,6 @@ class _AddItemState extends State<AddItem> {
     Map <Permission, PermissionStatus> statuses = await [
       Permission.storage,
     ].request();
-
-    print(statuses);
 
     if (statuses[Permission.storage]!.isDenied) {
       return Permission.storage.isDenied;

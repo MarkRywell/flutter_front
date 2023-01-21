@@ -101,10 +101,8 @@ class QueryBuilder {
   Future <dynamic> otherItems(int id) async {
 
     Database db = await instance.getDatabase();
-    print(id);
 
     final List<Map<String, dynamic>> map = await db.query('items', where: "userId != ?", whereArgs: [id]);
-    print(map);
 
     return map.isNotEmpty ?
     List.generate(map.length, (i) {
