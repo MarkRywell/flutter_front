@@ -43,9 +43,22 @@ class _MyListingsPageState extends State<MyListingsPage> {
     if (items.isEmpty) {
       return [];
     }
-
-    // QueryBuilder.instance.truncateTable();
     return items;
+  }
+
+  showStatus({required Color color, required String text}) {    // Snackbar to show message
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(text),
+            backgroundColor: color,
+            padding: const EdgeInsets.all(15),
+            behavior: SnackBarBehavior.fixed,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            )
+        )
+    );
   }
 
   @override
@@ -193,11 +206,16 @@ class _MyListingsPageState extends State<MyListingsPage> {
                                     onTap: () async {
                                       Map sellerDetails;
 
-                                      sellerDetails = await Api.instance.fetchItemSeller(item.userId);
+                                      try {
+                                        sellerDetails = await Api.instance.fetchItemSeller(item.userId);
 
-                                      Navigator.push(context,
-                                      MaterialPageRoute(builder: (context)
-                                      => ViewItem(item: item, seller: sellerDetails)));
+                                        Navigator.push(context,
+                                            MaterialPageRoute(builder: (context)
+                                            => ViewItem(item: item, seller: sellerDetails)));
+                                      } catch (error) {
+                                        showStatus(color: Colors.red, text: error.toString());
+                                        return;
+                                      }
                                     },
                                     child: const Text("View"),
                                   ),
