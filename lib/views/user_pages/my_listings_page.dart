@@ -66,7 +66,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
                   floatHeaderSlivers: true,
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
                     SliverAppBar(
-                      title: Image.asset('assets/appbar/HomePage.png',
+                      title: Image.asset('assets/appbar/MyListings.png',
                         alignment: Alignment.center,
                         width: 200,
                         fit: BoxFit.fitWidth,),
@@ -118,7 +118,7 @@ class _MyListingsPageState extends State<MyListingsPage> {
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (context, innerBoxIsScrolled) => [
                       SliverAppBar(
-                        title: Image.asset('assets/appbar/HomePage.png',
+                        title: Image.asset('assets/appbar/MyListings.png',
                           alignment: Alignment.center,
                           width: 200,
                           fit: BoxFit.fitWidth,),
