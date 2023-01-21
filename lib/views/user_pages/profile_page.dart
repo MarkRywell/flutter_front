@@ -391,10 +391,7 @@ class _ProfilePageState extends State<ProfilePage> {
               }
             }
             return const Center(
-              child: Text("Loading"),
-              // child: CircularProgressIndicator(
-              //   valueColor: colorTween,
-              // )
+              child: CircularProgressIndicator()
             );
           },
         )

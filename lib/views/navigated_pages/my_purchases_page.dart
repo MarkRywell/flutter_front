@@ -35,7 +35,6 @@ class _MyPurchasesPageState extends State<MyPurchasesPage> {
     if (items.isEmpty) {
       return [];
     }
-
     return items;
   }
 

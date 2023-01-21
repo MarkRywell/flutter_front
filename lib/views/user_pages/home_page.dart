@@ -33,15 +33,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     Map user = convert.jsonDecode(pref.getString("user")!);
 
     if(networkStatus == "none") {
-      return QueryBuilder.instance.items();
+      return QueryBuilder.instance.otherItems(user['id']);
     }
 
     var users = await Api.instance.fetchUsers();
 
     await QueryBuilder.instance.truncateTable("users");
 
-    for(var user in users) {
-      await QueryBuilder.instance.addUser(user);
+    for(var userData in users) {
+      await QueryBuilder.instance.addUser(userData);
     }
 
     var items = await Api.instance.fetchOtherItems(user['id']);
@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     }
   }
 
-  showStatus({required Color color, required String text}) {    // Snackbar to show message of API Response
+  showStatus({required Color color, required String text}) {    // Snackbar to show message
 
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -284,11 +284,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                             decoration: BoxDecoration(
                                               border: Border.all(color: Colors.blueGrey),
                                               borderRadius: BorderRadius.circular(10),
-                                              image: networkStatus == "none" ?
-                                              const DecorationImage(
-                                                  image: AssetImage('assets/OnlySells.png'),
-                                                  fit: BoxFit.fill) :
-                                              DecorationImage(
+                                              image: DecorationImage(
                                                 image: CachedNetworkImageProvider(
                                                     '${dotenv.env['API_URL']}/picture/${item.picture}',
                                                 ), // Change to Network Cache Image

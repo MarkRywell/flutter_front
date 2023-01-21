@@ -71,7 +71,7 @@ class QueryBuilder {
 
     Database db = await instance.getDatabase();
 
-    int status = await db.insert('users', user.toMap());
+    int status = await db.insert('users', user.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
 
     return status;
   }
@@ -84,6 +84,28 @@ class QueryBuilder {
 
     return map.isNotEmpty ?
       List.generate(map.length, (i) {
+      return Item(
+        id: map[i]['id'],
+        name: map[i]['name'],
+        details: map[i]['details'],
+        price: map[i]['price'],
+        userId: map[i]['userId'],
+        sold: map[i]['sold'],
+        picture: map[i]['picture'],
+        createdAt: map[i]['created_at'],
+        updatedAt: map[i]['updated_at'],
+      );
+    }) : [];
+  }
+
+  Future <dynamic> otherItems(int id) async {
+
+    Database db = await instance.getDatabase();
+
+    final List<Map<String, dynamic>> map = await db.query('items', where: "userId != ?", whereArgs: [id]);
+
+    return map.isNotEmpty ?
+    List.generate(map.length, (i) {
       return Item(
         id: map[i]['id'],
         name: map[i]['name'],
