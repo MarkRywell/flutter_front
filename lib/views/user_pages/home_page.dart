@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     }
   }
 
-  showStatus({required Color color, required String text}) {    // Snackbar to show message of API Response
+  showStatus({required Color color, required String text}) {    // Snackbar to show message
 
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -132,7 +132,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           builder: (context, snapshot) {
             if(snapshot.connectionState == ConnectionState.done) {
               if(snapshot.hasError) {
-                print(snapshot.error);
                 return NestedScrollView(
                   floatHeaderSlivers: true,
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -285,11 +284,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                             decoration: BoxDecoration(
                                               border: Border.all(color: Colors.blueGrey),
                                               borderRadius: BorderRadius.circular(10),
-                                              image: networkStatus == "none" ?
-                                              const DecorationImage(
-                                                  image: AssetImage('assets/OnlySells.png'),
-                                                  fit: BoxFit.fill) :
-                                              DecorationImage(
+                                              image: DecorationImage(
                                                 image: CachedNetworkImageProvider(
                                                     '${dotenv.env['API_URL']}/picture/${item.picture}',
                                                 ), // Change to Network Cache Image
