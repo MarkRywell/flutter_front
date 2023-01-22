@@ -333,7 +333,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               margin: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                color: Colors.blueAccent
+                                color: Colors.lightBlue[200]
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -366,7 +366,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               margin: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
-                                  color: Colors.blueAccent
+                                  color: Colors.lightBlue[200]
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -399,7 +399,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               margin: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
-                                  color: Colors.blueAccent
+                                  color: Colors.lightBlue[200]
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
