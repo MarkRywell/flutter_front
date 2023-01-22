@@ -1,6 +1,7 @@
 import 'dart:convert' as convert;
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -271,7 +272,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           radius: 75,
                                           backgroundColor: Colors.blue.withOpacity(0.4),
                                           backgroundImage: userData['picture'] != null ?
-                                          NetworkImage('${dotenv.env['API_URL']}/picture/${userData['picture']}')
+                                          CachedNetworkImageProvider('${dotenv.env['API_URL']}/picture/${userData['picture']}')
                                               : null,
                                           child: userData['picture'] != null ? null : Lottie.asset('assets/lotties/profile.json'),
                                         ),
@@ -308,7 +309,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             const Divider(thickness: 8, height: 5),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 40, 20, 10),
+                              padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
                               child: GestureDetector(
                                   onTap: () {
                                     Navigator.push(context,
@@ -327,61 +328,102 @@ class _ProfilePageState extends State<ProfilePage> {
                                   )
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                              child: Text("Email Address:",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey,
-                                ),
+                            Container(
+                              width: size.width,
+                              margin: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.blueAccent
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(20, 20, 10, 0),
+                                    child: Text("Email Address:",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[800],
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                    child: Text(userData['email'],
+                                      style: const TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                              child: Text(userData['email'],
-                                style: const TextStyle(
-                                  fontFamily: "Poppins",
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                ),
+
+                            Container(
+                              width: size.width,
+                              margin: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.blueAccent
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(20, 20, 10, 0),
+                                    child: Text("Home Address:",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[800],
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                    child: Text(userData['address'],
+                                      style: const TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                              child: Text("Home Address:",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey,
-                                ),
+
+                            Container(
+                              width: size.width,
+                              margin: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.blueAccent
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                              child: Text(userData['address'],
-                                style: const TextStyle(
-                                  fontFamily: "Poppins",
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                              child: Text("Mobile Number:",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                              child: Text(userData['contactNo'],
-                                style: const TextStyle(
-                                  fontFamily: "Poppins",
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(20, 20, 10, 0),
+                                    child: Text("Mobile Number:",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[800],
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                    child: Text(userData['contactNo'],
+                                      style: const TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
